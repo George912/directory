@@ -48,7 +48,7 @@ public class MainController {
         for (int i = 0; i < contactObservableList.size(); i++) {
             Contact editableContact = contactObservableList.get(i);
 
-            //получить инфу и объект из UI
+            //получить инфу и объект из UI sgsdfg
             if (editableContact.getId() == editableContactId) {
                 editableContact.setDescription("");
                 editableContact.setEmail("");
