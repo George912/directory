@@ -2,13 +2,17 @@ package directory;
 
 import data.DataManager;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.Contact;
+import model.Group;
 import model.PhoneNumberType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
 
 public class MainController {
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
@@ -31,8 +35,11 @@ public class MainController {
 
     @FXML
     private void createContact() {
+
         int id = dataManager.getContactObservableList().get(dataManager.getContactObservableList().size() - 1).getId() + 1;
+        //получить инфу из UI sgsdfg
         dataManager.getContactObservableList().add(new Contact(id, "", "", "", "", PhoneNumberType.MOBILE, "", PhoneNumberType.MOBILE, "", ""));
+
     }
 
     @FXML
@@ -61,10 +68,12 @@ public class MainController {
                 editableContact.setSecondPhoneNumberType(PhoneNumberType.MOBILE);
             }
         }
+
     }
 
     @FXML
     private void deleteContact() {
+
         ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
 
         //получить объект из UI
@@ -78,20 +87,61 @@ public class MainController {
             if (deletableContact.getId() == deletableContactId)
                 contactObservableList.remove(i);
         }
+
     }
 
     @FXML
     private void createGroup() {
-        
+
+        int id = ((Group) dataManager.getGroupObservableSet().toArray()[dataManager.getGroupObservableSet().toArray().length - 1]).getId() + 1;
+        //получить инфу из UI sgsdfg
+        dataManager.getGroupObservableSet().add(new Group(id, "", ""));
+
     }
 
     @FXML
     private void editGroup() {
 
+        ObservableSet<Group> groupObservableSet = dataManager.getGroupObservableSet();
+
+        //получить объект из UI
+        Group group = new Group();
+
+        int editableGroupId = group.getId();
+
+        Iterator<Group> groupIterator = groupObservableSet.iterator();
+
+        while (groupIterator.hasNext()) {
+            Group editableGroup = groupIterator.next();
+
+            //получить инфу из UI sgsdfg
+            if (editableGroup.getId() == editableGroupId) {
+                editableGroup.setName("");
+                editableGroup.setDescription("");
+            }
+        }
+
     }
 
     @FXML
     private void deleteGroup() {
+
+        ObservableSet<Group> groupObservableSet = dataManager.getGroupObservableSet();
+
+        //получить объект из UI
+        Group group = new Group();
+
+        int editableGroupId = group.getId();
+
+        Iterator<Group> groupIterator = groupObservableSet.iterator();
+
+        while (groupIterator.hasNext()) {
+            Group deletableGroup = groupIterator.next();
+
+            //получить инфу из UI sgsdfg
+            if (deletableGroup.getId() == editableGroupId)
+                groupObservableSet.remove(deletableGroup);
+        }
 
     }
 
