@@ -32,7 +32,7 @@ public class MainController {
     @FXML
     private void createContact() {
         int id = dataManager.getContactObservableList().get(dataManager.getContactObservableList().size() - 1).getId() + 1;
-        dataManager.getContactObservableList().add(new Contact(id, "", "", "", "", PhoneNumberType.MOBILE, "", PhoneNumberType.MOBILE, "", ""))
+        dataManager.getContactObservableList().add(new Contact(id, "", "", "", "", PhoneNumberType.MOBILE, "", PhoneNumberType.MOBILE, "", ""));
     }
 
     @FXML
@@ -40,7 +40,7 @@ public class MainController {
 
         ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
 
-        //получить инфу и объект из UI
+        //получить объект из UI
         Contact contact = new Contact();
 
         int editableContactId = contact.getId();
@@ -48,7 +48,7 @@ public class MainController {
         for (int i = 0; i < contactObservableList.size(); i++) {
             Contact editableContact = contactObservableList.get(i);
 
-            //получить инфу и объект из UI sgsdfg
+            //получить инфу из UI sgsdfg
             if (editableContact.getId() == editableContactId) {
                 editableContact.setDescription("");
                 editableContact.setEmail("");
@@ -65,12 +65,24 @@ public class MainController {
 
     @FXML
     private void deleteContact() {
+        ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
 
+        //получить объект из UI
+        Contact contact = new Contact();
+
+        int deletableContactId = contact.getId();
+
+        for (int i = 0; i < contactObservableList.size(); i++) {
+            Contact deletableContact = contactObservableList.get(i);
+
+            if (deletableContact.getId() == deletableContactId)
+                contactObservableList.remove(i);
+        }
     }
 
     @FXML
     private void createGroup() {
-
+        
     }
 
     @FXML
