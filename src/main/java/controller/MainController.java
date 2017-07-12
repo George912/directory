@@ -1,28 +1,45 @@
 package controller;
 
 import data.DataManager;
+import directory.MainApp;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import model.Contact;
 import model.Group;
 import model.PhoneNumberType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Iterator;
 
 public class MainController {
-    private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     //<editor-fold desc="поля">
+
+    private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     @FXML
     private TableView contactTableView;
     @FXML
     private TableView groupTableView;
+    @FXML
+    private TableColumn<Contact, String> contactTableViewLastNameColumn;
+    @FXML
+    private TableColumn<Contact, String> contactTableViewNameColumn;
+    @FXML
+    private TableColumn<Contact, String> contactTableViewMiddleNameColumn;
+    @FXML
+    private TableColumn<Group, String> groupTableViewGroupNameTableColumn;
     @FXML
     private ComboBox groupComboBox;
     @FXML
@@ -55,7 +72,13 @@ public class MainController {
     private TextField groupNameTextField;
     @FXML
     private TextArea groupNotesTextArea;
+    @FXML
+    private ComboBox<PhoneNumberType> firstPhoneNumberTypeComboBox;
+    @FXML
+    private ComboBox<PhoneNumberType> secondPhoneNumberTypeComboBox;
+
     private DataManager dataManager;
+
 
     //</editor-fold>
 
@@ -64,40 +87,62 @@ public class MainController {
     }
 
     @FXML
+    private void initialize() {
+
+        contactTableView.setItems(dataManager.getContactObservableList());
+        contactTableViewLastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+        contactTableViewNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
+        contactTableViewMiddleNameColumn.setCellValueFactory(cellData -> cellData.getValue().middleNameProperty());
+
+        contactTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                Contact contact = (Contact) newValue;
+
+                lastNameTextField.setText(contact.getLastName());
+                nameTextField.setText(contact.getFirstName());
+                middleNameTextField.setText(contact.getMiddleName());
+                firstPhoneNumberTypeComboBox.getSelectionModel().select(contact.getFirstPhoneNumberType());
+                firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
+                secondPhoneNumberTypeComboBox.getSelectionModel().select(contact.getSecondPhoneNumberType());
+                secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
+                emailTextField.setText(contact.getEmail());
+                notesTextArea.setText(contact.getNotes());
+
+            }
+        });
+
+        groupTableView.setItems(dataManager.getGroupObservableList());
+        groupTableViewGroupNameTableColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+
+        groupTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+            @Override
+            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                Group group = (Group) newValue;
+
+                groupNameTextField.setText(group.getName());
+                groupNotesTextArea.setText(group.getNotes());
+            }
+        });
+
+    }
+
+    @FXML
     private void createContact() {
 
         int id = dataManager.getContactObservableList().get(dataManager.getContactObservableList().size() - 1).getId() + 1;
-        //получить инфу из UI sgsdfg
-        dataManager.getContactObservableList().add(new Contact(id, "", "", "", "", PhoneNumberType.MOBILE, "", PhoneNumberType.MOBILE, "", ""));
+
+        showContactEditor(new Contact(id, "", "", ""));
 
     }
 
     @FXML
     private void editContact() {
 
-        ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
-
         //получить объект из UI
-        Contact contact = new Contact();
+        Contact contact = (Contact) contactTableView.getSelectionModel().getSelectedItem();
 
-        int editableContactId = contact.getId();
-
-        for (int i = 0; i < contactObservableList.size(); i++) {
-            Contact editableContact = contactObservableList.get(i);
-
-            //получить инфу из UI sgsdfg
-            if (editableContact.getId() == editableContactId) {
-                editableContact.setNotes("");
-                editableContact.setEmail("");
-                editableContact.setFirstName("");
-                editableContact.setFirstPhoneNumber("");
-                editableContact.setFirstPhoneNumberType(PhoneNumberType.MOBILE);
-                editableContact.setLastName("");
-                editableContact.setMiddleName("");
-                editableContact.setSecondPhoneNumber("");
-                editableContact.setSecondPhoneNumberType(PhoneNumberType.MOBILE);
-            }
-        }
+        showContactEditor(contact);
 
     }
 
@@ -106,8 +151,7 @@ public class MainController {
 
         ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
 
-        //получить объект из UI
-        Contact contact = new Contact();
+        Contact contact = (Contact) contactTableView.getSelectionModel().getSelectedItem();
 
         int deletableContactId = contact.getId();
 
@@ -123,54 +167,105 @@ public class MainController {
     @FXML
     private void createGroup() {
 
-        int id = ((Group) dataManager.getGroupObservableSet().toArray()[dataManager.getGroupObservableSet().toArray().length - 1]).getId() + 1;
-        //получить инфу из UI sgsdfg
-        dataManager.getGroupObservableSet().add(new Group(id, "", ""));
+        int id = ((Group) dataManager.getGroupObservableList().get(dataManager.getGroupObservableList().size() - 1)).getId() + 1;
+
+        showGroupEditor(new Group(id, ""));
 
     }
 
     @FXML
     private void editGroup() {
 
-        ObservableSet<Group> groupObservableSet = dataManager.getGroupObservableSet();
+        Group group = (Group) groupTableView.getSelectionModel().getSelectedItem();
 
-        //получить объект из UI
-        Group group = new Group();
-
-        int editableGroupId = group.getId();
-
-        Iterator<Group> groupIterator = groupObservableSet.iterator();
-
-        while (groupIterator.hasNext()) {
-            Group editableGroup = groupIterator.next();
-
-            //получить инфу из UI sgsdfg
-            if (editableGroup.getId() == editableGroupId) {
-                editableGroup.setName("");
-                editableGroup.setNotes("");
-            }
-        }
+        showGroupEditor(group);
 
     }
 
     @FXML
     private void deleteGroup() {
 
-        ObservableSet<Group> groupObservableSet = dataManager.getGroupObservableSet();
+        ObservableList<Group> groupObservableList = dataManager.getGroupObservableList();
 
-        //получить объект из UI
-        Group group = new Group();
+        Group group = (Group) groupTableView.getSelectionModel().getSelectedItem();
 
         int editableGroupId = group.getId();
 
-        Iterator<Group> groupIterator = groupObservableSet.iterator();
+        Iterator<Group> groupIterator = groupObservableList.iterator();
 
         while (groupIterator.hasNext()) {
             Group deletableGroup = groupIterator.next();
 
-            //получить инфу из UI sgsdfg
             if (deletableGroup.getId() == editableGroupId)
-                groupObservableSet.remove(deletableGroup);
+                groupObservableList.remove(deletableGroup);
+        }
+
+    }
+
+    private void showContactEditor(Contact contact) {
+
+        String stageTitle = "";
+        String fxmlPath = "/fxml/contact_editor.fxml";
+        FXMLLoader loader = null;
+        GridPane page = null;
+        Stage dialogStage = null;
+        Scene scene = null;
+        ContactEditorController contactEditorController = null;
+
+        try {
+
+            loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            page = loader.load();
+
+            dialogStage = new Stage();
+            dialogStage.setTitle(stageTitle);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            contactEditorController = loader.getController();
+            contactEditorController.setDialogStage(dialogStage);
+            contactEditorController.setContact(contact);
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void showGroupEditor(Group group) {
+
+        String stageTitle = "";
+        String fxmlPath = "/fxml/group_editor.fxml";
+        FXMLLoader loader = null;
+        GridPane page = null;
+        Stage dialogStage = null;
+        Scene scene = null;
+        GroupEditorController groupEditorController = null;
+
+        try {
+
+            loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            page = loader.load();
+
+            dialogStage = new Stage();
+            dialogStage.setTitle(stageTitle);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            scene = new Scene(page);
+            dialogStage.setScene(scene);
+
+            groupEditorController = loader.getController();
+            groupEditorController.setDialogStage(dialogStage);
+            groupEditorController.setGroup(group);
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e){
+            e.printStackTrace();
         }
 
     }

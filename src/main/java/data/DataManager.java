@@ -2,11 +2,12 @@ package data;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import model.Contact;
 import model.Group;
+import model.PhoneNumberType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,21 +19,21 @@ public class DataManager {
     //<editor-fold desc="Поля">
 
     private static final Logger log = LoggerFactory.getLogger(DataManager.class);
-    private ObservableSet<Group> groupObservableSet = FXCollections.observableSet();
-    private ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
+    private ObservableList<Group> groupObservableList;
+    private ObservableList<Contact> contactObservableList;
     private static DataManager instance;
-    private Map<String, ObservableList<Contact>> contactGroupAssociationMap = new HashMap<String, ObservableList<Contact>>();
+    private Map<String, ObservableList<Contact>> contactGroupAssociationMap;
 
     //</editor-fold>
 
     //<editor-fold desc="Методы получения">
 
-    public ObservableSet<Group> getGroupObservableSet() {
-        return groupObservableSet;
+    public ObservableList<Group> getGroupObservableList() {
+        return groupObservableList;
     }
 
-    public void setGroupObservableSet(ObservableSet<Group> groupObservableSet) {
-        this.groupObservableSet = groupObservableSet;
+    public void setGroupObservableList(ObservableList<Group> groupObservableList) {
+        this.groupObservableList = groupObservableList;
     }
 
     public ObservableList<Contact> getContactObservableList() {
@@ -56,10 +57,34 @@ public class DataManager {
     //<editor-fold desc="Методы">
 
 
-
     //</editor-fold>
 
     private DataManager() {
+
+        groupObservableList = FXCollections.observableArrayList();
+        contactObservableList = FXCollections.observableArrayList();
+        contactObservableList.add(new Contact(0, "1", "1", "1", "232266", PhoneNumberType.MOBILE, "234234", PhoneNumberType.HOME, "email", "notes"));
+        contactObservableList.add(new Contact(1, "2 ", "2 ", "2 "));
+        contactGroupAssociationMap = new HashMap<String, ObservableList<Contact>>();
+        groupObservableList.add(new Group(0, "g1", "notes"));
+
+        initializeData();
+
+    }
+
+    private void initializeData() {
+
+        initializeGroups();
+        initializeContacts();
+
+    }
+
+    private void initializeGroups() {
+        //load from source
+    }
+
+    private void initializeContacts() {
+        //load from source
     }
 
     public static DataManager getInstance() {

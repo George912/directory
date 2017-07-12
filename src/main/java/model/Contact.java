@@ -1,5 +1,8 @@
 package model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  * Created by neste_000 on 11.07.2017.
  */
@@ -8,9 +11,9 @@ public class Contact {
     //<editor-fold desc="поля">
 
     private int id;
-    private String firstName;
-    private String lastName;
-    private String middleName;
+    private final StringProperty firstName;
+    private final StringProperty lastName;
+    private final StringProperty middleName;
     private String firstPhoneNumber;
     private PhoneNumberType firstPhoneNumberType;
     private String secondPhoneNumber;
@@ -23,13 +26,16 @@ public class Contact {
     //<editor-fold desc="конструкторы">
 
     public Contact() {
+        this.firstName = new SimpleStringProperty("");
+        this.middleName = new SimpleStringProperty("");
+        this.lastName = new SimpleStringProperty("");
     }
 
     public Contact(int id, String firstName, String lastName, String middleName) {
         this.id = id;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
+        this.firstName = new SimpleStringProperty(firstName);
+        this.middleName = new SimpleStringProperty(middleName);
+        this.lastName = new SimpleStringProperty(lastName);
         this.firstPhoneNumber = "";
         this.firstPhoneNumberType = PhoneNumberType.MOBILE;
         this.secondPhoneNumber = "";
@@ -62,30 +68,6 @@ public class Contact {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
     }
 
     public String getFirstPhoneNumber() {
@@ -134,6 +116,42 @@ public class Contact {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getFirstName() {
+        return firstName.get();
+    }
+
+    public StringProperty firstNameProperty() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName.set(firstName);
+    }
+
+    public String getLastName() {
+        return lastName.get();
+    }
+
+    public StringProperty lastNameProperty() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName.set(lastName);
+    }
+
+    public String getMiddleName() {
+        return middleName.get();
+    }
+
+    public StringProperty middleNameProperty() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName.set(middleName);
     }
 
     //</editor-fold>

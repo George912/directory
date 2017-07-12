@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="500.0" maxWidth="800.0" minHeight="500.0" minWidth="800.0" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane maxHeight="500.0" maxWidth="800.0" minHeight="500.0" minWidth="800.0" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -32,8 +32,9 @@
                             <children>
                                 <TableView id="contactTableView" fx:id="contactTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="3">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
+                                        <TableColumn id="contactTableViewLastNameColumn" fx:id="contactTableViewLastNameColumn" prefWidth="75.0" text="Фамилия" />
+                                        <TableColumn id="contactTableViewNameColumn" fx:id="contactTableViewNameColumn" prefWidth="75.0" text="Имя" />
+                              <TableColumn id="contactTableViewMiddleNameColumn" fx:id="contactTableViewMiddleNameColumn" prefWidth="75.0" text="Отчество" />
                                     </columns>
                                 </TableView>
                                 <ComboBox id="groupComboBox" fx:id="groupComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
@@ -91,8 +92,8 @@
                                         <TextField id="secondPhoneNumberTextField" fx:id="secondPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                         <TextField id="emailTextField" fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                                         <TextArea id="notesTextArea" fx:id="notesTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                                        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                        <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                        <ComboBox id="firstPhoneNumberTypeComboBox" fx:id="firstPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                        <ComboBox id="secondPhoneNumberTypeComboBox" fx:id="secondPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                     </children>
                                 </GridPane>
                             </children>
@@ -115,23 +116,22 @@
                             <children>
                                 <TableView id="groupTableView" fx:id="groupTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="3">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="C1" />
-                                        <TableColumn prefWidth="75.0" text="C2" />
+                                        <TableColumn id="groupTableViewGroupNameTableColumn" fx:id="groupTableViewGroupNameTableColumn" prefWidth="75.0" text="Имя" />
                                     </columns>
                                 </TableView>
                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <children>
-                                        <ImageView id="addGroupImageView" fx:id="addGroupImageView" fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView id="addGroupImageView" fx:id="addGroupImageView" fitHeight="12.0" fitWidth="12.0" onMouseClicked="#createGroup" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="file:/F:/Data/idea/projects/directory/src/main/resources/images/add.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView id="editGroupImageView" fx:id="editGroupImageView" fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView id="editGroupImageView" fx:id="editGroupImageView" fitHeight="12.0" fitWidth="12.0" onMouseClicked="#editGroup" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="file:/F:/Data/idea/projects/directory/src/main/resources/images/edit.png" />
                                             </image>
                                         </ImageView>
-                                        <ImageView id="deleteGroupImageView" fx:id="deleteGroupImageView" fitHeight="12.0" fitWidth="12.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView id="deleteGroupImageView" fx:id="deleteGroupImageView" fitHeight="12.0" fitWidth="12.0" onMouseClicked="#deleteGroup" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="file:/F:/Data/idea/projects/directory/src/main/resources/images/delete.png" />
                                             </image>
