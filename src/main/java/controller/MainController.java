@@ -1,11 +1,11 @@
-package directory;
+package controller;
 
 import data.DataManager;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import model.Contact;
 import model.Group;
 import model.PhoneNumberType;
@@ -20,11 +20,41 @@ public class MainController {
     //<editor-fold desc="поля">
 
     @FXML
-    private TextField firstNameField;
+    private TableView contactTableView;
     @FXML
-    private TextField lastNameField;
+    private TableView groupTableView;
     @FXML
-    private Label messageLabel;
+    private ComboBox groupComboBox;
+    @FXML
+    private ImageView addContactImageView;
+    @FXML
+    private ImageView editContactImageView;
+    @FXML
+    private ImageView deleteContactImageView;
+    @FXML
+    private ImageView addGroupImageView;
+    @FXML
+    private ImageView editGroupImageView;
+    @FXML
+    private ImageView deleteGroupImageView;
+    @FXML
+    private TextField lastNameTextField;
+    @FXML
+    private TextField nameTextField;
+    @FXML
+    private TextField middleNameTextField;
+    @FXML
+    private TextField firstPhoneNumberTextField;
+    @FXML
+    private TextField secondPhoneNumberTextField;
+    @FXML
+    private TextField emailTextField;
+    @FXML
+    private TextArea notesTextArea;
+    @FXML
+    private TextField groupNameTextField;
+    @FXML
+    private TextArea groupNotesTextArea;
     private DataManager dataManager;
 
     //</editor-fold>
@@ -57,7 +87,7 @@ public class MainController {
 
             //получить инфу из UI sgsdfg
             if (editableContact.getId() == editableContactId) {
-                editableContact.setDescription("");
+                editableContact.setNotes("");
                 editableContact.setEmail("");
                 editableContact.setFirstName("");
                 editableContact.setFirstPhoneNumber("");
@@ -117,7 +147,7 @@ public class MainController {
             //получить инфу из UI sgsdfg
             if (editableGroup.getId() == editableGroupId) {
                 editableGroup.setName("");
-                editableGroup.setDescription("");
+                editableGroup.setNotes("");
             }
         }
 

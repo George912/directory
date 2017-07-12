@@ -16,7 +16,7 @@ public class Contact {
     private String secondPhoneNumber;
     private PhoneNumberType secondPhoneNumberType;
     private String email;
-    private String description;
+    private String notes;
 
     //</editor-fold>
 
@@ -35,7 +35,7 @@ public class Contact {
         this.secondPhoneNumber = "";
         this.secondPhoneNumberType = PhoneNumberType.MOBILE;
         this.email = "";
-        this.description = "";
+        this.notes = "";
     }
 
     public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType) {
@@ -44,12 +44,12 @@ public class Contact {
         this.firstPhoneNumberType = firstPhoneNumberType;
     }
 
-    public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType, String secondPhoneNumber, PhoneNumberType secondPhoneNumberType, String email, String description) {
+    public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType, String secondPhoneNumber, PhoneNumberType secondPhoneNumberType, String email, String notes) {
         this(id, firstName, lastName, middleName, firstPhoneNumber, firstPhoneNumberType);
         this.secondPhoneNumber = secondPhoneNumber;
         this.secondPhoneNumberType = secondPhoneNumberType;
         this.email = email;
-        this.description = description;
+        this.notes = notes;
     }
 
     //</editor-fold>
@@ -128,12 +128,12 @@ public class Contact {
         this.email = email;
     }
 
-    public String getDescription() {
-        return description;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     //</editor-fold>

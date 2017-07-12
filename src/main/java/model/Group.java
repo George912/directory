@@ -9,7 +9,7 @@ public class Group {
 
     private int id;
     private String name;
-    private String description;
+    private String notes;
 
     //</editor-fold>
 
@@ -23,9 +23,9 @@ public class Group {
         this.name = name;
     }
 
-    public Group(int id, String name, String description) {
+    public Group(int id, String name, String notes) {
         this(id, name);
-        this.description = description;
+        this.notes = notes;
     }
 
     //</editor-fold>
@@ -40,12 +40,12 @@ public class Group {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getNotes() {
+        return notes;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public int getId() {
