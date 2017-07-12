@@ -41,8 +41,8 @@
                         <TextArea id="groupNotesTextArea" fx:id="groupNotesTextArea" prefHeight="167.0" prefWidth="474.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                      <children>
-                        <Button id="saveButton" fx:id="saveButton" mnemonicParsing="false" text="Сохранить" />
-                        <Button id="cancelButton" fx:id="cancelButton" mnemonicParsing="false" text="Отмена" />
+                        <Button id="saveButton" fx:id="saveButton" mnemonicParsing="false" onAction="#saveButtonClick" text="Сохранить" />
+                        <Button id="cancelButton" fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonClick" text="Отмена" />
                      </children>
                   </HBox>
                     </children>

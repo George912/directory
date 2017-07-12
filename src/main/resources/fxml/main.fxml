@@ -92,8 +92,8 @@
                                         <TextField id="secondPhoneNumberTextField" fx:id="secondPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                         <TextField id="emailTextField" fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                                         <TextArea id="notesTextArea" fx:id="notesTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                                        <ComboBox id="firstPhoneNumberTypeComboBox" fx:id="firstPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                        <ComboBox id="secondPhoneNumberTypeComboBox" fx:id="secondPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                        <ComboBox id="firstPhoneNumberTypeComboBox" fx:id="firstPhoneNumberTypeComboBox" disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                        <ComboBox id="secondPhoneNumberTypeComboBox" fx:id="secondPhoneNumberTypeComboBox" disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                                     </children>
                                 </GridPane>
                             </children>

@@ -1,5 +1,7 @@
 package controller;
 
+import data.DataManager;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -16,9 +18,9 @@ import java.util.Iterator;
  */
 public class GroupEditorController {
 
-    private static final Logger log = LoggerFactory.getLogger(GroupEditorController.class);
-
     //<editor-fold desc="поля">
+
+    private static final Logger log = LoggerFactory.getLogger(GroupEditorController.class);
 
     @FXML
     private TextField groupNameTextField;
@@ -31,6 +33,8 @@ public class GroupEditorController {
 
     private Stage dialogStage;
     Group group;
+    DataManager dataManager;
+    EditorAction editorAction;
 
     //</editor-fold>
 
@@ -57,22 +61,60 @@ public class GroupEditorController {
         this.dialogStage = dialogStage;
     }
 
+    public EditorAction getEditorAction() {
+        return editorAction;
+    }
+
+    public void setEditorAction(EditorAction editorAction) {
+        this.editorAction = editorAction;
+    }
+
     //</editor-fold>
 
-    //edit
-//    int editableGroupId = group.getId();
-//
-//    Iterator<Group> groupIterator = groupObservableSet.iterator();
-//
-//    while (groupIterator.hasNext()) {
-//        Group editableGroup = groupIterator.next();
-//
-//        //получить инфу из UI sgsdfg
-//        if (editableGroup.getId() == editableGroupId) {
-//            editableGroup.setName("");
-//            editableGroup.setNotes("");
-//        }
-//    }
+    public GroupEditorController() {
+        dataManager = DataManager.getInstance();
+    }
 
+    @FXML
+    private void saveButtonClick() {
+
+        ObservableList<Group> groupObservableList = dataManager.getGroupObservableList();
+        int groupId = group.getId();
+
+        switch (editorAction) {
+            case CREATE:
+
+                group.setName(groupNameTextField.getText());
+                group.setNotes(groupNotesTextArea.getText());
+
+                groupObservableList.add(group);
+
+                break;
+
+            case UPDATE:
+
+                Iterator<Group> groupIterator = groupObservableList.iterator();
+
+                while (groupIterator.hasNext()) {
+                    Group editableGroup = groupIterator.next();
+
+                    if (editableGroup.getId() == groupId) {
+                        editableGroup.setName(groupNameTextField.getText());
+                        editableGroup.setNotes(groupNotesTextArea.getText());
+                    }
+                }
+
+                break;
+
+        }
+
+        dialogStage.close();
+
+    }
+
+    @FXML
+    private void cancelButtonClick() {
+        dialogStage.close();
+    }
 
 }

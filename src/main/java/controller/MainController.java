@@ -18,13 +18,14 @@ import model.Group;
 import model.PhoneNumberType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
 
 public class MainController {
 
-    //<editor-fold desc="ïîëÿ">
+    //<editor-fold desc="Ð¿Ð¾Ð»Ñ">
 
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
@@ -73,9 +74,9 @@ public class MainController {
     @FXML
     private TextArea groupNotesTextArea;
     @FXML
-    private ComboBox<PhoneNumberType> firstPhoneNumberTypeComboBox;
+    private ComboBox<String> firstPhoneNumberTypeComboBox;
     @FXML
-    private ComboBox<PhoneNumberType> secondPhoneNumberTypeComboBox;
+    private ComboBox<String> secondPhoneNumberTypeComboBox;
 
     private DataManager dataManager;
 
@@ -102,9 +103,9 @@ public class MainController {
                 lastNameTextField.setText(contact.getLastName());
                 nameTextField.setText(contact.getFirstName());
                 middleNameTextField.setText(contact.getMiddleName());
-                firstPhoneNumberTypeComboBox.getSelectionModel().select(contact.getFirstPhoneNumberType());
+                firstPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getFirstPhoneNumberType()));
                 firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
-                secondPhoneNumberTypeComboBox.getSelectionModel().select(contact.getSecondPhoneNumberType());
+                secondPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getSecondPhoneNumberType()));
                 secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
                 emailTextField.setText(contact.getEmail());
                 notesTextArea.setText(contact.getNotes());
@@ -132,17 +133,17 @@ public class MainController {
 
         int id = dataManager.getContactObservableList().get(dataManager.getContactObservableList().size() - 1).getId() + 1;
 
-        showContactEditor(new Contact(id, "", "", ""));
+        showContactEditor(new Contact(id, "", "", ""), EditorAction.CREATE);
 
     }
 
     @FXML
     private void editContact() {
 
-        //ïîëó÷èòü îáúåêò èç UI
+        //Ð¿Ð¾Ð»ÑƒÑ‡Ð¸Ñ‚ÑŒ Ð¾Ð±ÑŠÐµÐºÑ‚ Ð¸Ð· UI
         Contact contact = (Contact) contactTableView.getSelectionModel().getSelectedItem();
 
-        showContactEditor(contact);
+        showContactEditor(contact, EditorAction.UPDATE);
 
     }
 
@@ -169,7 +170,7 @@ public class MainController {
 
         int id = ((Group) dataManager.getGroupObservableList().get(dataManager.getGroupObservableList().size() - 1)).getId() + 1;
 
-        showGroupEditor(new Group(id, ""));
+        showGroupEditor(new Group(id, ""), EditorAction.CREATE);
 
     }
 
@@ -178,7 +179,7 @@ public class MainController {
 
         Group group = (Group) groupTableView.getSelectionModel().getSelectedItem();
 
-        showGroupEditor(group);
+        showGroupEditor(group, EditorAction.UPDATE);
 
     }
 
@@ -202,7 +203,7 @@ public class MainController {
 
     }
 
-    private void showContactEditor(Contact contact) {
+    private void showContactEditor(Contact contact, EditorAction editorAction) {
 
         String stageTitle = "";
         String fxmlPath = "/fxml/contact_editor.fxml";
@@ -227,6 +228,7 @@ public class MainController {
             contactEditorController = loader.getController();
             contactEditorController.setDialogStage(dialogStage);
             contactEditorController.setContact(contact);
+            contactEditorController.setEditorAction(editorAction);
 
             dialogStage.showAndWait();
 
@@ -236,7 +238,7 @@ public class MainController {
 
     }
 
-    private void showGroupEditor(Group group) {
+    private void showGroupEditor(Group group, EditorAction editorAction) {
 
         String stageTitle = "";
         String fxmlPath = "/fxml/group_editor.fxml";
@@ -261,6 +263,7 @@ public class MainController {
             groupEditorController = loader.getController();
             groupEditorController.setDialogStage(dialogStage);
             groupEditorController.setGroup(group);
+            groupEditorController.setEditorAction(editorAction);
 
             dialogStage.showAndWait();
 

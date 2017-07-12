@@ -55,8 +55,8 @@
           </GridPane>
       <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
          <children>
-            <Button id="saveButton" fx:id="saveButton" mnemonicParsing="false" text="Сохранить" />
-            <Button id="cancelButton" fx:id="cancelButton" mnemonicParsing="false" text="Отмена" />
+            <Button id="saveButton" fx:id="saveButton" mnemonicParsing="false" onMouseClicked="#saveButtonClick" text="Сохранить" />
+            <Button id="cancelButton" fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#cancelButtonClick" text="Отмена" />
          </children>
       </HBox>
     </children>
