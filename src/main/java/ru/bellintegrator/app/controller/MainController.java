@@ -1,10 +1,10 @@
-package controller;
+package ru.bellintegrator.app.controller;
 
-import data.DataManager;
-import directory.MainApp;
+import javafx.beans.property.SimpleStringProperty;
+import ru.bellintegrator.app.data.DataManager;
+import ru.bellintegrator.app.directory.MainApp;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,13 +14,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.Contact;
-import model.Group;
-import model.PhoneNumberType;
+import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.Group;
 import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.Util;
+import ru.bellintegrator.app.util.Util;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -88,16 +87,18 @@ public class MainController {
     //</editor-fold>
 
     public MainController() {
+
         dataManager = DataManager.getInstance();
+
     }
 
     @FXML
     private void initialize() {
 
         contactTableView.setItems(dataManager.getContactObservableList());
-        contactTableViewLastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
-        contactTableViewNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-        contactTableViewMiddleNameColumn.setCellValueFactory(cellData -> cellData.getValue().middleNameProperty());
+        contactTableViewLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
+        contactTableViewNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
+        contactTableViewMiddleNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMiddleName()));
 
         contactTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
             @Override
@@ -120,7 +121,7 @@ public class MainController {
         });
 
         groupTableView.setItems(dataManager.getGroupObservableList());
-        groupTableViewGroupNameTableColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        groupTableViewGroupNameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
 
         groupTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
             @Override
@@ -137,7 +138,13 @@ public class MainController {
     @FXML
     private void createContact() {
 
-        int id = dataManager.getContactObservableList().get(dataManager.getContactObservableList().size() - 1).getId() + 1;
+        int id;
+
+        if(dataManager.getContactObservableList().isEmpty())
+            id = 0;
+
+        else
+            id = dataManager.getContactObservableList().get(dataManager.getContactObservableList().size() - 1).getId() + 1;
 
         showContactEditor(new Contact(id, "", "", ""), EditorAction.CREATE);
 
@@ -174,7 +181,13 @@ public class MainController {
     @FXML
     private void createGroup() {
 
-        int id = ((Group) dataManager.getGroupObservableList().get(dataManager.getGroupObservableList().size() - 1)).getId() + 1;
+        int id;
+
+        if(dataManager.getGroupObservableList().isEmpty())
+            id = 0;
+
+        else
+            id = ((Group) dataManager.getGroupObservableList().get(dataManager.getGroupObservableList().size() - 1)).getId() + 1;
 
         showGroupEditor(new Group(id, ""), EditorAction.CREATE);
 

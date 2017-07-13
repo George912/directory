@@ -10,7 +10,7 @@
         </layout>
     </appender>
 
-    <logger name="directory">
+    <logger name="ru.bellintegrator.app">
         <level value="DEBUG"/>
     </logger>
 

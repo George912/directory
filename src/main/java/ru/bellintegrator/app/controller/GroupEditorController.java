@@ -1,13 +1,13 @@
-package controller;
+package ru.bellintegrator.app.controller;
 
-import data.DataManager;
+import ru.bellintegrator.app.data.DataManager;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.Group;
+import ru.bellintegrator.app.model.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ import java.util.Iterator;
  */
 public class GroupEditorController {
 
-    //<editor-fold desc="поля">
+    //<editor-fold desc="РїРѕР»СЏ">
 
     private static final Logger log = LoggerFactory.getLogger(GroupEditorController.class);
 
@@ -38,7 +38,7 @@ public class GroupEditorController {
 
     //</editor-fold>
 
-    //<editor-fold desc="методы получения и установки">
+    //<editor-fold desc="РјРµС‚РѕРґС‹ РїРѕР»СѓС‡РµРЅРёСЏ Рё СѓСЃС‚Р°РЅРѕРІРєРё">
 
     public Group getGroup() {
         return group;

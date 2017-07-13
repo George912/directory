@@ -1,22 +1,20 @@
-package model;
+package ru.bellintegrator.app.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by neste_000 on 11.07.2017.
  */
-public class Contact {
+public class Contact implements Serializable{
 
     //<editor-fold desc="поля">
 
     private int id;
-    private final StringProperty firstName;
-    private final StringProperty lastName;
-    private final StringProperty middleName;
+    private  String firstName;
+    private  String lastName;
+    private  String middleName;
     private String firstPhoneNumber;
     private PhoneNumberType firstPhoneNumberType;
     private String secondPhoneNumber;
@@ -30,16 +28,18 @@ public class Contact {
     //<editor-fold desc="конструкторы">
 
     public Contact() {
-        this.firstName = new SimpleStringProperty("");
-        this.middleName = new SimpleStringProperty("");
-        this.lastName = new SimpleStringProperty("");
+
+        this.firstName = "";
+        this.middleName = "";
+        this.lastName = "";
+
     }
 
     public Contact(int id, String firstName, String lastName, String middleName) {
         this.id = id;
-        this.firstName = new SimpleStringProperty(firstName);
-        this.middleName = new SimpleStringProperty(middleName);
-        this.lastName = new SimpleStringProperty(lastName);
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
         this.firstPhoneNumber = "";
         this.firstPhoneNumberType = PhoneNumberType.MOBILE;
         this.secondPhoneNumber = "";
@@ -123,39 +123,27 @@ public class Contact {
     }
 
     public String getFirstName() {
-        return firstName.get();
-    }
-
-    public StringProperty firstNameProperty() {
         return firstName;
     }
 
     public void setFirstName(String firstName) {
-        this.firstName.set(firstName);
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return lastName.get();
-    }
-
-    public StringProperty lastNameProperty() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
-        this.lastName.set(lastName);
+        this.lastName = lastName;
     }
 
     public String getMiddleName() {
-        return middleName.get();
-    }
-
-    public StringProperty middleNameProperty() {
         return middleName;
     }
 
     public void setMiddleName(String middleName) {
-        this.middleName.set(middleName);
+        this.middleName = middleName;
     }
 
     public List<Group> getGroupList() {
@@ -164,4 +152,20 @@ public class Contact {
 
     //</editor-fold>
 
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", firstPhoneNumber='" + firstPhoneNumber + '\'' +
+                ", firstPhoneNumberType=" + firstPhoneNumberType +
+                ", secondPhoneNumber='" + secondPhoneNumber + '\'' +
+                ", secondPhoneNumberType=" + secondPhoneNumberType +
+                ", email='" + email + '\'' +
+                ", notes='" + notes + '\'' +
+                ", groupList=" + groupList +
+                '}';
+    }
 }

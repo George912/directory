@@ -1,4 +1,4 @@
-package model;
+package ru.bellintegrator.app.model;
 
 /**
  * Created by neste_000 on 11.07.2017.

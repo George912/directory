@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="502.0" maxWidth="800.0" minHeight="500.0" minWidth="800.0" prefHeight="502.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GroupEditorController">
+<GridPane maxHeight="502.0" maxWidth="800.0" minHeight="500.0" minWidth="800.0" prefHeight="502.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.bellintegrator.app.controller.GroupEditorController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
