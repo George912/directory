@@ -233,7 +233,6 @@ public class MainController {
         ContactEditorController contactEditorController = null;
 
         try {
-            log.debug("");
             loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource(fxmlPath));
             page = loader.load();

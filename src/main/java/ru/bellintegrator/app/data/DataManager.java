@@ -47,31 +47,7 @@ public class DataManager {
 
     //</editor-fold>
 
-    private DataManager() {
-
-//        contactObservableList.add(new Contact(0, "1", "1", "1", "232266", PhoneNumberType.MOBILE, "234234", PhoneNumberType.HOME, "email", "notes"));
-//        contactObservableList.add(new Contact(1, "2 ", "2 ", "2 "));
-//        groupObservableList.add(new Group(0, "g1", "notes"));
-//        groupObservableList.add(new Group(1, "g2", "notes"));
-
-//        initializeData();
-
-    }
-
-    private void initializeData() {
-
-        initializeGroups();
-        initializeContacts();
-
-    }
-
-    private void initializeGroups() {
-        //load from source
-    }
-
-    private void initializeContacts() {
-        //load from source
-    }
+    private DataManager() {}
 
     public static DataManager getInstance() {
 
