@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import org.controlsfx.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -72,6 +73,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
@@ -84,16 +86,18 @@
                                         <Label text="Тип телефона" GridPane.rowIndex="6" />
                                         <Label text="Телефон" GridPane.rowIndex="7" />
                                         <Label text="Эл. почта" GridPane.rowIndex="8" />
-                                        <Label text="Примечания" GridPane.rowIndex="9" />
+                                        <Label text="Примечания" GridPane.rowIndex="10" />
                                         <TextField id="lastNameTextField" fx:id="lastNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                         <TextField id="nameTextField" fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                         <TextField id="middleNameTextField" fx:id="middleNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                         <TextField id="firstPhoneNumberTextField" fx:id="firstPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                         <TextField id="secondPhoneNumberTextField" fx:id="secondPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                         <TextField id="emailTextField" fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                                        <TextArea id="notesTextArea" fx:id="notesTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                                        <TextArea id="notesTextArea" fx:id="notesTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                                         <ComboBox id="firstPhoneNumberTypeComboBox" fx:id="firstPhoneNumberTypeComboBox" disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                         <ComboBox id="secondPhoneNumberTypeComboBox" fx:id="secondPhoneNumberTypeComboBox" disable="true" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <Label text="Группы" GridPane.rowIndex="9" />
+                              <CheckListView id="groupCheckListView" fx:id="groupCheckListView" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                                     </children>
                                 </GridPane>
                             </children>

@@ -3,12 +3,15 @@ package model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by neste_000 on 11.07.2017.
  */
 public class Contact {
 
-    //<editor-fold desc="поля">
+    //<editor-fold desc="РїРѕР»СЏ">
 
     private int id;
     private final StringProperty firstName;
@@ -20,10 +23,11 @@ public class Contact {
     private PhoneNumberType secondPhoneNumberType;
     private String email;
     private String notes;
+    private List<Group> groupList = new ArrayList<>();
 
     //</editor-fold>
 
-    //<editor-fold desc="конструкторы">
+    //<editor-fold desc="РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹">
 
     public Contact() {
         this.firstName = new SimpleStringProperty("");
@@ -60,7 +64,7 @@ public class Contact {
 
     //</editor-fold>
 
-    //<editor-fold desc="методы получения и установки">
+    //<editor-fold desc="РјРµС‚РѕРґС‹ РїРѕР»СѓС‡РµРЅРёСЏ Рё СѓСЃС‚Р°РЅРѕРІРєРё">
 
     public int getId() {
         return id;
@@ -154,5 +158,10 @@ public class Contact {
         this.middleName.set(middleName);
     }
 
+    public List<Group> getGroupList() {
+        return groupList;
+    }
+
     //</editor-fold>
+
 }

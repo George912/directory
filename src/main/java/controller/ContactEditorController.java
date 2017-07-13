@@ -4,13 +4,12 @@ import data.DataManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Contact;
+import model.Group;
 import model.PhoneNumberType;
+import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Util;
@@ -20,7 +19,7 @@ import util.Util;
  */
 public class ContactEditorController {
 
-    //<editor-fold desc="поля">
+    //<editor-fold desc="РїРѕР»СЏ">
 
     private static final Logger log = LoggerFactory.getLogger(ContactEditorController.class);
 
@@ -50,6 +49,8 @@ public class ContactEditorController {
     private ComboBox<String> firstPhoneNumberTypeComboBox;
     @FXML
     private ComboBox<String> secondPhoneNumberTypeComboBox;
+    @FXML
+    private CheckListView<Group> groupCheckListView;
 
     Contact contact;
     private Stage dialogStage;
@@ -58,7 +59,7 @@ public class ContactEditorController {
 
     //</editor-fold>
 
-    //<editor-fold desc="методы получения и установки">
+    //<editor-fold desc="РјРµС‚РѕРґС‹ РїРѕР»СѓС‡РµРЅРёСЏ Рё СѓСЃС‚Р°РЅРѕРІРєРё">
 
     public Contact getContact() {
         return contact;
@@ -76,6 +77,13 @@ public class ContactEditorController {
         secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
         emailTextField.setText(contact.getEmail());
         notesTextArea.setText(contact.getNotes());
+
+        for (Group group : contact.getGroupList()){
+            System.out.println(group);
+            groupCheckListView.getSelectionModel().select(group);
+        }
+
+
     }
 
     public Stage getDialogStage() {
@@ -106,6 +114,9 @@ public class ContactEditorController {
         firstPhoneNumberTypeComboBox.setItems(preparePhoneNumberTypeComboBoxData(PhoneNumberType.values()));
         secondPhoneNumberTypeComboBox.setItems(preparePhoneNumberTypeComboBoxData(PhoneNumberType.values()));
 
+        groupCheckListView.setItems(dataManager.getGroupObservableList());
+        groupCheckListView.getSelectionModel().selectionModeProperty().setValue(SelectionMode.MULTIPLE);
+
     }
 
     @FXML
@@ -128,11 +139,18 @@ public class ContactEditorController {
                 contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
                 contact.setSecondPhoneNumberType(Util.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
+                contact.getGroupList().addAll(groupCheckListView.getSelectionModel().getSelectedItems());
+
                 contactObservableList.add(contact);
 
                 break;
 
             case UPDATE:
+                System.out.println(groupCheckListView.getSelectionModel().getSelectedItems().size());
+
+
+                for (Group group: groupCheckListView.getSelectionModel().getSelectedItems())
+                    System.out.println(group);
 
                 for (int i = 0; i < contactObservableList.size(); i++) {
                     Contact editableContact = contactObservableList.get(i);
@@ -147,6 +165,7 @@ public class ContactEditorController {
                         editableContact.setMiddleName(middleNameTextField.getText());
                         editableContact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
                         editableContact.setSecondPhoneNumberType(Util.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+                        editableContact.getGroupList().addAll(groupCheckListView.getSelectionModel().getSelectedItems());
                     }
                 }
 

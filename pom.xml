@@ -87,6 +87,13 @@
             <version>${log4j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>control</groupId>
+            <artifactId>org.controlsfx</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/resources/libs/controlsfx.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>

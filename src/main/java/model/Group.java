@@ -8,7 +8,7 @@ import javafx.beans.property.StringProperty;
  */
 public class Group {
 
-    //<editor-fold desc="поля">
+    //<editor-fold desc="РїРѕР»СЏ">
 
     private int id;
     private final StringProperty name;
@@ -16,7 +16,7 @@ public class Group {
 
     //</editor-fold>
 
-    //<editor-fold desc="конструкторы">
+    //<editor-fold desc="РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹">
 
     public Group() {
         this.name = new SimpleStringProperty("");
@@ -34,7 +34,7 @@ public class Group {
 
     //</editor-fold>
 
-    //<editor-fold desc="методы получения и установки">
+    //<editor-fold desc="РјРµС‚РѕРґС‹ РїРѕР»СѓС‡РµРЅРёСЏ Рё СѓСЃС‚Р°РЅРѕРІРєРё">
 
     public String getName() {
         return name.get();
@@ -65,4 +65,9 @@ public class Group {
     }
 
     //</editor-fold>
+
+    @Override
+    public String toString() {
+        return name.get();
+    }
 }

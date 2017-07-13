@@ -4,6 +4,7 @@ import data.DataManager;
 import directory.MainApp;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import model.Contact;
 import model.Group;
 import model.PhoneNumberType;
+import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.Util;
@@ -77,6 +79,8 @@ public class MainController {
     private ComboBox<String> firstPhoneNumberTypeComboBox;
     @FXML
     private ComboBox<String> secondPhoneNumberTypeComboBox;
+    @FXML
+    private CheckListView<Group> groupCheckListView;
 
     private DataManager dataManager;
 
@@ -109,6 +113,8 @@ public class MainController {
                 secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
                 emailTextField.setText(contact.getEmail());
                 notesTextArea.setText(contact.getNotes());
+
+                groupCheckListView.setItems(dataManager.getGroupObservableList());
 
             }
         });
@@ -214,7 +220,7 @@ public class MainController {
         ContactEditorController contactEditorController = null;
 
         try {
-
+            log.debug("");
             loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource(fxmlPath));
             page = loader.load();

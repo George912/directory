@@ -22,7 +22,6 @@ public class DataManager {
     private ObservableList<Group> groupObservableList;
     private ObservableList<Contact> contactObservableList;
     private static DataManager instance;
-    private Map<String, ObservableList<Contact>> contactGroupAssociationMap;
 
     //</editor-fold>
 
@@ -44,14 +43,6 @@ public class DataManager {
         this.contactObservableList = contactObservableList;
     }
 
-    public Map<String, ObservableList<Contact>> getContactGroupAssociationMap() {
-        return contactGroupAssociationMap;
-    }
-
-    public void setContactGroupAssociationMap(Map<String, ObservableList<Contact>> contactGroupAssociationMap) {
-        this.contactGroupAssociationMap = contactGroupAssociationMap;
-    }
-
     //</editor-fold>
 
     //<editor-fold desc="Методы">
@@ -65,8 +56,8 @@ public class DataManager {
         contactObservableList = FXCollections.observableArrayList();
         contactObservableList.add(new Contact(0, "1", "1", "1", "232266", PhoneNumberType.MOBILE, "234234", PhoneNumberType.HOME, "email", "notes"));
         contactObservableList.add(new Contact(1, "2 ", "2 ", "2 "));
-        contactGroupAssociationMap = new HashMap<String, ObservableList<Contact>>();
         groupObservableList.add(new Group(0, "g1", "notes"));
+        groupObservableList.add(new Group(1, "g2", "notes"));
 
         initializeData();
 
