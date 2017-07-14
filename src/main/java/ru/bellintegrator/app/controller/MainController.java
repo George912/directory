@@ -31,9 +31,9 @@ public class MainController {
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     @FXML
-    private TableView contactTableView;
+    private TableView<Contact> contactTableView;
     @FXML
-    private TableView groupTableView;
+    private TableView<Group> groupTableView;
     @FXML
     private TableColumn<Contact, String> contactTableViewLastNameColumn;
     @FXML

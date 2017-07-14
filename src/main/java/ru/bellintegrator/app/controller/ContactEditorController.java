@@ -187,13 +187,10 @@ public class ContactEditorController {
 
             dialogStage.close();
 
-        } catch (PersonalDataNotSetException e) {
+        } catch (PersonalDataNotSetException | PhoneNumberFormatException e) {
             log.debug(e.getMessage());
             errorLabel.setText(e.getMessage());
 
-        } catch (PhoneNumberFormatException e) {
-            log.debug(e.getMessage());
-            errorLabel.setText(e.getMessage());
         }
 
     }
