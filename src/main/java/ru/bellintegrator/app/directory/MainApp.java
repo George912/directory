@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bellintegrator.app.data.DataManager;
 import ru.bellintegrator.app.state.ILoadFromStore;
 import ru.bellintegrator.app.state.ISaveToStore;
 import ru.bellintegrator.app.state.impl.Loader;
@@ -19,13 +20,14 @@ public class MainApp extends Application {
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
     private ILoadFromStore loader;
     private ISaveToStore saver;
+    private DataManager dataManager = DataManager.getInstance();
 
     //</editor-fold>
 
     @Override
     public void init(){
 
-        loader = new Loader();
+        loader = new Loader(dataManager);
         loader.load();
 
     }
@@ -33,7 +35,7 @@ public class MainApp extends Application {
     @Override
     public void stop(){
 
-        saver = new Saver();
+        saver = new Saver(dataManager);
         saver.save();
 
     }
@@ -51,8 +53,9 @@ public class MainApp extends Application {
         Scene scene = new Scene(rootNode, 400, 200);
         scene.getStylesheets().add("/styles/styles.css");
 
-        stage.setTitle("Hello JavaFX and Maven");
+        stage.setTitle("Справочник контактов");
         stage.setScene(scene);
         stage.show();
+
     }
 }

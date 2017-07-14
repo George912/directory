@@ -19,13 +19,17 @@ import java.util.List;
 public class Loader implements ILoadFromStore {
 
     private static final Logger log = LoggerFactory.getLogger(Loader.class);
+    private DataManager dataManager;
+
+    public Loader(DataManager dataManager) {
+        this.dataManager = dataManager;
+    }
 
     @Override
     public void load() {
 
         List<Contact> contacts;
         List<Group> groups;
-        DataManager dataManager = DataManager.getInstance();
 
         try (FileInputStream fileInputStream = new FileInputStream("state");
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
@@ -39,14 +43,8 @@ public class Loader implements ILoadFromStore {
             log.debug("deserialization:" + contacts);
             log.debug("deserialization:" + groups);
 
-        } catch (FileNotFoundException e) {
-            log.debug(e.getMessage());
-
-        } catch (IOException e) {
-            log.debug(e.getMessage());
-
-        } catch (ClassNotFoundException e) {
-            log.debug(e.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
+            log.debug("При восстановлении состояния возникла ошибка: " + e.getLocalizedMessage());
         }
     }
 

@@ -21,7 +21,7 @@ import ru.bellintegrator.app.data.DataManager;
 import ru.bellintegrator.app.directory.MainApp;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.util.Util;
+import ru.bellintegrator.app.model.PhoneNumberType;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -117,9 +117,9 @@ public class MainController {
                     lastNameTextField.setText(contact.getLastName());
                     nameTextField.setText(contact.getFirstName());
                     middleNameTextField.setText(contact.getMiddleName());
-                    firstPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getFirstPhoneNumberType()));
+                    firstPhoneNumberTypeComboBox.getSelectionModel().select(PhoneNumberType.getStringFromPhoneNumberType(contact.getFirstPhoneNumberType()));
                     firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
-                    secondPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getSecondPhoneNumberType()));
+                    secondPhoneNumberTypeComboBox.getSelectionModel().select(PhoneNumberType.getStringFromPhoneNumberType(contact.getSecondPhoneNumberType()));
                     secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
                     emailTextField.setText(contact.getEmail());
                     notesTextArea.setText(contact.getNotes());
@@ -179,7 +179,8 @@ public class MainController {
         //получить объект из UI
         Contact contact = (Contact) contactTableView.getSelectionModel().getSelectedItem();
 
-        showContactEditor(contact, EditorAction.UPDATE);
+        if (contact != null)
+            showContactEditor(contact, EditorAction.UPDATE);
 
     }
 
@@ -190,13 +191,17 @@ public class MainController {
 
         Contact contact = (Contact) contactTableView.getSelectionModel().getSelectedItem();
 
-        int deletableContactId = contact.getId();
+        if (contact != null) {
+            int deletableContactId = contact.getId();
 
-        for (int i = 0; i < contactObservableList.size(); i++) {
-            Contact deletableContact = contactObservableList.get(i);
+            for (int i = 0; i < contactObservableList.size(); i++) {
+                Contact deletableContact = contactObservableList.get(i);
 
-            if (deletableContact.getId() == deletableContactId)
-                contactObservableList.remove(i);
+                if (deletableContact.getId() == deletableContactId)
+                    contactObservableList.remove(i);
+            }
+
+            contactTableView.setItems(contactObservableList);
         }
 
     }
@@ -221,7 +226,8 @@ public class MainController {
 
         Group group = (Group) groupTableView.getSelectionModel().getSelectedItem();
 
-        showGroupEditor(group, EditorAction.UPDATE);
+        if (group != null)
+            showGroupEditor(group, EditorAction.UPDATE);
 
     }
 
@@ -232,15 +238,17 @@ public class MainController {
 
         Group group = (Group) groupTableView.getSelectionModel().getSelectedItem();
 
-        int editableGroupId = group.getId();
+        if (group != null) {
+            int editableGroupId = group.getId();
 
-        Iterator<Group> groupIterator = groupObservableList.iterator();
+            Iterator<Group> groupIterator = groupObservableList.iterator();
 
-        while (groupIterator.hasNext()) {
-            Group deletableGroup = groupIterator.next();
+            while (groupIterator.hasNext()) {
+                Group deletableGroup = groupIterator.next();
 
-            if (deletableGroup.getId() == editableGroupId)
-                groupObservableList.remove(deletableGroup);
+                if (deletableGroup.getId() == editableGroupId)
+                    groupObservableList.remove(deletableGroup);
+            }
         }
 
     }
@@ -314,17 +322,12 @@ public class MainController {
 
     }
 
-    private void findContactByGroup(ObservableList<Group> groupObservableList,  ObservableList<Contact> contactObservableList) {
+    private void findContactByGroup(ObservableList<Group> groupObservableList, ObservableList<Contact> contactObservableList) {
 
         Set<Contact> contactSet = new HashSet<>();
 
-        log.debug(contactObservableList + "");
-
         if (groupObservableList.isEmpty()) {
-            for (Contact contact : contactObservableList) {
-                if (contact.getGroupList().isEmpty())
-                    contactSet.add(contact);
-            }
+            contactSet.addAll(dataManager.getContactObservableList());
         } else {
             for (Group group : groupObservableList) {
                 for (Contact contact : contactObservableList) {

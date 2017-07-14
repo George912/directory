@@ -6,5 +6,54 @@ package ru.bellintegrator.app.model;
 public enum PhoneNumberType {
     MOBILE,
     HOME,
-    WORKING
+    WORKING,
+    UNKNOWN;
+
+    public static String getStringFromPhoneNumberType(PhoneNumberType phoneNumberType) {
+
+        String s = null;
+
+        switch (phoneNumberType) {
+            case MOBILE:
+                s = "Мобильный";
+                break;
+
+            case HOME:
+                s = "Домашний";
+                break;
+
+            case WORKING:
+                s = "Рабочий";
+                break;
+            case UNKNOWN:
+                s = "";
+                break;
+        }
+
+        return s;
+
+    }
+
+    public static PhoneNumberType getPhoneNumberTypeFromString(String s) {
+
+        PhoneNumberType phoneNumberType;
+
+        switch (s){
+            case "мобильный":
+                phoneNumberType = PhoneNumberType.MOBILE;
+                break;
+            case "домашний":
+                phoneNumberType = PhoneNumberType.HOME;
+                break;
+            case "рабочий":
+                phoneNumberType = PhoneNumberType.WORKING;
+                break;
+            default:
+                phoneNumberType = PhoneNumberType.UNKNOWN;
+                break;
+        }
+
+        return phoneNumberType;
+
+    }
 }

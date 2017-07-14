@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.state.impl;
 
+import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.data.DataManager;
@@ -19,17 +20,15 @@ import java.util.List;
  */
 public class Saver implements ISaveToStore {
 
-    //<editor-fold desc="поля">
-
     private static final Logger log = LoggerFactory.getLogger(Saver.class);
     private DataManager dataManager;
 
-    //</editor-fold>
+    public Saver(DataManager dataManager){
+        this.dataManager = dataManager;
+    }
 
     @Override
     public void save() {
-
-        dataManager = DataManager.getInstance();
 
         try (FileOutputStream fileOutputStream = new FileOutputStream("state");
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
@@ -47,13 +46,17 @@ public class Saver implements ISaveToStore {
             objectOutputStream.writeObject(groups);
 
             objectOutputStream.flush();
-            objectOutputStream.close();
-
-        } catch (FileNotFoundException e) {
-            log.debug(e.getMessage());
 
         } catch (IOException e) {
             log.debug(e.getMessage());
+
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Ошибка сохранения состояния");
+            alert.setHeaderText("При сохранении состояния возникла ошибка.");
+            alert.setContentText(e.getLocalizedMessage());
+
+            alert.showAndWait();
+
         }
 
     }
