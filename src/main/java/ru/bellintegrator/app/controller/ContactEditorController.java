@@ -83,8 +83,7 @@ public class ContactEditorController {
         notesTextArea.setText(contact.getNotes());
 
         for (Group group : contact.getGroupList()) {
-            System.out.println(group);
-            groupCheckListView.getSelectionModel().select(group);
+            groupCheckListView.getCheckModel().check(group);
         }
 
 
@@ -119,7 +118,6 @@ public class ContactEditorController {
         secondPhoneNumberTypeComboBox.setItems(preparePhoneNumberTypeComboBoxData(PhoneNumberType.values()));
 
         groupCheckListView.setItems(dataManager.getGroupObservableList());
-        groupCheckListView.getSelectionModel().selectionModeProperty().setValue(SelectionMode.MULTIPLE);
 
     }
 
@@ -131,8 +129,8 @@ public class ContactEditorController {
                     || lastNameTextField.getText().isEmpty() || middleNameTextField.getText().isEmpty())
                 throw new PersonalDataNotSetException("Не полные персональные данные: установите фамилию, имя и отчество.");
 
-            if ((!firstPhoneNumberTextField.getText().trim().isEmpty() && !firstPhoneNumberTextField.getText().trim().matches("\\d"))
-                    || (!secondPhoneNumberTextField.getText().trim().isEmpty() && !secondPhoneNumberTextField.getText().matches("\\d")))
+            if ((!firstPhoneNumberTextField.getText().trim().isEmpty() && !firstPhoneNumberTextField.getText().trim().matches("\\d*"))
+                    || (!secondPhoneNumberTextField.getText().trim().isEmpty() && !secondPhoneNumberTextField.getText().matches("\\d*")))
                 throw new PhoneNumberFormatException("Телефон должен содержать только цифры.");
 
             ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
@@ -152,7 +150,7 @@ public class ContactEditorController {
                     contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
                     contact.setSecondPhoneNumberType(Util.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
-                    contact.getGroupList().addAll(groupCheckListView.getSelectionModel().getSelectedItems());
+                    addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
                     contactObservableList.add(contact);
 
@@ -178,7 +176,8 @@ public class ContactEditorController {
                             editableContact.setMiddleName(middleNameTextField.getText());
                             editableContact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
                             editableContact.setSecondPhoneNumberType(Util.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
-                            editableContact.getGroupList().addAll(groupCheckListView.getSelectionModel().getSelectedItems());
+
+                            addContactToGroup(editableContact, groupCheckListView.getCheckModel().getCheckedItems());
                         }
                     }
 
@@ -211,6 +210,18 @@ public class ContactEditorController {
         }
 
         return stringObservableList;
+
+    }
+
+    private void addContactToGroup(Contact contact, ObservableList<Group> groupObservableList) {
+
+        if(!contact.getGroupList().isEmpty())
+            contact.getGroupList().clear();
+
+        for (Group group : groupObservableList) {
+            if (!contact.getGroupList().contains(group))
+                contact.getGroupList().add(group);
+        }
 
     }
 

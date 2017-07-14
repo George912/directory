@@ -21,24 +21,22 @@
                         <GridPane>
                             <columnConstraints>
                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="277.0" minWidth="10.0" prefWidth="277.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="38.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="319.0" minWidth="10.0" prefWidth="87.0" />
-                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="365.0" minWidth="10.0" prefWidth="365.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="33.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="493.0" minWidth="10.0" prefWidth="490.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="184.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="311.0" minHeight="10.0" prefHeight="304.0" vgrow="SOMETIMES" />
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <TableView id="contactTableView" fx:id="contactTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowSpan="3">
+                                <TableView id="contactTableView" fx:id="contactTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="2">
                                     <columns>
                                         <TableColumn id="contactTableViewLastNameColumn" fx:id="contactTableViewLastNameColumn" prefWidth="75.0" text="Фамилия" />
                                         <TableColumn id="contactTableViewNameColumn" fx:id="contactTableViewNameColumn" prefWidth="75.0" text="Имя" />
                               <TableColumn id="contactTableViewMiddleNameColumn" fx:id="contactTableViewMiddleNameColumn" prefWidth="75.0" text="Отчество" />
                                     </columns>
                                 </TableView>
-                                <ComboBox id="groupComboBox" fx:id="groupComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" />
                                 <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <children>
                                         <ImageView id="addContactImageView" fx:id="addContactImageView" fitHeight="12.0" fitWidth="12.0" onMouseClicked="#createContact" pickOnBounds="true" preserveRatio="true">
@@ -58,7 +56,7 @@
                                         </ImageView>
                                     </children>
                                 </VBox>
-                                <GridPane GridPane.columnIndex="3" GridPane.rowSpan="3">
+                                <GridPane GridPane.columnIndex="2" GridPane.rowSpan="3">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="81.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="284.0" />
@@ -100,6 +98,7 @@
                               <CheckListView id="groupCheckListView" fx:id="groupCheckListView" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                                     </children>
                                 </GridPane>
+                        <CheckListView id="checkListView" fx:id="checkListView" />
                             </children>
                         </GridPane>
                     </content>

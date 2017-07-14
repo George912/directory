@@ -1,8 +1,6 @@
 package ru.bellintegrator.app.controller;
 
 import javafx.beans.property.SimpleStringProperty;
-import ru.bellintegrator.app.data.DataManager;
-import ru.bellintegrator.app.directory.MainApp;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -14,15 +12,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.model.Group;
 import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bellintegrator.app.data.DataManager;
+import ru.bellintegrator.app.directory.MainApp;
+import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.util.Util;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 public class MainController {
 
@@ -43,7 +45,7 @@ public class MainController {
     @FXML
     private TableColumn<Group, String> groupTableViewGroupNameTableColumn;
     @FXML
-    private ComboBox groupComboBox;
+    private CheckListView<Group> checkListView;
     @FXML
     private ImageView addContactImageView;
     @FXML
@@ -105,6 +107,8 @@ public class MainController {
             public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
                 Contact contact = (Contact) newValue;
 
+                clearContactInfoUIComponents();
+
                 lastNameTextField.setText(contact.getLastName());
                 nameTextField.setText(contact.getFirstName());
                 middleNameTextField.setText(contact.getMiddleName());
@@ -116,6 +120,9 @@ public class MainController {
                 notesTextArea.setText(contact.getNotes());
 
                 groupCheckListView.setItems(dataManager.getGroupObservableList());
+
+                for (Group group : contact.getGroupList())
+                    groupCheckListView.getCheckModel().check(group);
 
             }
         });
@@ -133,6 +140,12 @@ public class MainController {
             }
         });
 
+        checkListView.setItems(dataManager.getGroupObservableList());
+
+        checkListView.checkModelProperty().addListener((observable, oldValue, newValue) -> {
+            log.debug("find");
+            findContactByGroup(checkListView.getCheckModel().getCheckedItems());
+        });
     }
 
     @FXML
@@ -140,7 +153,7 @@ public class MainController {
 
         int id;
 
-        if(dataManager.getContactObservableList().isEmpty())
+        if (dataManager.getContactObservableList().isEmpty())
             id = 0;
 
         else
@@ -183,7 +196,7 @@ public class MainController {
 
         int id;
 
-        if(dataManager.getGroupObservableList().isEmpty())
+        if (dataManager.getGroupObservableList().isEmpty())
             id = 0;
 
         else
@@ -250,7 +263,7 @@ public class MainController {
 
             dialogStage.showAndWait();
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -285,9 +298,43 @@ public class MainController {
 
             dialogStage.showAndWait();
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void findContactByGroup(ObservableList<Group> groupObservableList) {
+
+        Set<Contact> contactSet = new HashSet<>();
+        ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
+
+        for (Group group : groupObservableList) {
+            for (Contact contact : contactObservableList) {
+                if (contact.getGroupList().contains(group))
+                    contactSet.add(contact);
+            }
+        }
+
+        contactObservableList.addAll(contactSet);
+        contactTableView.setItems(contactObservableList);
+
+    }
+
+    private void clearContactInfoUIComponents() {
+
+        lastNameTextField.clear();
+        nameTextField.clear();
+        middleNameTextField.clear();
+        firstPhoneNumberTypeComboBox.getSelectionModel().clearSelection();
+        firstPhoneNumberTextField.clear();
+        secondPhoneNumberTypeComboBox.getSelectionModel().clearSelection();
+        secondPhoneNumberTextField.clear();
+        emailTextField.clear();
+        notesTextArea.clear();
+
+        groupCheckListView.setItems(dataManager.getGroupObservableList());
+        groupCheckListView.getCheckModel().clearChecks();
 
     }
 
