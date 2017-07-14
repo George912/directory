@@ -3,6 +3,8 @@ package ru.bellintegrator.app.controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -97,7 +99,9 @@ public class MainController {
     @FXML
     private void initialize() {
 
-        contactTableView.setItems(dataManager.getContactObservableList());
+        ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
+        contactObservableList.addAll(dataManager.getContactObservableList());
+        contactTableView.setItems(contactObservableList);
         contactTableViewLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
         contactTableViewNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
         contactTableViewMiddleNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMiddleName()));
@@ -109,20 +113,22 @@ public class MainController {
 
                 clearContactInfoUIComponents();
 
-                lastNameTextField.setText(contact.getLastName());
-                nameTextField.setText(contact.getFirstName());
-                middleNameTextField.setText(contact.getMiddleName());
-                firstPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getFirstPhoneNumberType()));
-                firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
-                secondPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getSecondPhoneNumberType()));
-                secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
-                emailTextField.setText(contact.getEmail());
-                notesTextArea.setText(contact.getNotes());
+                if (contact != null) {
+                    lastNameTextField.setText(contact.getLastName());
+                    nameTextField.setText(contact.getFirstName());
+                    middleNameTextField.setText(contact.getMiddleName());
+                    firstPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getFirstPhoneNumberType()));
+                    firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
+                    secondPhoneNumberTypeComboBox.getSelectionModel().select(Util.getStringFromPhoneNumberType(contact.getSecondPhoneNumberType()));
+                    secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
+                    emailTextField.setText(contact.getEmail());
+                    notesTextArea.setText(contact.getNotes());
 
-                groupCheckListView.setItems(dataManager.getGroupObservableList());
+                    groupCheckListView.setItems(dataManager.getGroupObservableList());
 
-                for (Group group : contact.getGroupList())
-                    groupCheckListView.getCheckModel().check(group);
+                    for (Group group : contact.getGroupList())
+                        groupCheckListView.getCheckModel().check(group);
+                }
 
             }
         });
@@ -142,10 +148,14 @@ public class MainController {
 
         checkListView.setItems(dataManager.getGroupObservableList());
 
-        checkListView.checkModelProperty().addListener((observable, oldValue, newValue) -> {
-            log.debug("find");
-            findContactByGroup(checkListView.getCheckModel().getCheckedItems());
+        checkListView.getCheckModel().getCheckedItems().addListener(new ListChangeListener<Group>() {
+            @Override
+            public void onChanged(Change<? extends Group> c) {
+                contactTableView.getItems().clear();
+                findContactByGroup(checkListView.getCheckModel().getCheckedItems(), dataManager.getContactObservableList());
+            }
         });
+
     }
 
     @FXML
@@ -304,20 +314,29 @@ public class MainController {
 
     }
 
-    private void findContactByGroup(ObservableList<Group> groupObservableList) {
+    private void findContactByGroup(ObservableList<Group> groupObservableList,  ObservableList<Contact> contactObservableList) {
 
         Set<Contact> contactSet = new HashSet<>();
-        ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
 
-        for (Group group : groupObservableList) {
+        log.debug(contactObservableList + "");
+
+        if (groupObservableList.isEmpty()) {
             for (Contact contact : contactObservableList) {
-                if (contact.getGroupList().contains(group))
+                if (contact.getGroupList().isEmpty())
                     contactSet.add(contact);
+            }
+        } else {
+            for (Group group : groupObservableList) {
+                for (Contact contact : contactObservableList) {
+                    if (contact.getGroupList().contains(group))
+                        contactSet.add(contact);
+                }
             }
         }
 
-        contactObservableList.addAll(contactSet);
-        contactTableView.setItems(contactObservableList);
+        ObservableList<Contact> contacts = FXCollections.observableArrayList();
+        contacts.addAll(contactSet);
+        contactTableView.setItems(contacts);
 
     }
 
