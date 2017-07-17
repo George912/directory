@@ -9,8 +9,7 @@ import java.util.List;
  */
 public class Contact implements Serializable{
 
-    //<editor-fold desc="поля">
-
+    private static final long serialVersionUID = -8767408797539567340L;
     private int id;
     private  String firstName;
     private  String lastName;
@@ -23,9 +22,7 @@ public class Contact implements Serializable{
     private String notes;
     private List<Group> groupList = new ArrayList<>();
 
-    //</editor-fold>
 
-    //<editor-fold desc="конструкторы">
 
     public Contact() {
 
@@ -61,10 +58,6 @@ public class Contact implements Serializable{
         this.email = email;
         this.notes = notes;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="методы получения и установки">
 
     public int getId() {
         return id;
@@ -150,8 +143,6 @@ public class Contact implements Serializable{
         return groupList;
     }
 
-    //</editor-fold>
-
     @Override
     public String toString() {
         return "Contact{" +
@@ -167,5 +158,9 @@ public class Contact implements Serializable{
                 ", notes='" + notes + '\'' +
                 ", groupList=" + groupList +
                 '}';
+    }
+
+    public void setGroupList(List<Group> groupList) {
+        this.groupList = groupList;
     }
 }

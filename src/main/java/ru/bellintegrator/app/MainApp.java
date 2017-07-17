@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.directory;
+package ru.bellintegrator.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,14 +15,10 @@ import ru.bellintegrator.app.state.impl.Saver;
 
 public class MainApp extends Application {
 
-    //<editor-fold desc="поля">
-
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
     private ILoadFromStore loader;
     private ISaveToStore saver;
     private DataManager dataManager = DataManager.getInstance();
-
-    //</editor-fold>
 
     @Override
     public void init(){
@@ -48,13 +44,14 @@ public class MainApp extends Application {
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();
-        Parent rootNode = (Parent) loader.load(getClass().getResourceAsStream(fxmlFile));
+        Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
 
-        Scene scene = new Scene(rootNode, 400, 200);
+        Scene scene = new Scene(rootNode, 800, 450);
         scene.getStylesheets().add("/styles/styles.css");
 
         stage.setTitle("Справочник контактов");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
 
     }

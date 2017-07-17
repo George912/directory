@@ -7,15 +7,10 @@ import java.io.Serializable;
  */
 public class Group implements Serializable{
 
-    //<editor-fold desc="поля">
-
+    private static final long serialVersionUID = 8751089525686641L;
     private int id;
     private String name;
     private String notes;
-
-    //</editor-fold>
-
-    //<editor-fold desc="конструкторы">
 
     public Group() {
 
@@ -32,10 +27,6 @@ public class Group implements Serializable{
         this(id, name);
         this.notes = notes;
     }
-
-    //</editor-fold>
-
-    //<editor-fold desc="методы получения и установки">
 
     public String getName() {
         return name;
@@ -60,8 +51,6 @@ public class Group implements Serializable{
     public void setId(int id) {
         this.id = id;
     }
-
-    //</editor-fold>
 
     @Override
     public String toString() {

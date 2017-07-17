@@ -3,21 +3,23 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>directory</groupId>
-    <artifactId>ru.bellintegrator</artifactId>
-    <name>ru.bellintegrator</name>
+    <groupId>ru.bellintegrator</groupId>
+    <artifactId>app</artifactId>
+    <name></name>
 
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
     
     <organization>
         <!-- Used as the 'Vendor' for JNLP generation -->
-        <name>bellintegrator</name>
+        <name>directory</name>
     </organization>
 
     <properties>
         <slf4j.version>1.7.12</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <build>
@@ -25,14 +27,13 @@
         <finalName>ru.bellintegrator</finalName>
 
         <plugins>
-
             <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.1.5</version>
                 <configuration>
 
-                    <mainClass>ru.bellintegrator.app.directory.MainApp</mainClass>
+                    <mainClass>ru.bellintegrator.app.MainApp</mainClass>
 
                     <!-- only required if signing the jar file -->
                     <keyStoreAlias>example-user</keyStoreAlias>

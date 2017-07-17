@@ -39,13 +39,13 @@ public enum PhoneNumberType {
         PhoneNumberType phoneNumberType;
 
         switch (s){
-            case "мобильный":
+            case "Мобильный":
                 phoneNumberType = PhoneNumberType.MOBILE;
                 break;
-            case "домашний":
+            case "Домашний":
                 phoneNumberType = PhoneNumberType.HOME;
                 break;
-            case "рабочий":
+            case "Рабочий":
                 phoneNumberType = PhoneNumberType.WORKING;
                 break;
             default:

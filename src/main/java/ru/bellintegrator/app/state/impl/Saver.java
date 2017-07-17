@@ -33,17 +33,11 @@ public class Saver implements ISaveToStore {
         try (FileOutputStream fileOutputStream = new FileOutputStream("state");
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
-            log.debug("serialization: " + dataManager.getContactObservableList());
-            log.debug("serialization: " + dataManager.getGroupObservableList());
+            log.debug("serialization: " + dataManager.getAllContacts());
+            log.debug("serialization: " + dataManager.getAllGroups());
 
-            List<Contact> contacts = new ArrayList<>();
-            List<Group> groups = new ArrayList<>();
-
-            contacts.addAll(dataManager.getContactObservableList());
-            groups.addAll(dataManager.getGroupObservableList());
-
-            objectOutputStream.writeObject(contacts);
-            objectOutputStream.writeObject(groups);
+            objectOutputStream.writeObject(dataManager.getAllContacts());
+            objectOutputStream.writeObject(dataManager.getAllGroups());
 
             objectOutputStream.flush();
 

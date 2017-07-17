@@ -20,14 +20,8 @@ import ru.bellintegrator.app.model.PhoneNumberType;
  */
 public class ContactEditorController {
 
-    //<editor-fold desc="поля">
-
     private static final Logger log = LoggerFactory.getLogger(ContactEditorController.class);
 
-    @FXML
-    private Button saveButton;
-    @FXML
-    private Button cancelButton;
     @FXML
     private TextField lastNameTextField;
     @FXML
@@ -60,14 +54,6 @@ public class ContactEditorController {
     private DataManager dataManager;
     private EditorAction editorAction;
 
-    //</editor-fold>
-
-    //<editor-fold desc="методы получения и установки">
-
-    public Contact getContact() {
-        return contact;
-    }
-
     public void setContact(Contact contact) {
         this.contact = contact;
 
@@ -88,23 +74,13 @@ public class ContactEditorController {
 
     }
 
-    public Stage getDialogStage() {
-        return dialogStage;
-    }
-
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
-    }
-
-    public EditorAction getEditorAction() {
-        return editorAction;
     }
 
     public void setEditorAction(EditorAction editorAction) {
         this.editorAction = editorAction;
     }
-
-    //</editor-fold>
 
     public ContactEditorController() {
         dataManager = DataManager.getInstance();
@@ -116,7 +92,10 @@ public class ContactEditorController {
         firstPhoneNumberTypeComboBox.setItems(preparePhoneNumberTypeComboBoxData(PhoneNumberType.values()));
         secondPhoneNumberTypeComboBox.setItems(preparePhoneNumberTypeComboBoxData(PhoneNumberType.values()));
 
-        groupCheckListView.setItems(dataManager.getGroupObservableList());
+        ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
+        groupObservableList.addAll(dataManager.getAllGroups());
+
+        groupCheckListView.setItems(groupObservableList);
 
     }
 
@@ -124,7 +103,6 @@ public class ContactEditorController {
     private void saveButtonClick() {
 
         try {
-
             validate();
 
             switch (editorAction) {
@@ -142,7 +120,6 @@ public class ContactEditorController {
         } catch (PersonalDataNotSetException | PhoneNumberFormatException e) {
             log.debug(e.getMessage());
             errorLabel.setText(e.getMessage());
-
         }
 
     }
@@ -180,11 +157,11 @@ public class ContactEditorController {
 
     private void validate() throws PersonalDataNotSetException, PhoneNumberFormatException {
 
-        StringBuilder personalDataErrorMessageStringBuilder = new StringBuilder("Не полные персональные данные: установите ");
+        StringBuilder personalDataErrorMessageStringBuilder = new StringBuilder("Не полные персональные данные: установите");
         boolean incorrectPersonalData = false;
 
         if (lastNameTextField.getText().isEmpty()){
-            personalDataErrorMessageStringBuilder.append("фамилию");
+            personalDataErrorMessageStringBuilder.append(" фамилию");
             incorrectPersonalData = true;
 
         }else if (nameTextField.getText().isEmpty()){
@@ -206,7 +183,25 @@ public class ContactEditorController {
 
     private void createContact(){
 
-        ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
+        contact.setNotes(notesTextArea.getText());
+        contact.setEmail(emailTextField.getText());
+        contact.setFirstName(nameTextField.getText());
+        contact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
+        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setLastName(lastNameTextField.getText());
+        contact.setMiddleName(middleNameTextField.getText());
+        contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
+        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+
+        addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
+
+        dataManager.addContact(contact);
+
+    }
+
+    private void updateContact(){
+
+        int contactId = contact.getId();
 
         contact.setNotes(notesTextArea.getText());
         contact.setEmail(emailTextField.getText());
@@ -220,33 +215,7 @@ public class ContactEditorController {
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
-        contactObservableList.add(contact);
-
-    }
-
-    private void updateContact(){
-
-        ObservableList<Contact> contactObservableList = dataManager.getContactObservableList();
-
-        int contactId = contact.getId();
-
-        for (int i = 0; i < contactObservableList.size(); i++) {
-            Contact editableContact = contactObservableList.get(i);
-
-            if (editableContact.getId() == contactId) {
-                editableContact.setNotes(notesTextArea.getText());
-                editableContact.setEmail(emailTextField.getText());
-                editableContact.setFirstName(nameTextField.getText());
-                editableContact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
-                editableContact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
-                editableContact.setLastName(lastNameTextField.getText());
-                editableContact.setMiddleName(middleNameTextField.getText());
-                editableContact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
-                editableContact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
-
-                addContactToGroup(editableContact, groupCheckListView.getCheckModel().getCheckedItems());
-            }
-        }
+        dataManager.updateContact(contact);
 
     }
 

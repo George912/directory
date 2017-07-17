@@ -1,15 +1,14 @@
 package ru.bellintegrator.app.controller;
 
-import ru.bellintegrator.app.data.DataManager;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import ru.bellintegrator.app.model.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bellintegrator.app.data.DataManager;
+import ru.bellintegrator.app.model.Group;
 
 import java.util.Iterator;
 
@@ -18,31 +17,17 @@ import java.util.Iterator;
  */
 public class GroupEditorController {
 
-    //<editor-fold desc="поля">
-
     private static final Logger log = LoggerFactory.getLogger(GroupEditorController.class);
 
     @FXML
     private TextField groupNameTextField;
     @FXML
     private TextArea groupNotesTextArea;
-    @FXML
-    private Button saveButton;
-    @FXML
-    private Button cancelButton;
 
     private Stage dialogStage;
     Group group;
     DataManager dataManager;
     EditorAction editorAction;
-
-    //</editor-fold>
-
-    //<editor-fold desc="методы получения и установки">
-
-    public Group getGroup() {
-        return group;
-    }
 
     public void setGroup(Group group) {
 
@@ -53,23 +38,13 @@ public class GroupEditorController {
 
     }
 
-    public Stage getDialogStage() {
-        return dialogStage;
-    }
-
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
-    }
-
-    public EditorAction getEditorAction() {
-        return editorAction;
     }
 
     public void setEditorAction(EditorAction editorAction) {
         this.editorAction = editorAction;
     }
-
-    //</editor-fold>
 
     public GroupEditorController() {
         dataManager = DataManager.getInstance();
@@ -78,32 +53,16 @@ public class GroupEditorController {
     @FXML
     private void saveButtonClick() {
 
-        ObservableList<Group> groupObservableList = dataManager.getGroupObservableList();
-        int groupId = group.getId();
+        group.setName(groupNameTextField.getText());
+        group.setNotes(groupNotesTextArea.getText());
 
         switch (editorAction) {
             case CREATE:
-
-                group.setName(groupNameTextField.getText());
-                group.setNotes(groupNotesTextArea.getText());
-
-                groupObservableList.add(group);
-
+                dataManager.addGroup(group);
                 break;
 
             case UPDATE:
-
-                Iterator<Group> groupIterator = groupObservableList.iterator();
-
-                while (groupIterator.hasNext()) {
-                    Group editableGroup = groupIterator.next();
-
-                    if (editableGroup.getId() == groupId) {
-                        editableGroup.setName(groupNameTextField.getText());
-                        editableGroup.setNotes(groupNotesTextArea.getText());
-                    }
-                }
-
+                dataManager.updateGroup(group);
                 break;
 
         }

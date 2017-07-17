@@ -37,8 +37,8 @@ public class Loader implements ILoadFromStore {
             contacts = (List<Contact>) objectInputStream.readObject();
             groups = (List<Group>) objectInputStream.readObject();
 
-            dataManager.getContactObservableList().addAll(contacts);
-            dataManager.getGroupObservableList().addAll(groups);
+            dataManager.getAllContacts().addAll(contacts);
+            dataManager.getAllGroups().addAll(groups);
 
             log.debug("deserialization:" + contacts);
             log.debug("deserialization:" + groups);
