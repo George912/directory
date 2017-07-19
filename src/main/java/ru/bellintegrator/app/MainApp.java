@@ -16,25 +16,6 @@ import ru.bellintegrator.app.state.impl.Saver;
 public class MainApp extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
-    private ILoadFromStore loader;
-    private ISaveToStore saver;
-    private DataManager dataManager = DataManager.getInstance();
-
-    @Override
-    public void init(){
-
-        loader = new Loader(dataManager);
-        loader.load();
-
-    }
-
-    @Override
-    public void stop(){
-
-        saver = new Saver(dataManager);
-        saver.save();
-
-    }
 
     public static void main(String[] args) throws Exception {
         launch(args);

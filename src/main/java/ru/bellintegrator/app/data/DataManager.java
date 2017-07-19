@@ -2,11 +2,14 @@ package ru.bellintegrator.app.data;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bellintegrator.app.dao.ContactDAO;
+import ru.bellintegrator.app.dao.GroupDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.factory.DAOFactoryType;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -15,8 +18,11 @@ import java.util.List;
 public class DataManager {
 
     private static final Logger log = LoggerFactory.getLogger(DataManager.class);
-    private List<Contact> contactList = new ArrayList<>();
-    private List<Group> groupList = new ArrayList<>();
+    DAOFactory fileDAOFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+    ContactDAO contactDAO = fileDAOFactory.getContactDAO();
+    GroupDAO groupDAO = fileDAOFactory.getGroupDAO();
+    private List<Contact> contactList = contactDAO.getAllContacts();
+    private List<Group> groupList = groupDAO.getAllGroups();
     private static DataManager instance;
 
     private DataManager() {
@@ -39,7 +45,12 @@ public class DataManager {
     }
 
     public void addContact(Contact contact) {
-        contactList.add(contact);
+
+        if (!contactList.contains(contact)) {
+            contactList.add(contact);
+            contactDAO.insertContact(contact);
+        }
+
     }
 
     public void updateContact(Contact contact) {
@@ -58,6 +69,8 @@ public class DataManager {
                 editableContact.setSecondPhoneNumber(contact.getSecondPhoneNumber());
                 editableContact.setSecondPhoneNumberType(contact.getSecondPhoneNumberType());
                 editableContact.setGroupList(contact.getGroupList());
+
+                contactDAO.updateContact(contact);
             }
         }
 
@@ -65,42 +78,44 @@ public class DataManager {
 
     public void deleteContact(Contact contact) {
 
-        int deletableContactId = contact.getId();
+        boolean isRemove = contactList.remove(contact);
 
-        for (int i = 0; i < contactList.size(); i++) {
-            Contact deletableContact = contactList.get(i);
-
-            if (deletableContact.getId() == deletableContactId) {
-                contactList.remove(i);
-            }
+        if (isRemove) {
+            contactDAO.deleteContact(contact);
         }
 
     }
 
     public void addGroup(Group group) {
-        groupList.add(group);
+
+        if (!groupList.contains(group)) {
+            groupList.add(group);
+            groupDAO.insertGroup(group);
+        }
+
     }
 
     public void updateGroup(Group group) {
 
-        Iterator<Group> groupIterator = groupList.iterator();
-
-        while (groupIterator.hasNext()) {
-            Group editableGroup = groupIterator.next();
+        for (int i = 0; i < groupList.size(); i++) {
+            Group editableGroup = groupList.get(i);
 
             if (editableGroup.getId() == group.getId()) {
                 editableGroup.setName(group.getName());
                 editableGroup.setNotes(group.getNotes());
+
+                groupDAO.updateGroup(group);
             }
         }
+
     }
 
     public void deleteGroup(Group group) {
 
-        for (int i = 0; i < groupList.size(); i++) {
-            if (groupList.get(i).getId() == group.getId()) {
-                groupList.remove(group);
-            }
+        boolean isRemove = groupList.remove(group);
+
+        if (isRemove) {
+            groupDAO.deleteGroup(group);
         }
 
     }
