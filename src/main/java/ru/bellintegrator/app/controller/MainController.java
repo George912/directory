@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bellintegrator.app.ContactListChangeObservable;
+import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.MainApp;
 import ru.bellintegrator.app.Util;
 import ru.bellintegrator.app.data.DataManager;
@@ -24,14 +26,12 @@ import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-public class MainController {
+public class MainController implements ContactListChangeObservable {
 
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
+    private List<ContactListChangeObserver> contactListChangeObserverList = new ArrayList<>();
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -105,6 +105,8 @@ public class MainController {
 
         contactTableView.setItems(contactObservableList);
 
+        notifyContactListChangeObserver();
+
     }
 
     @FXML
@@ -118,6 +120,7 @@ public class MainController {
             contactObservableList.addAll(dataManager.getAllContacts());
             contactTableView.getItems().clear();
             contactTableView.setItems(contactObservableList);
+            notifyContactListChangeObserver();
 
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -139,6 +142,7 @@ public class MainController {
             ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
             contactObservableList.addAll(dataManager.getAllContacts());
             contactTableView.setItems(contactObservableList);
+            notifyContactListChangeObserver();
 
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -413,4 +417,28 @@ public class MainController {
 
     }
 
+    @Override
+    public void addContactListChangeObserver(ContactListChangeObserver contactListChangeObserver) {
+
+        if (!contactListChangeObserverList.contains(contactListChangeObserver)) {
+            contactListChangeObserverList.add(contactListChangeObserver);
+        }
+
+    }
+
+    @Override
+    public void removeContactListChangeObserver(ContactListChangeObserver contactListChangeObserver) {
+
+        contactListChangeObserverList.remove(contactListChangeObserver);
+
+    }
+
+    @Override
+    public void notifyContactListChangeObserver() {
+
+        for (ContactListChangeObserver observer : contactListChangeObserverList) {
+            observer.listChanged();
+        }
+
+    }
 }

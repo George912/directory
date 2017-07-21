@@ -1,34 +1,35 @@
 package ru.bellintegrator.app.dao.factory;
 
-import ru.bellintegrator.app.dao.GroupDAO;
-import ru.bellintegrator.app.dao.factory.impl.file.FileDAOFactory;
-import ru.bellintegrator.app.dao.ContactDAO;
+import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.Group;
 
 /**
  * Created by neste_000 on 19.07.2017.
  */
 public abstract class DAOFactory {
 
-    public abstract ContactDAO getContactDAO();
+    public abstract GenericDAO<Contact> getContactDAO();
 
-    public abstract GroupDAO getGroupDAO();
+    public abstract GenericDAO<Group> getGroupDAO();
 
-    public static DAOFactory getDAOFactory(DAOFactoryType daoFactoryType){
+    public static DAOFactory getDAOFactory(DAOFactoryType daoFactoryType) {
 
-        switch (daoFactoryType){
+        switch (daoFactoryType) {
 
             case XML:
-                break;
+                throw new UnsupportedOperationException("Define dao factory class!");
             case ORACLE:
-                break;
+                throw new UnsupportedOperationException("Define dao factory class!");
             case MYSQL:
-                break;
+                throw new UnsupportedOperationException("Define dao factory class!");
             case MSSQL:
-                break;
+                throw new UnsupportedOperationException("Define dao factory class!");
             case POSTGRESQL:
-                break;
+                throw new UnsupportedOperationException("Define dao factory class!");
             case FILE:
-                return new FileDAOFactory();
+                return new MemoryDAOFactory();
         }
 
         return null;

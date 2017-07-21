@@ -3,11 +3,10 @@ package ru.bellintegrator.app.dao.impl.file;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.ContactDAO;
-import ru.bellintegrator.app.dao.factory.impl.file.FileDAOFactory;
+import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.data.DataManager;
 import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.model.Group;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 19.07.2017.
  */
-public class FileContactDAO implements ContactDAO {
+public class FileContactDAO implements GenericDAO<Contact> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
 
@@ -24,7 +23,7 @@ public class FileContactDAO implements ContactDAO {
     }
 
     @Override
-    public int insertContact(Contact contact) {
+    public int create(Contact contact) {
 
         serialize(DataManager.getInstance().getAllContacts());
 
@@ -33,28 +32,29 @@ public class FileContactDAO implements ContactDAO {
     }
 
     @Override
-    public void deleteContact(Contact contact) {
+    public void delete(Contact contact) {
 
         serialize(DataManager.getInstance().getAllContacts());
 
     }
 
     @Override
-    public void updateContact(Contact contact) {
+    public void update(Contact contact) {
 
         serialize(DataManager.getInstance().getAllContacts());
 
     }
 
     @Override
-    public List<Contact> getAllContacts() {
+    public List<Contact> getAll() {
 
         return deserialize();
+
     }
 
     private void serialize(List<Contact> contactList) {
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(FileDAOFactory.FILE);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.CONTACT_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
             objectOutputStream.writeObject(contactList);
@@ -77,13 +77,11 @@ public class FileContactDAO implements ContactDAO {
     private List<Contact> deserialize() {
 
         List<Contact> contacts = null;
-        List<Group> groups = null;
 
-        try (FileInputStream fileInputStream = new FileInputStream(FileDAOFactory.FILE);
+        try (FileInputStream fileInputStream = new FileInputStream(MemoryDAOFactory.CONTACT_FILE);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
             contacts = (List<Contact>) objectInputStream.readObject();
-            groups = (List<Group>) objectInputStream.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
             log.debug("При восстановлении состояния возникла ошибка: " + e.getLocalizedMessage());

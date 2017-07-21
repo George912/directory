@@ -1,25 +1,27 @@
 package ru.bellintegrator.app.dao.factory.impl.file;
 
-import ru.bellintegrator.app.dao.GroupDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.file.FileContactDAO;
-import ru.bellintegrator.app.dao.ContactDAO;
 import ru.bellintegrator.app.dao.impl.file.FileGroupDAO;
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.Group;
 
 /**
  * Created by neste_000 on 19.07.2017.
  */
-public class FileDAOFactory extends DAOFactory {
+public class MemoryDAOFactory extends DAOFactory {
 
-    public static final String FILE = "state";
+    public static final String CONTACT_FILE = "contact";
+    public static final String GROUP_FILE = "group";
 
     @Override
-    public ContactDAO getContactDAO() {
+    public GenericDAO<Contact> getContactDAO() {
         return new FileContactDAO();
     }
 
     @Override
-    public GroupDAO getGroupDAO() {
+    public GenericDAO<Group> getGroupDAO() {
         return new FileGroupDAO();
     }
 

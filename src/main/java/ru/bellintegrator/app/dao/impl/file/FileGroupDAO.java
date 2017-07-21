@@ -3,10 +3,9 @@ package ru.bellintegrator.app.dao.impl.file;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.GroupDAO;
-import ru.bellintegrator.app.dao.factory.impl.file.FileDAOFactory;
+import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.data.DataManager;
-import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 
 import java.io.*;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 19.07.2017.
  */
-public class FileGroupDAO implements GroupDAO {
+public class FileGroupDAO implements GenericDAO<Group> {
 
     private static final Logger log = LoggerFactory.getLogger(FileGroupDAO.class);
 
@@ -24,7 +23,7 @@ public class FileGroupDAO implements GroupDAO {
     }
 
     @Override
-    public int insertGroup(Group group) {
+    public int create(Group group) {
 
         serialize(DataManager.getInstance().getAllGroups());
 
@@ -33,21 +32,21 @@ public class FileGroupDAO implements GroupDAO {
     }
 
     @Override
-    public void deleteGroup(Group group) {
+    public void delete(Group group) {
 
         serialize(DataManager.getInstance().getAllGroups());
 
     }
 
     @Override
-    public void updateGroup(Group group) {
+    public void update(Group group) {
 
         serialize(DataManager.getInstance().getAllGroups());
 
     }
 
     @Override
-    public List<Group> getAllGroups() {
+    public List<Group> getAll() {
 
         return deserialize();
 
@@ -55,7 +54,7 @@ public class FileGroupDAO implements GroupDAO {
 
     private void serialize(List<Group> groupList) {
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(FileDAOFactory.FILE);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.GROUP_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
             objectOutputStream.writeObject(groupList);
@@ -77,13 +76,11 @@ public class FileGroupDAO implements GroupDAO {
 
     private List<Group> deserialize() {
 
-        List<Contact> contacts = null;
         List<Group> groups = null;
 
-        try (FileInputStream fileInputStream = new FileInputStream(FileDAOFactory.FILE);
+        try (FileInputStream fileInputStream = new FileInputStream(MemoryDAOFactory.GROUP_FILE);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
-            contacts = (List<Contact>) objectInputStream.readObject();
             groups = (List<Group>) objectInputStream.readObject();
 
         } catch (IOException | ClassNotFoundException e) {

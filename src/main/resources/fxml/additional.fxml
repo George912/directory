@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.bellintegrator.app.controller.AdditionalController">
+   <children>
+      <TableView id="contactTableView" fx:id="contactTableView" layoutX="20.0" layoutY="21.0" prefHeight="355.0" prefWidth="560.0">
+        <columns>
+          <TableColumn id="lastNameTableColumn" fx:id="lastNameTableColumn" prefWidth="75.0" text="Фамилия" />
+            <TableColumn id="nameTableColumn" fx:id="nameTableColumn" prefWidth="75.0" text="Имя" />
+            <TableColumn id="middleNameTableColumn" fx:id="middleNameTableColumn" prefWidth="75.0" text="Отчество" />
+            <TableColumn id="firstPhoneNumberTableColumn" fx:id="firstPhoneNumberTableColumn" prefWidth="75.0" text="Телефон" />
+            <TableColumn id="firstPhoneNumberTypeTableColumn" fx:id="firstPhoneNumberTypeTableColumn" prefWidth="75.0" text="Тип телефона" />
+            <TableColumn id="secondPhoneNumberTableColumn" fx:id="secondPhoneNumberTableColumn" prefWidth="75.0" text="Телефон" />
+            <TableColumn id="secondPhoneNumberTypeTableColumn" fx:id="secondPhoneNumberTypeTableColumn" prefWidth="75.0" text="Тип телефона" />
+            <TableColumn id="emailTableColumn" fx:id="emailTableColumn" prefWidth="75.0" text="Эл. почта" />
+            <TableColumn id="notesTableColumn" fx:id="notesTableColumn" prefWidth="75.0" text="Заметки" />
+            <TableColumn id="groupsTableColumn" fx:id="groupsTableColumn" prefWidth="75.0" text="Группы" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
