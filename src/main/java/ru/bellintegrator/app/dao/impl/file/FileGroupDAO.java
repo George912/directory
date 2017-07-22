@@ -17,14 +17,15 @@ import java.util.List;
 public class FileGroupDAO implements GenericDAO<Group> {
 
     private static final Logger log = LoggerFactory.getLogger(FileGroupDAO.class);
-    private List<Group> groupList = new ArrayList<>();
+    private List<Group> groupList;
 
     public FileGroupDAO() {
-        groupList = deserialize();
     }
 
     @Override
     public int create(Group group) {
+
+        groupList = deserialize();
 
         if (!groupList.contains(group)) {
             groupList.add(group);
@@ -39,18 +40,20 @@ public class FileGroupDAO implements GenericDAO<Group> {
     @Override
     public void delete(Group group) {
 
+        groupList = deserialize();
+
         boolean isRemove = groupList.remove(group);
 
         if (isRemove) {
             serialize(groupList);
         }
 
-        //todo удалить группу у всех контактов
-
     }
 
     @Override
     public void update(Group group) {
+
+        groupList = deserialize();
 
         for (int i = 0; i < groupList.size(); i++) {
             Group editableGroup = groupList.get(i);
@@ -69,6 +72,13 @@ public class FileGroupDAO implements GenericDAO<Group> {
     public List<Group> getAll() {
 
         return deserialize();
+
+    }
+
+    @Override
+    public void save(List<Group> groupList) {
+
+        serialize(groupList);
 
     }
 

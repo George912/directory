@@ -3,6 +3,7 @@ package ru.bellintegrator.app.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 
 import java.util.List;
@@ -14,9 +15,13 @@ public class GroupService {
 
     private static final Logger log = LoggerFactory.getLogger(GroupService.class);
     private GenericDAO<Group> groupGenericDAO;
+    private ContactService contactService;
 
-    public GroupService(GenericDAO<Group> groupGenericDAO) {
+    public GroupService(GenericDAO<Group> groupGenericDAO, ContactService contactService) {
+
         this.groupGenericDAO = groupGenericDAO;
+        this.contactService = contactService;
+
     }
 
     public void addGroup(Group group) {
@@ -33,12 +38,17 @@ public class GroupService {
 
     public void deleteGroup(Group group) {
 
+        List<Contact> contactList = contactService.getAllContacts();
+
+        for (Contact contact : contactList) {
+
+            contact.getGroupList().remove(group);
+
+        }
+
+        contactService.saveContacts(contactList);
+
         groupGenericDAO.delete(group);
-
-        //todo удалить группу у всех контактов
-
-        //варианты 1.получить список контактов, удалить группы; 2. метод dao для удаления группы у контактов
-        //this ссылка на contactservice, метод удаления группы у контактов
 
     }
 

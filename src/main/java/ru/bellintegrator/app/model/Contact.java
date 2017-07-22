@@ -163,4 +163,28 @@ public class Contact implements Serializable{
     public void setGroupList(List<Group> groupList) {
         this.groupList = groupList;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contact contact = (Contact) o;
+
+        if (id != contact.id) return false;
+        if (firstName != null ? !firstName.equals(contact.firstName) : contact.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(contact.lastName) : contact.lastName != null) return false;
+        return !(middleName != null ? !middleName.equals(contact.middleName) : contact.middleName != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
+        return result;
+    }
 }

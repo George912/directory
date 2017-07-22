@@ -157,6 +157,8 @@ public class MainController{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         groupObservableList.addAll(groupService.getAllGroups());
         groupTableView.setItems(groupObservableList);
+        checkListView.setItems(groupObservableList);
+        groupCheckListView.setItems(groupObservableList);
 
     }
 
@@ -171,6 +173,8 @@ public class MainController{
             groupObservableList.addAll(groupService.getAllGroups());
             groupTableView.getItems().clear();
             groupTableView.setItems(groupObservableList);
+            checkListView.setItems(groupObservableList);
+            groupCheckListView.setItems(groupObservableList);
 
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -193,6 +197,8 @@ public class MainController{
             ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
             groupObservableList.addAll(groupService.getAllGroups());
             groupTableView.setItems(groupObservableList);
+            checkListView.setItems(groupObservableList);
+            groupCheckListView.setItems(groupObservableList);
 
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -247,25 +253,27 @@ public class MainController{
         GridPane page = null;
         Stage dialogStage = null;
         Scene scene = null;
-        GroupEditorController groupEditorController = null;
+        GroupEditorController groupEditorController = new GroupEditorController(groupService);
 
         try {
 
             loader = new FXMLLoader();
+            loader.setController(groupEditorController);
             loader.setLocation(MainApp.class.getResource(fxmlPath));
-            page = loader.load();
 
             dialogStage = new Stage();
             dialogStage.setTitle(stageTitle);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            scene = new Scene(page, 380, 200);
-            dialogStage.setScene(scene);
-            dialogStage.setResizable(false);
 
-            groupEditorController = loader.getController();
+            page = loader.load();
+
             groupEditorController.setDialogStage(dialogStage);
             groupEditorController.setGroup(group);
             groupEditorController.setEditorAction(editorAction);
+
+            scene = new Scene(page, 380, 200);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
 
             dialogStage.showAndWait();
 

@@ -28,7 +28,7 @@ public class MainApp extends Application {
     GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
     GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
     ContactService contactService = new ContactService(contactGenericDAO);
-    GroupService groupService = new GroupService(groupGenericDAO);
+    GroupService groupService = new GroupService(groupGenericDAO, contactService);
 
     public static void main(String[] args) throws Exception {
         launch(args);

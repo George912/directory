@@ -53,6 +53,12 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
+    public void saveContacts(List<Contact> contactList){
+
+        contactGenericDAO.save(contactList);
+
+    }
+
     @Override
     public void addContactListChangeObserver(ContactListChangeObserver contactListChangeObserver) {
 

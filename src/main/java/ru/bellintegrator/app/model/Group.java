@@ -56,4 +56,25 @@ public class Group implements Serializable{
     public String toString() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Group group = (Group) o;
+
+        if (id != group.id) return false;
+        if (name != null ? !name.equals(group.name) : group.name != null) return false;
+        return !(notes != null ? !notes.equals(group.notes) : group.notes != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (notes != null ? notes.hashCode() : 0);
+        return result;
+    }
 }

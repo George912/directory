@@ -47,9 +47,10 @@ public class ContactEditorValidator {
         if(incorrectPersonalData)
             throw new PersonalDataNotSetException(personalDataErrorMessageStringBuilder.toString());
 
-        if ((!firstPhoneNumber.trim().isEmpty() || !firstPhoneNumber.trim().matches("\\d*"))
-                || (!secondPhoneNumber.trim().isEmpty() || !secondPhoneNumber.matches("\\d*")))
+        if (!firstPhoneNumber.trim().matches("\\d*")
+                || !secondPhoneNumber.matches("\\d*"))
             throw new PhoneNumberFormatException("Телефон должен содержать только цифры.");
+
     }
 
 }

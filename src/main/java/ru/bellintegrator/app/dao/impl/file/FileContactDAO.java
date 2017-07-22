@@ -17,14 +17,15 @@ import java.util.List;
 public class FileContactDAO implements GenericDAO<Contact> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
-    private List<Contact> contactList = new ArrayList<>();
+    private List<Contact> contactList;
 
     public FileContactDAO() {
-        contactList = deserialize();
     }
 
     @Override
     public int create(Contact contact) {
+
+        contactList = deserialize();
 
         if (!contactList.contains(contact)) {
             contactList.add(contact);
@@ -38,6 +39,8 @@ public class FileContactDAO implements GenericDAO<Contact> {
     @Override
     public void delete(Contact contact) {
 
+        contactList = deserialize();
+
         boolean isRemove = contactList.remove(contact);
 
         if (isRemove) {
@@ -48,6 +51,8 @@ public class FileContactDAO implements GenericDAO<Contact> {
 
     @Override
     public void update(Contact contact) {
+
+        contactList = deserialize();
 
         for (int i = 0; i < contactList.size(); i++) {
             Contact editableContact = contactList.get(i);
@@ -79,10 +84,19 @@ public class FileContactDAO implements GenericDAO<Contact> {
 
     }
 
-    private void serialize(List<Contact> contactList) {
+    @Override
+    public void save(List<Contact> contactList) {
+
+        serialize(contactList);
+
+    }
+
+    public void serialize(List<Contact> contactList) {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.CONTACT_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+
+            log.debug(contactList.toString());
 
             objectOutputStream.writeObject(contactList);
 

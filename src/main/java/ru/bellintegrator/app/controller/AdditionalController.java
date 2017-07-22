@@ -81,7 +81,6 @@ public class AdditionalController implements ContactListChangeObserver {
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
         contactObservableList.addAll(contactService.getAllContacts());
         contactTableView.setItems(contactObservableList);
-        contactTableView.refresh();
 
     }
 }

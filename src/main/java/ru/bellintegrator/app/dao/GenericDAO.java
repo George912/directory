@@ -1,5 +1,7 @@
 package ru.bellintegrator.app.dao;
 
+import ru.bellintegrator.app.model.Contact;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,5 +17,7 @@ public interface GenericDAO<T extends Serializable> {
     void update(T t);
 
     List<T> getAll();
+
+    void save(List<T> list);
 
 }
