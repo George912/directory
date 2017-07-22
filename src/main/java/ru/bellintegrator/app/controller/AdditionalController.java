@@ -7,14 +7,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import ru.bellintegrator.app.ContactListChangeObserver;
-import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.factory.DAOFactory;
-import ru.bellintegrator.app.dao.factory.DAOFactoryType;
-import ru.bellintegrator.app.dao.service.ContactService;
-import ru.bellintegrator.app.dao.service.GroupService;
 import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
+import ru.bellintegrator.app.service.ContactService;
+import ru.bellintegrator.app.service.GroupService;
 
 /**
  * Created by neste_000 on 21.07.2017.
@@ -44,11 +40,15 @@ public class AdditionalController implements ContactListChangeObserver {
     @FXML
     private TableColumn<Contact, String> groupsTableColumn;
 
-    DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
-    GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
-    GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
-    ContactService contactService = new ContactService(contactGenericDAO);
-    GroupService groupService = new GroupService(groupGenericDAO);
+    private ContactService contactService;
+    private GroupService groupService;
+
+    public AdditionalController(ContactService contactService, GroupService groupService) {
+
+        this.contactService = contactService;
+        this.groupService = groupService;
+
+    }
 
     @FXML
     private void initialize() {
@@ -61,9 +61,9 @@ public class AdditionalController implements ContactListChangeObserver {
         nameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
         middleNameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMiddleName()));
         firstPhoneNumberTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstPhoneNumber()));
-        firstPhoneNumberTypeTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(PhoneNumberType.getStringFromPhoneNumberType(cellData.getValue().getFirstPhoneNumberType())));
+        firstPhoneNumberTypeTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstPhoneNumberType().getName()));
         secondPhoneNumberTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSecondPhoneNumber()));
-        secondPhoneNumberTypeTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(PhoneNumberType.getStringFromPhoneNumberType(cellData.getValue().getSecondPhoneNumberType())));
+        secondPhoneNumberTypeTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSecondPhoneNumberType().getName()));
         emailTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
         notesTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNotes()));
         groupsTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(getContactGroups()));

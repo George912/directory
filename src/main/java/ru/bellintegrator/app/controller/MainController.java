@@ -16,26 +16,20 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.ContactListChangeObservable;
-import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.MainApp;
 import ru.bellintegrator.app.Util;
-import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.factory.DAOFactory;
-import ru.bellintegrator.app.dao.factory.DAOFactoryType;
-import ru.bellintegrator.app.dao.service.ContactService;
-import ru.bellintegrator.app.dao.service.GroupService;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
+import ru.bellintegrator.app.service.ContactService;
+import ru.bellintegrator.app.service.GroupService;
 
 import java.io.IOException;
 import java.util.*;
 
-public class MainController implements ContactListChangeObservable {
+public class MainController{
 
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
-    private List<ContactListChangeObserver> contactListChangeObserverList = new ArrayList<>();
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -76,17 +70,13 @@ public class MainController implements ContactListChangeObservable {
     @FXML
     private CheckListView<Group> groupCheckListView;
 
-//    private DataManager dataManager;
+    private ContactService contactService;
+    private GroupService groupService;
 
-    DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
-    GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
-    GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
-    ContactService contactService = new ContactService(contactGenericDAO);
-    GroupService groupService = new GroupService(groupGenericDAO);
+    public MainController(ContactService contactService, GroupService groupService) {
 
-    public MainController() {
-
-//        dataManager = DataManager.getInstance();
+        this.contactService = contactService;
+        this.groupService = groupService;
 
     }
 
@@ -115,8 +105,6 @@ public class MainController implements ContactListChangeObservable {
 
         contactTableView.setItems(contactObservableList);
 
-        notifyContactListChangeObserver();
-
     }
 
     @FXML
@@ -130,7 +118,6 @@ public class MainController implements ContactListChangeObservable {
             contactObservableList.addAll(contactService.getAllContacts());
             contactTableView.getItems().clear();
             contactTableView.setItems(contactObservableList);
-            notifyContactListChangeObserver();
 
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -152,7 +139,6 @@ public class MainController implements ContactListChangeObservable {
             ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
             contactObservableList.addAll(contactService.getAllContacts());
             contactTableView.setItems(contactObservableList);
-            notifyContactListChangeObserver();
 
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -226,10 +212,11 @@ public class MainController implements ContactListChangeObservable {
         GridPane page = null;
         Stage dialogStage = null;
         Scene scene = null;
-        ContactEditorController contactEditorController = null;
+        ContactEditorController contactEditorController = new ContactEditorController(contactService, groupService);
 
         try {
             loader = new FXMLLoader();
+            loader.setController(contactEditorController);
             loader.setLocation(MainApp.class.getResource(fxmlPath));
             page = loader.load();
 
@@ -240,7 +227,6 @@ public class MainController implements ContactListChangeObservable {
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 
-            contactEditorController = loader.getController();
             contactEditorController.setDialogStage(dialogStage);
             contactEditorController.setContact(contact);
             contactEditorController.setEditorAction(editorAction);
@@ -350,9 +336,9 @@ public class MainController implements ContactListChangeObservable {
                     lastNameTextField.setText(contact.getLastName());
                     nameTextField.setText(contact.getFirstName());
                     middleNameTextField.setText(contact.getMiddleName());
-                    firstPhoneNumberTypeComboBox.getSelectionModel().select(PhoneNumberType.getStringFromPhoneNumberType(contact.getFirstPhoneNumberType()));
+                    firstPhoneNumberTypeComboBox.getSelectionModel().select(contact.getFirstPhoneNumberType().getName());
                     firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
-                    secondPhoneNumberTypeComboBox.getSelectionModel().select(PhoneNumberType.getStringFromPhoneNumberType(contact.getSecondPhoneNumberType()));
+                    secondPhoneNumberTypeComboBox.getSelectionModel().select(contact.getSecondPhoneNumberType().getName());
                     secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
                     emailTextField.setText(contact.getEmail());
                     notesTextArea.setText(contact.getNotes());
@@ -408,7 +394,7 @@ public class MainController implements ContactListChangeObservable {
         String[] phoneNumberTypes = new String[PhoneNumberType.values().length];
 
         for (int i = 0; i < phoneNumberTypes.length; i++) {
-            phoneNumberTypes[i] = PhoneNumberType.getStringFromPhoneNumberType(PhoneNumberType.values()[i]);
+            phoneNumberTypes[i] = PhoneNumberType.values()[i].getName();
         }
 
         ObservableList<String> stringObservableList = FXCollections.observableArrayList();
@@ -425,31 +411,6 @@ public class MainController implements ContactListChangeObservable {
         groupObservableList.addAll(groupService.getAllGroups());
 
         groupCheckListView.setItems(groupObservableList);
-
-    }
-
-    @Override
-    public void addContactListChangeObserver(ContactListChangeObserver contactListChangeObserver) {
-
-        if (!contactListChangeObserverList.contains(contactListChangeObserver)) {
-            contactListChangeObserverList.add(contactListChangeObserver);
-        }
-
-    }
-
-    @Override
-    public void removeContactListChangeObserver(ContactListChangeObserver contactListChangeObserver) {
-
-        contactListChangeObserverList.remove(contactListChangeObserver);
-
-    }
-
-    @Override
-    public void notifyContactListChangeObserver() {
-
-        for (ContactListChangeObserver observer : contactListChangeObserverList) {
-            observer.listChanged();
-        }
 
     }
 

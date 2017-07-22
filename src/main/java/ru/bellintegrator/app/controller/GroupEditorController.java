@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
-import ru.bellintegrator.app.dao.service.GroupService;
+import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.model.Group;
 
 /**

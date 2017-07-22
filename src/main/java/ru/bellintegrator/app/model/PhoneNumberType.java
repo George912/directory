@@ -4,56 +4,32 @@ package ru.bellintegrator.app.model;
  * Created by neste_000 on 11.07.2017.
  */
 public enum PhoneNumberType {
-    MOBILE,
-    HOME,
-    WORKING,
-    UNKNOWN;
+    MOBILE("Мобильный"),
+    HOME("Домашний"),
+    WORKING("Рабочий"),
+    UNKNOWN("Неизвестный");
 
-    public static String getStringFromPhoneNumberType(PhoneNumberType phoneNumberType) {
+    private String name;
 
-        String s = null;
+    PhoneNumberType(String name) {
 
-        switch (phoneNumberType) {
-            case MOBILE:
-                s = "Мобильный";
-                break;
-
-            case HOME:
-                s = "Домашний";
-                break;
-
-            case WORKING:
-                s = "Рабочий";
-                break;
-            case UNKNOWN:
-                s = "";
-                break;
-        }
-
-        return s;
+        this.name = name;
 
     }
 
-    public static PhoneNumberType getPhoneNumberTypeFromString(String s) {
+    public String getName() {
+        return name;
+    }
 
-        PhoneNumberType phoneNumberType;
+    public static PhoneNumberType getPhoneNumberTypeByTypeName(String typeName) {
 
-        switch (s){
-            case "Мобильный":
-                phoneNumberType = PhoneNumberType.MOBILE;
-                break;
-            case "Домашний":
-                phoneNumberType = PhoneNumberType.HOME;
-                break;
-            case "Рабочий":
-                phoneNumberType = PhoneNumberType.WORKING;
-                break;
-            default:
-                phoneNumberType = PhoneNumberType.UNKNOWN;
-                break;
+        for (PhoneNumberType phoneNumberType : values()) {
+            if (phoneNumberType.getName().equalsIgnoreCase(typeName)) {
+                return phoneNumberType;
+            }
         }
 
-        return phoneNumberType;
+        return UNKNOWN;
 
     }
 }

@@ -3,21 +3,22 @@ package ru.bellintegrator.app.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.factory.DAOFactory;
-import ru.bellintegrator.app.dao.factory.DAOFactoryType;
-import ru.bellintegrator.app.dao.service.ContactService;
-import ru.bellintegrator.app.dao.service.GroupService;
 import ru.bellintegrator.app.exception.PersonalDataNotSetException;
 import ru.bellintegrator.app.exception.PhoneNumberFormatException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
+import ru.bellintegrator.app.service.ContactService;
+import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.validation.ContactEditorValidator;
 
 /**
  * Created by neste_000 on 12.07.2017.
@@ -56,12 +57,9 @@ public class ContactEditorController {
     Contact contact;
     private Stage dialogStage;
     private EditorAction editorAction;
-
-    DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
-    GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
-    GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
-    ContactService contactService = new ContactService(contactGenericDAO);
-    GroupService groupService = new GroupService(groupGenericDAO);
+    private ContactEditorValidator validator = ContactEditorValidator.getInstance();
+    private GroupService groupService;
+    private ContactService contactService;
 
     public void setContact(Contact contact) {
         this.contact = contact;
@@ -69,9 +67,9 @@ public class ContactEditorController {
         lastNameTextField.setText(contact.getLastName());
         nameTextField.setText(contact.getFirstName());
         middleNameTextField.setText(contact.getMiddleName());
-        firstPhoneNumberTypeComboBox.getSelectionModel().select(PhoneNumberType.getStringFromPhoneNumberType(contact.getFirstPhoneNumberType()));
+        firstPhoneNumberTypeComboBox.getSelectionModel().select(contact.getFirstPhoneNumberType().getName());
         firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
-        secondPhoneNumberTypeComboBox.getSelectionModel().select(PhoneNumberType.getStringFromPhoneNumberType(contact.getSecondPhoneNumberType()));
+        secondPhoneNumberTypeComboBox.getSelectionModel().select(contact.getSecondPhoneNumberType().getName());
         secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
         emailTextField.setText(contact.getEmail());
         notesTextArea.setText(contact.getNotes());
@@ -91,7 +89,11 @@ public class ContactEditorController {
         this.editorAction = editorAction;
     }
 
-    public ContactEditorController() {
+    public ContactEditorController(ContactService contactService, GroupService groupService) {
+
+        this.contactService = contactService;
+        this.groupService = groupService;
+
     }
 
     @FXML
@@ -111,7 +113,7 @@ public class ContactEditorController {
     private void saveButtonClick() {
 
         try {
-            validate();
+            validator.validate(lastNameTextField.getText(), nameTextField.getText(), middleNameTextField.getText(), firstPhoneNumberTextField.getText(), secondPhoneNumberTextField.getText());
 
             switch (editorAction) {
                 case CREATE:
@@ -144,7 +146,7 @@ public class ContactEditorController {
         ObservableList<String> stringObservableList = FXCollections.observableArrayList();
 
         for (int i = 0; i < phoneNumberTypes.length; i++) {
-            stringObservableList.add(PhoneNumberType.getStringFromPhoneNumberType(phoneNumberTypes[i]));
+            stringObservableList.add(phoneNumberTypes[i].getName());
         }
 
         return stringObservableList;
@@ -163,43 +165,17 @@ public class ContactEditorController {
 
     }
 
-    private void validate() throws PersonalDataNotSetException, PhoneNumberFormatException {
-
-        StringBuilder personalDataErrorMessageStringBuilder = new StringBuilder("Не полные персональные данные: установите");
-        boolean incorrectPersonalData = false;
-
-        if (lastNameTextField.getText().isEmpty()){
-            personalDataErrorMessageStringBuilder.append(" фамилию");
-            incorrectPersonalData = true;
-
-        }else if (nameTextField.getText().isEmpty()){
-            personalDataErrorMessageStringBuilder.append(" имя");
-            incorrectPersonalData = true;
-
-        }else if (middleNameTextField.getText().isEmpty()){
-            personalDataErrorMessageStringBuilder.append(" отчество");
-            incorrectPersonalData = true;
-        }
-
-        if(incorrectPersonalData)
-            throw new PersonalDataNotSetException(personalDataErrorMessageStringBuilder.toString());
-
-        if ((!firstPhoneNumberTextField.getText().trim().isEmpty() && !firstPhoneNumberTextField.getText().trim().matches("\\d*"))
-                || (!secondPhoneNumberTextField.getText().trim().isEmpty() && !secondPhoneNumberTextField.getText().matches("\\d*")))
-            throw new PhoneNumberFormatException("Телефон должен содержать только цифры.");
-    }
-
-    private void createContact(){
+    private void createContact() {
 
         contact.setNotes(notesTextArea.getText());
         contact.setEmail(emailTextField.getText());
         contact.setFirstName(nameTextField.getText());
         contact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
-        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
         contact.setLastName(lastNameTextField.getText());
         contact.setMiddleName(middleNameTextField.getText());
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
-        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
@@ -207,7 +183,7 @@ public class ContactEditorController {
 
     }
 
-    private void updateContact(){
+    private void updateContact() {
 
         int contactId = contact.getId();
 
@@ -215,11 +191,11 @@ public class ContactEditorController {
         contact.setEmail(emailTextField.getText());
         contact.setFirstName(nameTextField.getText());
         contact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
-        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
         contact.setLastName(lastNameTextField.getText());
         contact.setMiddleName(middleNameTextField.getText());
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
-        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 

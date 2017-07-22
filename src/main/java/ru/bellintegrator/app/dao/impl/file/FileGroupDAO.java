@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
-import ru.bellintegrator.app.data.DataManager;
 import ru.bellintegrator.app.model.Group;
 
 import java.io.*;
