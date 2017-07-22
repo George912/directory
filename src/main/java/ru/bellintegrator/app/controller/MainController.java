@@ -17,7 +17,6 @@ import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.MainApp;
-import ru.bellintegrator.app.Util;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
@@ -98,7 +97,7 @@ public class MainController{
     @FXML
     private void createContact() {
 
-        showContactEditor(new Contact(Util.getNewContactId(contactService.getAllContacts()), "", "", ""), EditorAction.CREATE);
+        showContactEditor(new Contact(), EditorAction.CREATE);
 
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
         contactObservableList.addAll(contactService.getAllContacts());
@@ -153,7 +152,7 @@ public class MainController{
     @FXML
     private void createGroup() {
 
-        showGroupEditor(new Group(Util.getNewGroupId(groupService.getAllGroups()), ""), EditorAction.CREATE);
+        showGroupEditor(new Group(), EditorAction.CREATE);
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         groupObservableList.addAll(groupService.getAllGroups());
         groupTableView.setItems(groupObservableList);

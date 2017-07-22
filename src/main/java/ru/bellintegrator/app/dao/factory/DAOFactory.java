@@ -1,9 +1,10 @@
 package ru.bellintegrator.app.dao.factory;
 
-import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.util.IdGenerator;
 
 /**
  * Created by neste_000 on 19.07.2017.
@@ -35,6 +36,5 @@ public abstract class DAOFactory {
         return null;
 
     }
-
 
 }

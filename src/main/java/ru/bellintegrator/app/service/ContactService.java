@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.ContactListChangeObservable;
 import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ public class ContactService implements ContactListChangeObservable {
 
     private static final Logger log = LoggerFactory.getLogger(ContactService.class);
     private GenericDAO<Contact> contactGenericDAO;
+    private IdGenerator idGenerator;
     private List<ContactListChangeObserver> contactListChangeObserverList = new ArrayList<>();
 
     public ContactService(GenericDAO<Contact> contactGenericDAO) {
@@ -24,6 +27,8 @@ public class ContactService implements ContactListChangeObservable {
     }
 
     public void addContact(Contact contact) {
+
+        contact.setId(idGenerator.generateId());
 
         contactGenericDAO.create(contact);
 
@@ -83,4 +88,10 @@ public class ContactService implements ContactListChangeObservable {
         }
 
     }
+
+
+    public void setIdGenerator(IdGenerator idGenerator) {
+        this.idGenerator = idGenerator;
+    }
+
 }

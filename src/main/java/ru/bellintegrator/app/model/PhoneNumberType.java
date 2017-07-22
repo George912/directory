@@ -9,7 +9,7 @@ public enum PhoneNumberType {
     WORKING("Рабочий"),
     UNKNOWN("Неизвестный");
 
-    private String name;
+    private final String name;
 
     PhoneNumberType(String name) {
 

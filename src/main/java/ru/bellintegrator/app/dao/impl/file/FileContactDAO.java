@@ -96,8 +96,6 @@ public class FileContactDAO implements GenericDAO<Contact> {
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.CONTACT_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
-            log.debug(contactList.toString());
-
             objectOutputStream.writeObject(contactList);
 
             objectOutputStream.flush();

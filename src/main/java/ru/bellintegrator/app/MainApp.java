@@ -18,8 +18,12 @@ import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.util.IdGenerator;
+import ru.bellintegrator.app.util.Rankable;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainApp extends Application {
 
@@ -35,6 +39,15 @@ public class MainApp extends Application {
     }
 
     public void start(Stage stage) throws Exception {
+
+        List<Rankable> rankableList = new ArrayList<>();
+        rankableList.addAll(contactService.getAllContacts());
+        IdGenerator contactIdGenerator = new IdGenerator(rankableList);
+        rankableList.addAll(groupService.getAllGroups());
+        IdGenerator groupIdGenerator = new IdGenerator(rankableList);
+
+        contactService.setIdGenerator(contactIdGenerator);
+        groupService.setIdGenerator(groupIdGenerator);
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();

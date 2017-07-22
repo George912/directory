@@ -3,8 +3,10 @@ package ru.bellintegrator.app.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.util.IdGenerator;
 
 import java.util.List;
 
@@ -16,6 +18,7 @@ public class GroupService {
     private static final Logger log = LoggerFactory.getLogger(GroupService.class);
     private GenericDAO<Group> groupGenericDAO;
     private ContactService contactService;
+    private IdGenerator idGenerator;
 
     public GroupService(GenericDAO<Group> groupGenericDAO, ContactService contactService) {
 
@@ -25,6 +28,8 @@ public class GroupService {
     }
 
     public void addGroup(Group group) {
+
+        group.setId(idGenerator.generateId());
 
         groupGenericDAO.create(group);
 
@@ -58,4 +63,7 @@ public class GroupService {
 
     }
 
+    public void setIdGenerator(IdGenerator idGenerator) {
+        this.idGenerator = idGenerator;
+    }
 }

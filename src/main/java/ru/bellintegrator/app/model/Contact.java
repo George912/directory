@@ -1,5 +1,7 @@
 package ru.bellintegrator.app.model;
 
+import ru.bellintegrator.app.util.Rankable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,13 +9,13 @@ import java.util.List;
 /**
  * Created by neste_000 on 11.07.2017.
  */
-public class Contact implements Serializable{
+public class Contact implements Serializable, Rankable {
 
     private static final long serialVersionUID = -8767408797539567340L;
     private int id;
-    private  String firstName;
-    private  String lastName;
-    private  String middleName;
+    private String firstName;
+    private String lastName;
+    private String middleName;
     private String firstPhoneNumber;
     private PhoneNumberType firstPhoneNumberType;
     private String secondPhoneNumber;
@@ -22,13 +24,9 @@ public class Contact implements Serializable{
     private String notes;
     private List<Group> groupList = new ArrayList<>();
 
-
-
     public Contact() {
 
-        this.firstName = "";
-        this.middleName = "";
-        this.lastName = "";
+        this(0, "", "", "");
 
     }
 
@@ -59,6 +57,7 @@ public class Contact implements Serializable{
         this.notes = notes;
     }
 
+    @Override
     public int getId() {
         return id;
     }
