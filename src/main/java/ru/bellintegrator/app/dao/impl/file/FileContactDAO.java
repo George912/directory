@@ -3,9 +3,8 @@ package ru.bellintegrator.app.dao.impl.file;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.data.DataManager;
+import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.model.Contact;
 
 import java.io.*;
@@ -18,14 +17,19 @@ import java.util.List;
 public class FileContactDAO implements GenericDAO<Contact> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
+    private List<Contact> contactList = new ArrayList<>();
 
     public FileContactDAO() {
+        contactList = deserialize();
     }
 
     @Override
     public int create(Contact contact) {
 
-        serialize(DataManager.getInstance().getAllContacts());
+        if (!contactList.contains(contact)) {
+            contactList.add(contact);
+            serialize(contactList);
+        }
 
         return contact.getId();
 
@@ -34,21 +38,44 @@ public class FileContactDAO implements GenericDAO<Contact> {
     @Override
     public void delete(Contact contact) {
 
-        serialize(DataManager.getInstance().getAllContacts());
+        boolean isRemove = contactList.remove(contact);
+
+        if (isRemove) {
+            serialize(contactList);
+        }
 
     }
 
     @Override
     public void update(Contact contact) {
 
-        serialize(DataManager.getInstance().getAllContacts());
+        for (int i = 0; i < contactList.size(); i++) {
+            Contact editableContact = contactList.get(i);
+
+            if (editableContact.getId() == contact.getId()) {
+                editableContact.setNotes(contact.getNotes());
+                editableContact.setEmail(contact.getEmail());
+                editableContact.setFirstName(contact.getFirstName());
+                editableContact.setFirstPhoneNumber(contact.getFirstPhoneNumber());
+                editableContact.setFirstPhoneNumberType(contact.getFirstPhoneNumberType());
+                editableContact.setLastName(contact.getLastName());
+                editableContact.setMiddleName(contact.getMiddleName());
+                editableContact.setSecondPhoneNumber(contact.getSecondPhoneNumber());
+                editableContact.setSecondPhoneNumberType(contact.getSecondPhoneNumberType());
+                editableContact.setGroupList(contact.getGroupList());
+
+                serialize(contactList);
+            }
+        }
 
     }
 
     @Override
     public List<Contact> getAll() {
 
-        return deserialize();
+        contactList = deserialize();
+
+        return contactList;
 
     }
 

@@ -11,6 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.controller.AdditionalController;
 import ru.bellintegrator.app.controller.MainController;
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.dao.service.ContactService;
+import ru.bellintegrator.app.model.Contact;
 
 import java.io.IOException;
 
@@ -41,7 +46,7 @@ public class MainApp extends Application {
 
     }
 
-    private void showAdditionalWindow(ContactListChangeObservable contactListChangeObservable){
+    private void showAdditionalWindow(ContactListChangeObservable contactListChangeObservable) {
 
         String stageTitle = "";
         String fxmlPath = "/fxml/additional.fxml";

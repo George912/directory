@@ -3,8 +3,8 @@ package ru.bellintegrator.app.dao.impl.file;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.data.DataManager;
 import ru.bellintegrator.app.model.Group;
 
@@ -18,14 +18,20 @@ import java.util.List;
 public class FileGroupDAO implements GenericDAO<Group> {
 
     private static final Logger log = LoggerFactory.getLogger(FileGroupDAO.class);
+    private List<Group> groupList = new ArrayList<>();
 
     public FileGroupDAO() {
+        groupList = deserialize();
     }
 
     @Override
     public int create(Group group) {
 
-        serialize(DataManager.getInstance().getAllGroups());
+        if (!groupList.contains(group)) {
+            groupList.add(group);
+
+            serialize(groupList);
+        }
 
         return group.getId();
 
@@ -34,14 +40,29 @@ public class FileGroupDAO implements GenericDAO<Group> {
     @Override
     public void delete(Group group) {
 
-        serialize(DataManager.getInstance().getAllGroups());
+        boolean isRemove = groupList.remove(group);
+
+        if (isRemove) {
+            serialize(groupList);
+        }
+
+        //todo удалить группу у всех контактов
 
     }
 
     @Override
     public void update(Group group) {
 
-        serialize(DataManager.getInstance().getAllGroups());
+        for (int i = 0; i < groupList.size(); i++) {
+            Group editableGroup = groupList.get(i);
+
+            if (editableGroup.getId() == group.getId()) {
+                editableGroup.setName(group.getName());
+                editableGroup.setNotes(group.getNotes());
+
+                serialize(groupList);
+            }
+        }
 
     }
 

@@ -8,7 +8,11 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.data.DataManager;
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.dao.service.ContactService;
+import ru.bellintegrator.app.dao.service.GroupService;
 import ru.bellintegrator.app.exception.PersonalDataNotSetException;
 import ru.bellintegrator.app.exception.PhoneNumberFormatException;
 import ru.bellintegrator.app.model.Contact;
@@ -51,8 +55,13 @@ public class ContactEditorController {
 
     Contact contact;
     private Stage dialogStage;
-    private DataManager dataManager;
     private EditorAction editorAction;
+
+    DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+    GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
+    GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+    ContactService contactService = new ContactService(contactGenericDAO);
+    GroupService groupService = new GroupService(groupGenericDAO);
 
     public void setContact(Contact contact) {
         this.contact = contact;
@@ -83,7 +92,6 @@ public class ContactEditorController {
     }
 
     public ContactEditorController() {
-        dataManager = DataManager.getInstance();
     }
 
     @FXML
@@ -93,7 +101,7 @@ public class ContactEditorController {
         secondPhoneNumberTypeComboBox.setItems(preparePhoneNumberTypeComboBoxData(PhoneNumberType.values()));
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-        groupObservableList.addAll(dataManager.getAllGroups());
+        groupObservableList.addAll(groupService.getAllGroups());
 
         groupCheckListView.setItems(groupObservableList);
 
@@ -195,7 +203,7 @@ public class ContactEditorController {
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
-        dataManager.addContact(contact);
+        contactService.addContact(contact);
 
     }
 
@@ -215,7 +223,7 @@ public class ContactEditorController {
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
-        dataManager.updateContact(contact);
+        contactService.updateContact(contact);
 
     }
 

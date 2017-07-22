@@ -1,16 +1,16 @@
 package ru.bellintegrator.app.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.data.DataManager;
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.dao.service.GroupService;
 import ru.bellintegrator.app.model.Group;
-
-import java.util.Iterator;
 
 /**
  * Created by neste_000 on 12.07.2017.
@@ -26,8 +26,11 @@ public class GroupEditorController {
 
     private Stage dialogStage;
     Group group;
-    DataManager dataManager;
     EditorAction editorAction;
+
+    DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+    GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+    GroupService groupService = new GroupService(groupGenericDAO);
 
     public void setGroup(Group group) {
 
@@ -47,7 +50,6 @@ public class GroupEditorController {
     }
 
     public GroupEditorController() {
-        dataManager = DataManager.getInstance();
     }
 
     @FXML
@@ -58,11 +60,11 @@ public class GroupEditorController {
 
         switch (editorAction) {
             case CREATE:
-                dataManager.addGroup(group);
+                groupService.addGroup(group);
                 break;
 
             case UPDATE:
-                dataManager.updateGroup(group);
+                groupService.updateGroup(group);
                 break;
 
         }

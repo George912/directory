@@ -7,8 +7,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import ru.bellintegrator.app.ContactListChangeObserver;
-import ru.bellintegrator.app.data.DataManager;
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.dao.service.ContactService;
+import ru.bellintegrator.app.dao.service.GroupService;
 import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 
 /**
@@ -39,12 +44,17 @@ public class AdditionalController implements ContactListChangeObserver {
     @FXML
     private TableColumn<Contact, String> groupsTableColumn;
 
+    DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+    GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
+    GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+    ContactService contactService = new ContactService(contactGenericDAO);
+    GroupService groupService = new GroupService(groupGenericDAO);
+
     @FXML
     private void initialize() {
 
-        DataManager dataManager = DataManager.getInstance();
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-        contactObservableList.addAll(dataManager.getAllContacts());
+        contactObservableList.addAll(contactService.getAllContacts());
         contactTableView.setItems(contactObservableList);
 
         lastNameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
@@ -68,9 +78,8 @@ public class AdditionalController implements ContactListChangeObserver {
     @Override
     public void listChanged() {
 
-        DataManager dataManager = DataManager.getInstance();
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-        contactObservableList.addAll(dataManager.getAllContacts());
+        contactObservableList.addAll(contactService.getAllContacts());
         contactTableView.setItems(contactObservableList);
         contactTableView.refresh();
 
