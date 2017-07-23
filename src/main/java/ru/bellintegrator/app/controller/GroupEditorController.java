@@ -57,10 +57,12 @@ public class GroupEditorController {
 
         switch (editorAction) {
             case CREATE:
+                log.debug("create group: " + group);
                 groupService.addGroup(group);
                 break;
 
             case UPDATE:
+                log.debug("update group: " + group);
                 groupService.updateGroup(group);
                 break;
 

@@ -1,13 +1,13 @@
 package ru.bellintegrator.app.model;
 
-import ru.bellintegrator.app.util.Rankable;
+import ru.bellintegrator.app.util.Identifiable;
 
 import java.io.Serializable;
 
 /**
  * Created by neste_000 on 11.07.2017.
  */
-public class Group implements Serializable, Rankable {
+public class Group implements Serializable, Identifiable {
 
     private static final long serialVersionUID = 8751089525686641L;
     private int id;
@@ -80,4 +80,5 @@ public class Group implements Serializable, Rankable {
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
         return result;
     }
+
 }

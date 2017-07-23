@@ -3,7 +3,6 @@ package ru.bellintegrator.app.dao.impl.file;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.model.Group;
 
@@ -14,18 +13,15 @@ import java.util.List;
 /**
  * Created by neste_000 on 19.07.2017.
  */
-public class FileGroupDAO implements GenericDAO<Group> {
+public class FileGroupDAO extends AbstractFileDAO<Group> {
 
     private static final Logger log = LoggerFactory.getLogger(FileGroupDAO.class);
-    private List<Group> groupList;
-
-    public FileGroupDAO() {
-    }
 
     @Override
     public int create(Group group) {
 
-        groupList = deserialize();
+        group.setId(generateId());
+        List<Group> groupList = deserialize();
 
         if (!groupList.contains(group)) {
             groupList.add(group);
@@ -40,7 +36,7 @@ public class FileGroupDAO implements GenericDAO<Group> {
     @Override
     public void delete(Group group) {
 
-        groupList = deserialize();
+        List<Group> groupList = deserialize();
 
         boolean isRemove = groupList.remove(group);
 
@@ -53,7 +49,7 @@ public class FileGroupDAO implements GenericDAO<Group> {
     @Override
     public void update(Group group) {
 
-        groupList = deserialize();
+        List<Group> groupList = deserialize();
 
         for (int i = 0; i < groupList.size(); i++) {
             Group editableGroup = groupList.get(i);
@@ -87,6 +83,7 @@ public class FileGroupDAO implements GenericDAO<Group> {
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.GROUP_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
+            log.debug(groupList.toString());
             objectOutputStream.writeObject(groupList);
 
             objectOutputStream.flush();

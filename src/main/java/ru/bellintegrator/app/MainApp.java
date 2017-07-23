@@ -19,7 +19,7 @@ import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.util.IdGenerator;
-import ru.bellintegrator.app.util.Rankable;
+import ru.bellintegrator.app.util.Identifiable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,11 +28,6 @@ import java.util.List;
 public class MainApp extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
-    DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
-    GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
-    GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
-    ContactService contactService = new ContactService(contactGenericDAO);
-    GroupService groupService = new GroupService(groupGenericDAO, contactService);
 
     public static void main(String[] args) throws Exception {
         launch(args);
@@ -40,14 +35,11 @@ public class MainApp extends Application {
 
     public void start(Stage stage) throws Exception {
 
-        List<Rankable> rankableList = new ArrayList<>();
-        rankableList.addAll(contactService.getAllContacts());
-        IdGenerator contactIdGenerator = new IdGenerator(rankableList);
-        rankableList.addAll(groupService.getAllGroups());
-        IdGenerator groupIdGenerator = new IdGenerator(rankableList);
-
-        contactService.setIdGenerator(contactIdGenerator);
-        groupService.setIdGenerator(groupIdGenerator);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+        GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
+        GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+        ContactService contactService = new ContactService(contactGenericDAO);
+        GroupService groupService = new GroupService(groupGenericDAO, contactService);
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();
@@ -62,11 +54,11 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
-        showAdditionalWindow();
+        showAdditionalWindow(contactService);
 
     }
 
-    private void showAdditionalWindow() {
+    private void showAdditionalWindow(ContactService contactService) {
 
         String stageTitle = "";
         String fxmlPath = "/fxml/additional.fxml";
@@ -74,7 +66,7 @@ public class MainApp extends Application {
         AnchorPane page = null;
         Stage dialogStage = null;
         Scene scene = null;
-        AdditionalController additionalController = new AdditionalController(contactService, groupService);
+        AdditionalController additionalController = new AdditionalController(contactService);
 
         try {
             loader = new FXMLLoader();
@@ -85,8 +77,10 @@ public class MainApp extends Application {
             dialogStage = new Stage();
             dialogStage.setTitle(stageTitle);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            scene = new Scene(page, 400, 330);
+            scene = new Scene(page, 760, 240);
             dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+            dialogStage.setTitle("Список контактов");
 
             contactService.addContactListChangeObserver(additionalController);
 

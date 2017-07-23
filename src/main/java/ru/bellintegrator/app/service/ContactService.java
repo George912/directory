@@ -19,7 +19,6 @@ public class ContactService implements ContactListChangeObservable {
 
     private static final Logger log = LoggerFactory.getLogger(ContactService.class);
     private GenericDAO<Contact> contactGenericDAO;
-    private IdGenerator idGenerator;
     private List<ContactListChangeObserver> contactListChangeObserverList = new ArrayList<>();
 
     public ContactService(GenericDAO<Contact> contactGenericDAO) {
@@ -27,13 +26,8 @@ public class ContactService implements ContactListChangeObservable {
     }
 
     public void addContact(Contact contact) {
-
-        contact.setId(idGenerator.generateId());
-
         contactGenericDAO.create(contact);
-
         notifyContactListChangeObserver();
-
     }
 
     public void updateContact(Contact contact) {
@@ -88,10 +82,4 @@ public class ContactService implements ContactListChangeObservable {
         }
 
     }
-
-
-    public void setIdGenerator(IdGenerator idGenerator) {
-        this.idGenerator = idGenerator;
-    }
-
 }

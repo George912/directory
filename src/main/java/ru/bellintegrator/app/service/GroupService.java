@@ -18,7 +18,6 @@ public class GroupService {
     private static final Logger log = LoggerFactory.getLogger(GroupService.class);
     private GenericDAO<Group> groupGenericDAO;
     private ContactService contactService;
-    private IdGenerator idGenerator;
 
     public GroupService(GenericDAO<Group> groupGenericDAO, ContactService contactService) {
 
@@ -28,8 +27,6 @@ public class GroupService {
     }
 
     public void addGroup(Group group) {
-
-        group.setId(idGenerator.generateId());
 
         groupGenericDAO.create(group);
 
@@ -63,7 +60,4 @@ public class GroupService {
 
     }
 
-    public void setIdGenerator(IdGenerator idGenerator) {
-        this.idGenerator = idGenerator;
-    }
 }

@@ -7,16 +7,20 @@ import java.util.List;
  */
 public class IdGenerator {
 
-    private int id = 1;
+    private int id;
 
-    public IdGenerator(List<Rankable> list) {
+    public IdGenerator(List<? extends Identifiable> list) {
+        id = getMax(list);
+    }
 
-        for (Rankable rankable : list) {
-            if (rankable.getId() > id) {
-                id = rankable.getId();
+    private int getMax(List<? extends Identifiable> list) {
+        int maxId = 1;
+        for (Identifiable identifiable : list) {
+            if (identifiable.getId() > maxId) {
+                maxId = identifiable.getId();
             }
         }
-
+        return maxId;
     }
 
     public int generateId() {

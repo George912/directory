@@ -6,6 +6,7 @@ import ru.bellintegrator.app.dao.impl.file.FileGroupDAO;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.util.IdGenerator;
 
 /**
  * Created by neste_000 on 19.07.2017.
@@ -17,12 +18,22 @@ public class MemoryDAOFactory extends DAOFactory {
 
     @Override
     public GenericDAO<Contact> getContactDAO() {
-        return new FileContactDAO();
+
+        FileContactDAO fileContactDAO = new FileContactDAO();
+        fileContactDAO.setIdGenerator(new IdGenerator(fileContactDAO.getAll()));
+
+        return fileContactDAO;
+
     }
 
     @Override
     public GenericDAO<Group> getGroupDAO() {
-        return new FileGroupDAO();
+
+        FileGroupDAO fileGroupDAO = new FileGroupDAO();
+        fileGroupDAO.setIdGenerator(new IdGenerator(fileGroupDAO.getAll()));
+
+        return fileGroupDAO;
+
     }
 
 }

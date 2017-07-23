@@ -3,7 +3,6 @@ package ru.bellintegrator.app.dao.impl.file;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.model.Contact;
 
@@ -14,18 +13,15 @@ import java.util.List;
 /**
  * Created by neste_000 on 19.07.2017.
  */
-public class FileContactDAO implements GenericDAO<Contact> {
+public class FileContactDAO extends AbstractFileDAO<Contact> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
-    private List<Contact> contactList;
-
-    public FileContactDAO() {
-    }
 
     @Override
     public int create(Contact contact) {
 
-        contactList = deserialize();
+        contact.setId(generateId());
+        List<Contact> contactList = deserialize();
 
         if (!contactList.contains(contact)) {
             contactList.add(contact);
@@ -39,7 +35,7 @@ public class FileContactDAO implements GenericDAO<Contact> {
     @Override
     public void delete(Contact contact) {
 
-        contactList = deserialize();
+        List<Contact> contactList = deserialize();
 
         boolean isRemove = contactList.remove(contact);
 
@@ -52,7 +48,7 @@ public class FileContactDAO implements GenericDAO<Contact> {
     @Override
     public void update(Contact contact) {
 
-        contactList = deserialize();
+        List<Contact> contactList = deserialize();
 
         for (int i = 0; i < contactList.size(); i++) {
             Contact editableContact = contactList.get(i);
@@ -78,9 +74,7 @@ public class FileContactDAO implements GenericDAO<Contact> {
     @Override
     public List<Contact> getAll() {
 
-        contactList = deserialize();
-
-        return contactList;
+        return deserialize();
 
     }
 
@@ -96,6 +90,7 @@ public class FileContactDAO implements GenericDAO<Contact> {
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.CONTACT_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
+            log.debug(contactList.toString());
             objectOutputStream.writeObject(contactList);
 
             objectOutputStream.flush();
@@ -129,5 +124,4 @@ public class FileContactDAO implements GenericDAO<Contact> {
         return contacts == null ? new ArrayList<>() : contacts;
 
     }
-
 }

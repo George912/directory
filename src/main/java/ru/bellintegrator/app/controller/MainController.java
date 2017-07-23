@@ -24,9 +24,12 @@ import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class MainController{
+public class MainController {
 
     private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
@@ -134,6 +137,7 @@ public class MainController{
         Contact contact = contactTableView.getSelectionModel().getSelectedItem();
 
         if (contact != null) {
+            log.debug("deleteContact method. Contact = " + contact);
             contactService.deleteContact(contact);
             ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
             contactObservableList.addAll(contactService.getAllContacts());
@@ -192,6 +196,7 @@ public class MainController{
         Group group = groupTableView.getSelectionModel().getSelectedItem();
 
         if (group != null) {
+            log.debug("deleteGroup method. Group = " + group);
             groupService.deleteGroup(group);
             ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
             groupObservableList.addAll(groupService.getAllGroups());
@@ -218,6 +223,8 @@ public class MainController{
         Stage dialogStage = null;
         Scene scene = null;
         ContactEditorController contactEditorController = new ContactEditorController(contactService, groupService);
+
+        log.debug("showContactEditor method. Action = " + editorAction + ", contact = " + contact);
 
         try {
             loader = new FXMLLoader();
@@ -254,6 +261,8 @@ public class MainController{
         Scene scene = null;
         GroupEditorController groupEditorController = new GroupEditorController(groupService);
 
+        log.debug("showGroupEditor method. Action = " + editorAction + ", group = " + group);
+
         try {
 
             loader = new FXMLLoader();
@@ -285,6 +294,8 @@ public class MainController{
     private void findContactByGroup(List<Group> groupList, List<Contact> contactList) {
 
         Set<Contact> contactSet = new HashSet<>();
+
+        log.debug("findContactByGroup method. Group list = " + groupList);
 
         if (groupList.isEmpty()) {
             contactSet.addAll(contactList);
@@ -327,6 +338,9 @@ public class MainController{
 
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
         contactObservableList.addAll(contactService.getAllContacts());
+
+        log.debug("initContactTableView method. Items = " + contactObservableList);
+
         contactTableView.setItems(contactObservableList);
         contactTableViewLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
         contactTableViewNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
@@ -366,6 +380,9 @@ public class MainController{
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         groupObservableList.addAll(groupService.getAllGroups());
+
+        log.debug("initGroupTableView method. Items = " + groupObservableList);
+
         groupTableView.setItems(groupObservableList);
         groupTableViewGroupNameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         groupTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
@@ -387,6 +404,8 @@ public class MainController{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         groupObservableList.addAll(groupService.getAllGroups());
 
+        log.debug("initCheckListView method. Items = " + groupObservableList);
+
         checkListView.setItems(groupObservableList);
 
         checkListView.getCheckModel().getCheckedItems().addListener((ListChangeListener<Group>) c -> {
@@ -407,6 +426,8 @@ public class MainController{
         ObservableList<String> stringObservableList = FXCollections.observableArrayList();
         stringObservableList.addAll(Arrays.asList(phoneNumberTypes));
 
+        log.debug("initPhoneNumberTypeComboBoxes method. Items = " + stringObservableList);
+
         firstPhoneNumberTypeComboBox.setItems(stringObservableList);
         secondPhoneNumberTypeComboBox.setItems(stringObservableList);
 
@@ -416,6 +437,8 @@ public class MainController{
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         groupObservableList.addAll(groupService.getAllGroups());
+
+        log.debug("initGroupCheckListView method. Items = " + groupObservableList);
 
         groupCheckListView.setItems(groupObservableList);
 

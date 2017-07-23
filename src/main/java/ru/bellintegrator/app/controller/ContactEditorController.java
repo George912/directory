@@ -179,13 +179,13 @@ public class ContactEditorController {
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
+        log.debug("createContact method: " + contact);
+
         contactService.addContact(contact);
 
     }
 
     private void updateContact() {
-
-        int contactId = contact.getId();
 
         contact.setNotes(notesTextArea.getText());
         contact.setEmail(emailTextField.getText());
@@ -198,6 +198,8 @@ public class ContactEditorController {
         contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
+
+        log.debug("updateContact method: " + contact);
 
         contactService.updateContact(contact);
 

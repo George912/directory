@@ -6,11 +6,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.service.ContactService;
-import ru.bellintegrator.app.service.GroupService;
 
 /**
  * Created by neste_000 on 21.07.2017.
@@ -37,24 +37,40 @@ public class AdditionalController implements ContactListChangeObserver {
     private TableColumn<Contact, String> emailTableColumn;
     @FXML
     private TableColumn<Contact, String> notesTableColumn;
-    @FXML
-    private TableColumn<Contact, String> groupsTableColumn;
 
     private ContactService contactService;
-    private GroupService groupService;
 
-    public AdditionalController(ContactService contactService, GroupService groupService) {
+    private static final Logger log = LoggerFactory.getLogger(AdditionalController.class);
+
+    public AdditionalController(ContactService contactService) {
 
         this.contactService = contactService;
-        this.groupService = groupService;
 
     }
 
     @FXML
     private void initialize() {
 
+        initializeContactTableView();
+
+    }
+
+    @Override
+    public void listChanged() {
+
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
         contactObservableList.addAll(contactService.getAllContacts());
+        contactTableView.setItems(contactObservableList);
+
+    }
+
+    private void initializeContactTableView() {
+
+        ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
+        contactObservableList.addAll(contactService.getAllContacts());
+
+        log.debug("initializeContactTableView method. Items = " + contactObservableList);
+
         contactTableView.setItems(contactObservableList);
 
         lastNameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
@@ -66,21 +82,7 @@ public class AdditionalController implements ContactListChangeObserver {
         secondPhoneNumberTypeTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSecondPhoneNumberType().getName()));
         emailTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
         notesTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNotes()));
-        groupsTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(getContactGroups()));
 
     }
 
-    //todo
-    private String getContactGroups() {
-        return "группа";
-    }
-
-    @Override
-    public void listChanged() {
-
-        ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-        contactObservableList.addAll(contactService.getAllContacts());
-        contactTableView.setItems(contactObservableList);
-
-    }
 }
