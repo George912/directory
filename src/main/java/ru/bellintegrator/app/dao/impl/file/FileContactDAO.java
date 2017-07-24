@@ -1,9 +1,9 @@
 package ru.bellintegrator.app.dao.impl.file;
 
-import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 
 import java.io.*;
@@ -18,7 +18,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
 
     @Override
-    public int create(Contact contact) {
+    public int create(Contact contact) throws DAOException {
 
         contact.setId(generateId());
         List<Contact> contactList = deserialize();
@@ -33,7 +33,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
     }
 
     @Override
-    public void delete(Contact contact) {
+    public void delete(Contact contact) throws DAOException {
 
         List<Contact> contactList = deserialize();
 
@@ -46,7 +46,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
     }
 
     @Override
-    public void update(Contact contact) {
+    public void update(Contact contact) throws DAOException {
 
         List<Contact> contactList = deserialize();
 
@@ -72,20 +72,20 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
     }
 
     @Override
-    public List<Contact> getAll() {
+    public List<Contact> getAll() throws DAOException {
 
         return deserialize();
 
     }
 
     @Override
-    public void save(List<Contact> contactList) {
+    public void save(List<Contact> contactList) throws DAOException {
 
         serialize(contactList);
 
     }
 
-    public void serialize(List<Contact> contactList) {
+    private void serialize(List<Contact> contactList) throws DAOException {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.CONTACT_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
@@ -97,18 +97,13 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
 
         } catch (IOException e) {
 
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Ошибка сохранения состояния");
-            alert.setHeaderText("При сохранении состояния возникла ошибка.");
-            alert.setContentText(e.getLocalizedMessage());
-
-            alert.showAndWait();
+            throw new DAOException(e);
 
         }
 
     }
 
-    private List<Contact> deserialize() {
+    private List<Contact> deserialize() throws DAOException {
 
         List<Contact> contacts = null;
 
@@ -118,10 +113,12 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
             contacts = (List<Contact>) objectInputStream.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
-            log.debug("При восстановлении состояния возникла ошибка: " + e.getLocalizedMessage());
+
+            throw new DAOException(e);
         }
 
         return contacts == null ? new ArrayList<>() : contacts;
 
     }
+
 }

@@ -1,7 +1,9 @@
 package ru.bellintegrator.app.dao;
 
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,14 +12,14 @@ import java.util.List;
  */
 public interface GenericDAO<T extends Serializable> {
 
-    int create(T t);
+    int create(T t) throws DAOException;
 
-    void delete(T t);
+    void delete(T t) throws DAOException;
 
-    void update(T t);
+    void update(T t) throws DAOException;
 
-    List<T> getAll();
+    List<T> getAll() throws DAOException;
 
-    void save(List<T> list);
+    void save(List<T> list) throws DAOException;
 
 }

@@ -32,7 +32,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="27.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="27.0" minHeight="10.0" prefHeight="26.0" vgrow="SOMETIMES" />
               </rowConstraints>
@@ -48,17 +48,44 @@
                   <Label text="Примечания" GridPane.rowIndex="9" />
                   <TextField id="lastNameTextField" fx:id="lastNameTextField" GridPane.columnIndex="1">
                <GridPane.margin>
-                  <Insets />
+                  <Insets bottom="5.0" />
                </GridPane.margin></TextField>
-                  <TextField id="nameTextField" fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField id="middleNameTextField" fx:id="middleNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField id="firstPhoneNumberTextField" fx:id="firstPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <TextField id="secondPhoneNumberTextField" fx:id="secondPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                  <TextField id="emailTextField" fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                  <TextArea id="notesTextArea" fx:id="notesTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                  <ComboBox id="firstPhoneNumberTypeComboBox" fx:id="firstPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <ComboBox id="secondPhoneNumberTypeComboBox" fx:id="secondPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <CheckListView id="groupCheckListView" fx:id="groupCheckListView" prefHeight="31.0" prefWidth="284.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <TextField id="nameTextField" fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+                  <TextField id="middleNameTextField" fx:id="middleNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+                  <TextField id="firstPhoneNumberTextField" fx:id="firstPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+                  <TextField id="secondPhoneNumberTextField" fx:id="secondPhoneNumberTextField" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+                  <TextField id="emailTextField" fx:id="emailTextField" GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextField>
+                  <TextArea id="notesTextArea" fx:id="notesTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></TextArea>
+                  <ComboBox id="firstPhoneNumberTypeComboBox" fx:id="firstPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></ComboBox>
+                  <ComboBox id="secondPhoneNumberTypeComboBox" fx:id="secondPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></ComboBox>
+            <CheckListView id="groupCheckListView" fx:id="groupCheckListView" minHeight="50.0" prefHeight="50.0" prefWidth="284.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <GridPane.margin>
+                  <Insets top="5.0" />
+               </GridPane.margin></CheckListView>
             <Label text="Группы" GridPane.rowIndex="8" />
             <Label id="errorLabel" fx:id="errorLabel" GridPane.columnIndex="1" GridPane.rowIndex="10" />
               </children>

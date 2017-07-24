@@ -17,11 +17,13 @@ import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.MainApp;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.util.Annunciator;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -103,9 +105,14 @@ public class MainController {
         showContactEditor(new Contact(), EditorAction.CREATE);
 
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-        contactObservableList.addAll(contactService.getAllContacts());
 
-        contactTableView.setItems(contactObservableList);
+        try {
+            contactObservableList.addAll(contactService.getAllContacts());
+            contactTableView.setItems(contactObservableList);
+
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 
@@ -117,16 +124,17 @@ public class MainController {
         if (contact != null) {
             showContactEditor(contact, EditorAction.UPDATE);
             ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-            contactObservableList.addAll(contactService.getAllContacts());
-            contactTableView.getItems().clear();
-            contactTableView.setItems(contactObservableList);
+            try {
+                contactObservableList.addAll(contactService.getAllContacts());
+                contactTableView.getItems().clear();
+                contactTableView.setItems(contactObservableList);
+
+            } catch (DAOException e) {
+                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            }
 
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Редактирование контакта");
-            alert.setHeaderText("Не выбран контакт для редактирования.");
-            alert.setContentText("Выберите контакт в таблице и нажмите кнопку редактирования.");
-            alert.showAndWait();
+            Annunciator.showAlert("Редактирование контакта", "Не выбран контакт для редактирования.", "Выберите контакт в таблице и нажмите кнопку редактирования.");
         }
 
     }
@@ -138,17 +146,19 @@ public class MainController {
 
         if (contact != null) {
             log.debug("deleteContact method. Contact = " + contact);
-            contactService.deleteContact(contact);
-            ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-            contactObservableList.addAll(contactService.getAllContacts());
-            contactTableView.setItems(contactObservableList);
+            try {
+                contactService.deleteContact(contact);
+
+                ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
+                contactObservableList.addAll(contactService.getAllContacts());
+                contactTableView.setItems(contactObservableList);
+
+            } catch (DAOException e) {
+                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            }
 
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Удаление контакта");
-            alert.setHeaderText("Не выбран контакт для удаления.");
-            alert.setContentText("Выберите контакт в таблице и нажмите кнопку удаления.");
-            alert.showAndWait();
+            Annunciator.showAlert("Удаление контакта", "Не выбран контакт для удаления.", "Выберите контакт в таблице и нажмите кнопку удаления.");
         }
 
     }
@@ -158,10 +168,17 @@ public class MainController {
 
         showGroupEditor(new Group(), EditorAction.CREATE);
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-        groupObservableList.addAll(groupService.getAllGroups());
-        groupTableView.setItems(groupObservableList);
-        checkListView.setItems(groupObservableList);
-        groupCheckListView.setItems(groupObservableList);
+
+        try {
+            groupObservableList.addAll(groupService.getAllGroups());
+
+            groupTableView.setItems(groupObservableList);
+            checkListView.setItems(groupObservableList);
+            groupCheckListView.setItems(groupObservableList);
+
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 
@@ -173,20 +190,20 @@ public class MainController {
         if (group != null) {
             showGroupEditor(group, EditorAction.UPDATE);
             ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-            groupObservableList.addAll(groupService.getAllGroups());
-            groupTableView.getItems().clear();
-            groupTableView.setItems(groupObservableList);
-            checkListView.setItems(groupObservableList);
-            groupCheckListView.setItems(groupObservableList);
+            try {
+                groupObservableList.addAll(groupService.getAllGroups());
+                groupTableView.getItems().clear();
+                groupTableView.setItems(groupObservableList);
+                checkListView.setItems(groupObservableList);
+                groupCheckListView.setItems(groupObservableList);
+
+            } catch (DAOException e) {
+                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            }
 
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Редактирование группы");
-            alert.setHeaderText("Не выбрана группа для редактирования.");
-            alert.setContentText("Выберите группу в таблице и нажмите кнопку редактирования.");
-            alert.showAndWait();
+            Annunciator.showAlert("Редактирование группы", "Не выбрана группа для редактирования.", "Выберите группу в таблице и нажмите кнопку редактирования.");
         }
-
 
     }
 
@@ -197,19 +214,20 @@ public class MainController {
 
         if (group != null) {
             log.debug("deleteGroup method. Group = " + group);
-            groupService.deleteGroup(group);
-            ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-            groupObservableList.addAll(groupService.getAllGroups());
-            groupTableView.setItems(groupObservableList);
-            checkListView.setItems(groupObservableList);
-            groupCheckListView.setItems(groupObservableList);
+            try {
+                groupService.deleteGroup(group);
+                ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
+                groupObservableList.addAll(groupService.getAllGroups());
+                groupTableView.setItems(groupObservableList);
+                checkListView.setItems(groupObservableList);
+                groupCheckListView.setItems(groupObservableList);
+
+            } catch (DAOException e) {
+                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            }
 
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Удаление группы");
-            alert.setHeaderText("Не выбрана группа для удаления.");
-            alert.setContentText("Выберите группу в таблице и нажмите кнопку удаления.");
-            alert.showAndWait();
+            Annunciator.showAlert("Удаление группы", "Не выбрана группа для удаления.", "Выберите группу в таблице и нажмите кнопку удаления.");
         }
 
     }
@@ -235,7 +253,7 @@ public class MainController {
             dialogStage = new Stage();
             dialogStage.setTitle(stageTitle);
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            scene = new Scene(page, 400, 330);
+            scene = new Scene(page, 400, 350);
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 
@@ -327,91 +345,119 @@ public class MainController {
         notesTextArea.clear();
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-        groupObservableList.addAll(groupService.getAllGroups());
 
-        groupCheckListView.setItems(groupObservableList);
-        groupCheckListView.getCheckModel().clearChecks();
+        try {
+            groupObservableList.addAll(groupService.getAllGroups());
+            groupCheckListView.setItems(groupObservableList);
+            groupCheckListView.getCheckModel().clearChecks();
+
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 
     private void initContactTableView() {
 
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-        contactObservableList.addAll(contactService.getAllContacts());
 
-        log.debug("initContactTableView method. Items = " + contactObservableList);
+        try {
+            contactObservableList.addAll(contactService.getAllContacts());
+            log.debug("initContactTableView method. Items = " + contactObservableList);
 
-        contactTableView.setItems(contactObservableList);
-        contactTableViewLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
-        contactTableViewNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
-        contactTableViewMiddleNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMiddleName()));
+            contactTableView.setItems(contactObservableList);
+            contactTableViewLastNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLastName()));
+            contactTableViewNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
+            contactTableViewMiddleNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMiddleName()));
 
-        contactTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
-            @Override
-            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-                Contact contact = (Contact) newValue;
+            contactTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+                @Override
+                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                    Contact contact = (Contact) newValue;
 
-                clearContactInfoUIComponents();
+                    clearContactInfoUIComponents();
 
-                if (contact != null) {
-                    lastNameTextField.setText(contact.getLastName());
-                    nameTextField.setText(contact.getFirstName());
-                    middleNameTextField.setText(contact.getMiddleName());
-                    firstPhoneNumberTypeComboBox.getSelectionModel().select(contact.getFirstPhoneNumberType().getName());
-                    firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
-                    secondPhoneNumberTypeComboBox.getSelectionModel().select(contact.getSecondPhoneNumberType().getName());
-                    secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
-                    emailTextField.setText(contact.getEmail());
-                    notesTextArea.setText(contact.getNotes());
+                    if (contact != null) {
+                        lastNameTextField.setText(contact.getLastName());
+                        nameTextField.setText(contact.getFirstName());
+                        middleNameTextField.setText(contact.getMiddleName());
+                        firstPhoneNumberTypeComboBox.getSelectionModel().select(contact.getFirstPhoneNumberType().getName());
+                        firstPhoneNumberTextField.setText(contact.getFirstPhoneNumber());
+                        secondPhoneNumberTypeComboBox.getSelectionModel().select(contact.getSecondPhoneNumberType().getName());
+                        secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
+                        emailTextField.setText(contact.getEmail());
+                        notesTextArea.setText(contact.getNotes());
 
-                    for (Group group : contact.getGroupList()) {
-                        groupCheckListView.getCheckModel().check(group);
+                        for (Group group : contact.getGroupList()) {
+                            groupCheckListView.getCheckModel().check(group);
+                        }
+
+                        groupCheckListView.refresh();
                     }
 
-                    groupCheckListView.refresh();
                 }
+            });
 
-            }
-        });
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
+
 
     }
 
     private void initGroupTableView() {
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-        groupObservableList.addAll(groupService.getAllGroups());
 
-        log.debug("initGroupTableView method. Items = " + groupObservableList);
+        try {
+            groupObservableList.addAll(groupService.getAllGroups());
 
-        groupTableView.setItems(groupObservableList);
-        groupTableViewGroupNameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        groupTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
-            @Override
-            public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
-                Group group = (Group) newValue;
+            log.debug("initGroupTableView method. Items = " + groupObservableList);
 
-                if (group != null) {
-                    groupNameTextField.setText(group.getName());
-                    groupNotesTextArea.setText(group.getNotes());
+            groupTableView.setItems(groupObservableList);
+            groupTableViewGroupNameTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+            groupTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Object>() {
+                @Override
+                public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+                    Group group = (Group) newValue;
+
+                    if (group != null) {
+                        groupNameTextField.setText(group.getName());
+                        groupNotesTextArea.setText(group.getNotes());
+                    }
                 }
-            }
-        });
+            });
+
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 
     private void initCheckListView() {
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-        groupObservableList.addAll(groupService.getAllGroups());
 
-        log.debug("initCheckListView method. Items = " + groupObservableList);
+        try {
+            groupObservableList.addAll(groupService.getAllGroups());
 
-        checkListView.setItems(groupObservableList);
+            log.debug("initCheckListView method. Items = " + groupObservableList);
 
-        checkListView.getCheckModel().getCheckedItems().addListener((ListChangeListener<Group>) c -> {
-            contactTableView.getItems().clear();
-            findContactByGroup(checkListView.getCheckModel().getCheckedItems(), contactService.getAllContacts());
-        });
+            checkListView.setItems(groupObservableList);
+
+            checkListView.getCheckModel().getCheckedItems().addListener((ListChangeListener<Group>) c -> {
+                contactTableView.getItems().clear();
+                try {
+                    findContactByGroup(checkListView.getCheckModel().getCheckedItems(), contactService.getAllContacts());
+                } catch (DAOException e) {
+                    Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                }
+            });
+
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
+
 
     }
 
@@ -436,11 +482,15 @@ public class MainController {
     private void initGroupCheckListView() {
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-        groupObservableList.addAll(groupService.getAllGroups());
+        try {
+            groupObservableList.addAll(groupService.getAllGroups());
+            log.debug("initGroupCheckListView method. Items = " + groupObservableList);
 
-        log.debug("initGroupCheckListView method. Items = " + groupObservableList);
+            groupCheckListView.setItems(groupObservableList);
 
-        groupCheckListView.setItems(groupObservableList);
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 

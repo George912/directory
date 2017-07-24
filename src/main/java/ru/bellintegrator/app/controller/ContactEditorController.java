@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.exception.PersonalDataNotSetException;
 import ru.bellintegrator.app.exception.PhoneNumberFormatException;
 import ru.bellintegrator.app.model.Contact;
@@ -18,6 +19,7 @@ import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.util.Annunciator;
 import ru.bellintegrator.app.validation.ContactEditorValidator;
 
 /**
@@ -103,9 +105,13 @@ public class ContactEditorController {
         secondPhoneNumberTypeComboBox.setItems(preparePhoneNumberTypeComboBoxData(PhoneNumberType.values()));
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-        groupObservableList.addAll(groupService.getAllGroups());
+        try {
+            groupObservableList.addAll(groupService.getAllGroups());
+            groupCheckListView.setItems(groupObservableList);
 
-        groupCheckListView.setItems(groupObservableList);
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 
@@ -181,7 +187,11 @@ public class ContactEditorController {
 
         log.debug("createContact method: " + contact);
 
-        contactService.addContact(contact);
+        try {
+            contactService.addContact(contact);
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 
@@ -201,7 +211,11 @@ public class ContactEditorController {
 
         log.debug("updateContact method: " + contact);
 
-        contactService.updateContact(contact);
+        try {
+            contactService.updateContact(contact);
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
     }
 

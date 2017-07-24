@@ -4,7 +4,6 @@ import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.util.IdGenerator;
 
 /**
  * Created by neste_000 on 19.07.2017.
@@ -20,20 +19,26 @@ public abstract class DAOFactory {
         switch (daoFactoryType) {
 
             case XML:
-                throw new UnsupportedOperationException("Define dao factory class!");
+                throw new UnsupportedOperationException("Unable to create XML dao factory. Define XML dao factory class!");
+
             case ORACLE:
-                throw new UnsupportedOperationException("Define dao factory class!");
+                throw new UnsupportedOperationException("Unable to create ORACLE dao factory. Define ORACLE dao factory class!");
+
             case MYSQL:
-                throw new UnsupportedOperationException("Define dao factory class!");
+                throw new UnsupportedOperationException("Unable to create MYSQL dao factory. Define MYSQL dao factory class!");
+
             case MSSQL:
-                throw new UnsupportedOperationException("Define dao factory class!");
+                throw new UnsupportedOperationException("Unable to create MSSQL dao factory. Define MSSQL dao factory class!");
+
             case POSTGRESQL:
-                throw new UnsupportedOperationException("Define dao factory class!");
+                throw new UnsupportedOperationException("Unable to create POSTGRESQL dao factory. Define POSTGRESQL dao factory class!");
+
             case FILE:
                 return new MemoryDAOFactory();
-        }
 
-        return null;
+            default:
+                throw new UnsupportedOperationException("Unable to create dao factory for target type. Type " + daoFactoryType + " is unknown!");
+        }
 
     }
 

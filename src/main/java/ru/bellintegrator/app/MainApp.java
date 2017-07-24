@@ -47,7 +47,7 @@ public class MainApp extends Application {
         loader.setController(new MainController(contactService, groupService));
         Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
 
-        Scene scene = new Scene(rootNode, 800, 450);
+        Scene scene = new Scene(rootNode, 800, 500);
         scene.getStylesheets().add("/styles/styles.css");
 
         stage.setTitle("Справочник контактов");

@@ -1,9 +1,9 @@
 package ru.bellintegrator.app.dao.impl.file;
 
-import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
 
 import java.io.*;
@@ -18,7 +18,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
     private static final Logger log = LoggerFactory.getLogger(FileGroupDAO.class);
 
     @Override
-    public int create(Group group) {
+    public int create(Group group) throws DAOException {
 
         group.setId(generateId());
         List<Group> groupList = deserialize();
@@ -34,7 +34,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
     }
 
     @Override
-    public void delete(Group group) {
+    public void delete(Group group) throws DAOException {
 
         List<Group> groupList = deserialize();
 
@@ -47,7 +47,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
     }
 
     @Override
-    public void update(Group group) {
+    public void update(Group group) throws DAOException {
 
         List<Group> groupList = deserialize();
 
@@ -65,20 +65,20 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
     }
 
     @Override
-    public List<Group> getAll() {
+    public List<Group> getAll() throws DAOException {
 
         return deserialize();
 
     }
 
     @Override
-    public void save(List<Group> groupList) {
+    public void save(List<Group> groupList) throws DAOException {
 
         serialize(groupList);
 
     }
 
-    private void serialize(List<Group> groupList) {
+    private void serialize(List<Group> groupList) throws DAOException {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.GROUP_FILE);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
@@ -89,19 +89,12 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
             objectOutputStream.flush();
 
         } catch (IOException e) {
-
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Ошибка сохранения состояния");
-            alert.setHeaderText("При сохранении состояния возникла ошибка.");
-            alert.setContentText(e.getLocalizedMessage());
-
-            alert.showAndWait();
-
+            throw new DAOException(e);
         }
 
     }
 
-    private List<Group> deserialize() {
+    private List<Group> deserialize() throws DAOException {
 
         List<Group> groups = null;
 
@@ -111,7 +104,9 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
             groups = (List<Group>) objectInputStream.readObject();
 
         } catch (IOException | ClassNotFoundException e) {
-            log.debug("При восстановлении состояния возникла ошибка: " + e.getLocalizedMessage());
+
+            throw new DAOException(e);
+
         }
 
         return groups == null ? new ArrayList<>() : groups;

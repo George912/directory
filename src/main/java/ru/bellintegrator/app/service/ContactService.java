@@ -6,6 +6,7 @@ import ru.bellintegrator.app.ContactListChangeObservable;
 import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.util.IdGenerator;
 
@@ -25,12 +26,12 @@ public class ContactService implements ContactListChangeObservable {
         this.contactGenericDAO = contactGenericDAO;
     }
 
-    public void addContact(Contact contact) {
+    public void addContact(Contact contact) throws DAOException {
         contactGenericDAO.create(contact);
         notifyContactListChangeObserver();
     }
 
-    public void updateContact(Contact contact) {
+    public void updateContact(Contact contact) throws DAOException {
 
         contactGenericDAO.update(contact);
 
@@ -38,7 +39,7 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
-    public void deleteContact(Contact contact) {
+    public void deleteContact(Contact contact) throws DAOException {
 
         contactGenericDAO.delete(contact);
 
@@ -46,13 +47,13 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
-    public List<Contact> getAllContacts() {
+    public List<Contact> getAllContacts() throws DAOException {
 
         return contactGenericDAO.getAll();
 
     }
 
-    public void saveContacts(List<Contact> contactList){
+    public void saveContacts(List<Contact> contactList) throws DAOException {
 
         contactGenericDAO.save(contactList);
 

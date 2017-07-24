@@ -4,8 +4,10 @@ import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.file.FileContactDAO;
 import ru.bellintegrator.app.dao.impl.file.FileGroupDAO;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.util.Annunciator;
 import ru.bellintegrator.app.util.IdGenerator;
 
 /**
@@ -20,7 +22,11 @@ public class MemoryDAOFactory extends DAOFactory {
     public GenericDAO<Contact> getContactDAO() {
 
         FileContactDAO fileContactDAO = new FileContactDAO();
-        fileContactDAO.setIdGenerator(new IdGenerator(fileContactDAO.getAll()));
+        try {
+            fileContactDAO.setIdGenerator(new IdGenerator(fileContactDAO.getAll()));
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
         return fileContactDAO;
 
@@ -30,7 +36,11 @@ public class MemoryDAOFactory extends DAOFactory {
     public GenericDAO<Group> getGroupDAO() {
 
         FileGroupDAO fileGroupDAO = new FileGroupDAO();
-        fileGroupDAO.setIdGenerator(new IdGenerator(fileGroupDAO.getAll()));
+        try {
+            fileGroupDAO.setIdGenerator(new IdGenerator(fileGroupDAO.getAll()));
+        } catch (DAOException e) {
+            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+        }
 
         return fileGroupDAO;
 
