@@ -2,6 +2,7 @@ package ru.bellintegrator.app.dao.factory;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 
@@ -10,9 +11,9 @@ import ru.bellintegrator.app.model.Group;
  */
 public abstract class DAOFactory {
 
-    public abstract GenericDAO<Contact> getContactDAO();
+    public abstract GenericDAO<Contact> getContactDAO() throws DAOException;
 
-    public abstract GenericDAO<Group> getGroupDAO();
+    public abstract GenericDAO<Group> getGroupDAO() throws DAOException;
 
     public static DAOFactory getDAOFactory(DAOFactoryType daoFactoryType) {
 

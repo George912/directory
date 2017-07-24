@@ -1,13 +1,12 @@
 package ru.bellintegrator.app.dao.factory.impl.file;
 
+import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.file.FileContactDAO;
 import ru.bellintegrator.app.dao.impl.file.FileGroupDAO;
-import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.util.Annunciator;
 import ru.bellintegrator.app.util.IdGenerator;
 
 /**
@@ -19,28 +18,20 @@ public class MemoryDAOFactory extends DAOFactory {
     public static final String GROUP_FILE = "group";
 
     @Override
-    public GenericDAO<Contact> getContactDAO() {
+    public GenericDAO<Contact> getContactDAO() throws DAOException {
 
         FileContactDAO fileContactDAO = new FileContactDAO();
-        try {
-            fileContactDAO.setIdGenerator(new IdGenerator(fileContactDAO.getAll()));
-        } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
-        }
+        fileContactDAO.setIdGenerator(new IdGenerator(fileContactDAO.getAll()));
 
         return fileContactDAO;
 
     }
 
     @Override
-    public GenericDAO<Group> getGroupDAO() {
+    public GenericDAO<Group> getGroupDAO() throws DAOException {
 
         FileGroupDAO fileGroupDAO = new FileGroupDAO();
-        try {
-            fileGroupDAO.setIdGenerator(new IdGenerator(fileGroupDAO.getAll()));
-        } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
-        }
+        fileGroupDAO.setIdGenerator(new IdGenerator(fileGroupDAO.getAll()));
 
         return fileGroupDAO;
 
