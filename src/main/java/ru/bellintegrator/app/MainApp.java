@@ -18,12 +18,9 @@ import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
-import ru.bellintegrator.app.util.IdGenerator;
-import ru.bellintegrator.app.util.Identifiable;
+import ru.bellintegrator.app.util.DOMUtilForContact;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainApp extends Application {
 
@@ -40,6 +37,15 @@ public class MainApp extends Application {
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
+
+//        DOMUtilForGroup domUtilForGroup = new DOMUtilForGroup();
+//        System.out.println(domUtilForGroup.getAll().toString());
+//        domUtilForGroup.create(new Group(0, "g1", "g1"));
+//        domUtilForGroup.update(new Group(111, "g2", "g2"));
+//        domUtilForGroup.delete(new Group(111, "", ""));
+
+        DOMUtilForContact domUtilForContact = new DOMUtilForContact();
+//        domUtilForContact.create(new Contact(0, "c1", "c1", "c1"));
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();
