@@ -16,9 +16,9 @@ import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.parser.sax.SAXUtilForGroup;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
-import ru.bellintegrator.app.util.DOMUtilForContact;
 
 import java.io.IOException;
 
@@ -44,8 +44,15 @@ public class MainApp extends Application {
 //        domUtilForGroup.update(new Group(111, "g2", "g2"));
 //        domUtilForGroup.delete(new Group(111, "", ""));
 
-        DOMUtilForContact domUtilForContact = new DOMUtilForContact();
+//        DOMUtilForContact domUtilForContact = new DOMUtilForContact();
+//        System.out.println(domUtilForContact.getAll().toString());
 //        domUtilForContact.create(new Contact(0, "c1", "c1", "c1"));
+//        domUtilForContact.delete(new Contact(111, "", "", ""));
+//        domUtilForContact.update(new Contact(111, "c2", "c2", "c2", "2", PhoneNumberType.HOME, "2", PhoneNumberType.WORKING, "2", "2"));
+//        domUtilForContact.save(Arrays.asList(new Contact(1, "", "", ""), new Contact(1, "", "", ""), new Contact(1, "", "", "")));
+
+        SAXUtilForGroup saxUtilForGroup = new SAXUtilForGroup();
+        System.out.println(saxUtilForGroup.getAll().toString());
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();

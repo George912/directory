@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.util;
+package ru.bellintegrator.app.parser.dom;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
