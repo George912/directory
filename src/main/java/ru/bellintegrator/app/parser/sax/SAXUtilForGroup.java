@@ -12,9 +12,7 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -25,44 +23,27 @@ public class SAXUtilForGroup extends AbstractFileDAO<Group> {
     @Override
     public int create(Group group) throws DAOException {
 
-        StringWriter stringWriter = new StringWriter();
+        List<Group> groupList = getAll();
 
-        XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
-
-        try {
-            XMLStreamWriter xMLStreamWriter = xMLOutputFactory.createXMLStreamWriter(stringWriter);
-            xMLStreamWriter.writeStartDocument();
-            xMLStreamWriter.writeStartElement("cars");
-
-            xMLStreamWriter.writeStartElement("supercars");
-            xMLStreamWriter.writeAttribute("company", "Ferrari");
-
-            xMLStreamWriter.writeStartElement("carname");
-            xMLStreamWriter.writeAttribute("type", "formula one");
-            xMLStreamWriter.writeCharacters("Ferrari 101");
-            xMLStreamWriter.writeEndElement();
-
-            xMLStreamWriter.writeStartElement("carname");
-            xMLStreamWriter.writeAttribute("type", "sports");
-            xMLStreamWriter.writeCharacters("Ferrari 202");
-            xMLStreamWriter.writeEndElement();
-
-            xMLStreamWriter.writeEndElement();
-            xMLStreamWriter.writeEndDocument();
-
-            xMLStreamWriter.flush();
-            xMLStreamWriter.close();
-
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
+        if (!groupList.contains(group)) {
+            groupList.add(group);
         }
+
+        save(groupList);
 
         return group.getId();
 
     }
 
     @Override
+    //todo удалить группу у контактов перед вызовом delete
     public void delete(Group group) throws DAOException {
+
+        List<Group> groupList = getAll();
+
+        groupList.remove(group);
+
+        save(groupList);
 
     }
 
@@ -79,7 +60,7 @@ public class SAXUtilForGroup extends AbstractFileDAO<Group> {
         List<Group> groupList = null;
 
         try {
-            SAXParser saxParser  = factory.newSAXParser();
+            SAXParser saxParser = factory.newSAXParser();
             GroupHandler groupHandler = new GroupHandler();
             saxParser.parse(inputStream, groupHandler);
             groupList = groupHandler.getGroupList();
@@ -95,5 +76,43 @@ public class SAXUtilForGroup extends AbstractFileDAO<Group> {
     @Override
     public void save(List<Group> list) throws DAOException {
 
+        XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
+        XMLStreamWriter xMLStreamWriter = null;
+
+        try {
+            OutputStream outputStream = new FileOutputStream("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups2.xml");
+
+            xMLStreamWriter = xMLOutputFactory.createXMLStreamWriter(outputStream);
+
+            xMLStreamWriter.writeStartDocument();
+
+            xMLStreamWriter.writeStartElement("groups");
+
+            for (Group group1 : list) {
+                xMLStreamWriter.writeStartElement("group");
+                xMLStreamWriter.writeAttribute("id", String.valueOf(group1.getId()));
+
+                xMLStreamWriter.writeStartElement("name");
+                xMLStreamWriter.writeCharacters(group1.getName());
+                xMLStreamWriter.writeEndElement();
+
+                xMLStreamWriter.writeStartElement("notes");
+                xMLStreamWriter.writeCharacters(group1.getNotes());
+                xMLStreamWriter.writeEndElement();
+
+                xMLStreamWriter.writeEndElement();
+
+            }
+
+            xMLStreamWriter.writeEndDocument();
+
+            xMLStreamWriter.flush();
+            xMLStreamWriter.close();
+
+        } catch (XMLStreamException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
+
 }

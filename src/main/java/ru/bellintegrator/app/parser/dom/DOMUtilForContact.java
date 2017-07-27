@@ -320,9 +320,9 @@ public class DOMUtilForContact extends AbstractFileDAO<Contact> {
                             , eElement.getElementsByTagName("firstName").item(0).getTextContent()
                             , eElement.getElementsByTagName("middleName").item(0).getTextContent()
                             , eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent()
-                            , PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent())
+                            , PhoneNumberType.getPhoneNumberTypeByTypeDescription(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent())
                             , eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent()
-                            , PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent())
+                            , PhoneNumberType.getPhoneNumberTypeByTypeDescription(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent())
                             , eElement.getElementsByTagName("email").item(0).getTextContent()
                             , eElement.getElementsByTagName("notes").item(0).getTextContent()
                     );

@@ -21,10 +21,22 @@ public enum PhoneNumberType {
         return name;
     }
 
+    public static PhoneNumberType getPhoneNumberTypeByTypeDescription(String typeDescription) {
+
+        for (PhoneNumberType phoneNumberType : values()) {
+            if (phoneNumberType.getName().equalsIgnoreCase(typeDescription)) {
+                return phoneNumberType;
+            }
+        }
+
+        return UNKNOWN;
+
+    }
+
     public static PhoneNumberType getPhoneNumberTypeByTypeName(String typeName) {
 
         for (PhoneNumberType phoneNumberType : values()) {
-            if (phoneNumberType.getName().equalsIgnoreCase(typeName)) {
+            if (phoneNumberType.name().equalsIgnoreCase(typeName)) {
                 return phoneNumberType;
             }
         }

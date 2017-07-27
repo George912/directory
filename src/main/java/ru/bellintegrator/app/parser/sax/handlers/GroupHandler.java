@@ -53,4 +53,5 @@ public class GroupHandler extends DefaultHandler {
     public List<Group> getGroupList() {
         return groupList;
     }
+
 }

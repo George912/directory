@@ -177,11 +177,11 @@ public class ContactEditorController {
         contact.setEmail(emailTextField.getText());
         contact.setFirstName(nameTextField.getText());
         contact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
-        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
         contact.setLastName(lastNameTextField.getText());
         contact.setMiddleName(middleNameTextField.getText());
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
-        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
@@ -201,11 +201,11 @@ public class ContactEditorController {
         contact.setEmail(emailTextField.getText());
         contact.setFirstName(nameTextField.getText());
         contact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
-        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
         contact.setLastName(lastNameTextField.getText());
         contact.setMiddleName(middleNameTextField.getText());
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
-        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
