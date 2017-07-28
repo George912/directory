@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.parser.sax.handlers;
+package ru.bellintegrator.app.parser.sax.handler.byname;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -13,11 +13,10 @@ import java.util.List;
 /**
  * Created by neste_000 on 26.07.2017.
  */
-public class ContactHandler extends DefaultHandler {
+public class ByNameContactHandler extends DefaultHandler {
 
     Contact contact = null;
     List<Contact> contactList = new ArrayList<>();
-    List<Group> groupList = null;
     private boolean bFirstName;
     private boolean bLastName;
     private boolean bMiddleName;
@@ -29,13 +28,20 @@ public class ContactHandler extends DefaultHandler {
     private boolean bNotes;
     private boolean bGroupList;
     private boolean bGroupId;
+    private boolean bContactIsFind;
+    private int contactId;
+    private String name;
+    List<Group> groupList;
+    private String lastName;
+
+    public ByNameContactHandler(String name) {
+        this.name = name;
+    }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-
         if ("contact".equalsIgnoreCase(qName)) {
-            contact = new Contact();
-            contact.setId(Integer.parseInt(attributes.getValue("id")));
+            contactId = Integer.parseInt(attributes.getValue("id"));
 
         } else if ("lastName".equalsIgnoreCase(qName)) {
             bLastName = true;
@@ -70,80 +76,85 @@ public class ContactHandler extends DefaultHandler {
         } else if ("id".equalsIgnoreCase(qName)) {
             bGroupId = true;
         }
-
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-
         if (bLastName) {
-            contact.setLastName(new String(ch, start, length));
+            lastName = new String(ch, start, length);
             bLastName = false;
 
         } else if (bFirstName) {
+            String firstName = new String(ch, start, length);
+            if (name.equals(firstName)) {
+                contact = new Contact();
+                contact.setId(contactId);
+                contact.setFirstName(firstName);
+                contact.setLastName(lastName);
+                bFirstName = false;
+                bContactIsFind = true;
+            }
+
+        } else if (bFirstName && bContactIsFind) {
             contact.setFirstName(new String(ch, start, length));
             bFirstName = false;
 
-        } else if (bMiddleName) {
+        } else if (bMiddleName && bContactIsFind) {
             contact.setMiddleName(new String(ch, start, length));
             bMiddleName = false;
 
-        } else if (bFirstPhoneNumber) {
+        } else if (bFirstPhoneNumber && bContactIsFind) {
             contact.setFirstPhoneNumber(new String(ch, start, length));
             bFirstPhoneNumber = false;
 
-        } else if (bFirstPhoneNumberType) {
+        } else if (bFirstPhoneNumberType && bContactIsFind) {
             String s = new String(ch, start, length);
             contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(s));
             bFirstPhoneNumberType = false;
 
-        } else if (bSecondPhoneNumber) {
+        } else if (bSecondPhoneNumber && bContactIsFind) {
             contact.setSecondPhoneNumber(new String(ch, start, length));
             bSecondPhoneNumber = false;
 
-        } else if (bSecondPhoneNumberType) {
+        } else if (bSecondPhoneNumberType && bContactIsFind) {
             contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(new String(ch, start, length)));
             bSecondPhoneNumberType = false;
 
-        } else if (bEmail) {
+        } else if (bEmail && bContactIsFind) {
             contact.setEmail(new String(ch, start, length));
             bEmail = false;
 
-        } else if (bNotes) {
+        } else if (bNotes && bContactIsFind) {
             contact.setNotes(new String(ch, start, length));
             bNotes = false;
 
-        } else if (bGroupList) {
+        } else if (bGroupList && bContactIsFind) {
             groupList = new ArrayList<>();
             bGroupList = false;
 
-        } else if (bGroupId) {
+        } else if (bGroupId && bContactIsFind) {
             if (groupList != null) {
                 groupList.add(new Group(Integer.parseInt(new String(ch, start, length)), "", ""));
             }
             bGroupId = false;
-
         }
-
     }
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-
         if ("contact".equalsIgnoreCase(qName)) {
             if (contact != null) {
                 if (groupList == null) {
                     groupList = new ArrayList<>();
                 }
 
-                contact.setGroupList(groupList);
-
-                contactList.add(contact);
-
+                if (bContactIsFind) {
+                    contact.setGroupList(groupList);
+                    bContactIsFind = false;
+                    contactList.add(contact);
+                }
             }
-
         }
-
     }
 
     public List<Contact> getContactList() {

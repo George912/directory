@@ -5,10 +5,8 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.ContactListChangeObservable;
 import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.util.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +55,14 @@ public class ContactService implements ContactListChangeObservable {
 
         contactGenericDAO.save(contactList);
 
+    }
+
+    public Contact getContactById(int id) {
+        return contactGenericDAO.getById(id);
+    }
+
+    public List<Contact> getContactsByName(String name) {
+        return contactGenericDAO.getByName(name);
     }
 
     @Override

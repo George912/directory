@@ -203,6 +203,87 @@ public class DOMUtilForGroup extends AbstractFileDAO<Group> {
 
     }
 
+    @Override
+    public Group getById(int id) {
+        Group group = null;
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml")) {
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputStream);
+            doc.getDocumentElement().normalize();
+
+            StringBuilder expression = new StringBuilder("/groups/group[@id='");
+            expression.append(id);
+            expression.append("']");
+
+            XPath xPath = XPathFactory.newInstance().newXPath();
+
+            NodeList nList = (NodeList) xPath.compile(expression.toString()).evaluate(doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    group = new Group();
+
+                    group.setId(id);
+                    group.setName(eElement.getElementsByTagName("name").item(0).getTextContent());
+                    group.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
+                }
+            }
+
+        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
+            e.printStackTrace();
+        }
+
+        return group;
+    }
+
+    @Override
+    public List<Group> getByName(String name) {
+        List<Group> groupList = new ArrayList<>();
+        Group group = null;
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml")) {
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputStream);
+            doc.getDocumentElement().normalize();
+
+            StringBuilder expression = new StringBuilder("/groups/group[name='");
+            expression.append(name);
+            expression.append("']");
+
+            XPath xPath = XPathFactory.newInstance().newXPath();
+
+            NodeList nList = (NodeList) xPath.compile(expression.toString()).evaluate(doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    group = new Group();
+
+                    group.setId(Integer.parseInt(eElement.getAttribute("id")));
+                    group.setName(eElement.getElementsByTagName("name").item(0).getTextContent());
+                    group.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
+
+                    groupList.add(group);
+                }
+            }
+
+        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
+            e.printStackTrace();
+        }
+
+        return groupList;
+    }
+
     private void writeToXml(Document document) {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();

@@ -4,14 +4,13 @@ import org.xml.sax.SAXException;
 import ru.bellintegrator.app.dao.impl.file.AbstractFileDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.parser.sax.handlers.GroupHandler;
+import ru.bellintegrator.app.parser.sax.handler.all.AllGroupHandler;
+import ru.bellintegrator.app.parser.sax.handler.byid.ByIdGroupHandler;
+import ru.bellintegrator.app.parser.sax.handler.byname.ByNameGroupHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.io.*;
 import java.util.List;
 
@@ -22,34 +21,20 @@ public class SAXUtilForGroup extends AbstractFileDAO<Group> {
 
     @Override
     public int create(Group group) throws DAOException {
-
-        List<Group> groupList = getAll();
-
-        if (!groupList.contains(group)) {
-            groupList.add(group);
-        }
-
-        save(groupList);
-
-        return group.getId();
-
+        throw new DAOException(
+                new UnsupportedOperationException("Create operation not supported while using SAX parser."));
     }
 
     @Override
-    //todo удалить группу у контактов перед вызовом delete
     public void delete(Group group) throws DAOException {
-
-        List<Group> groupList = getAll();
-
-        groupList.remove(group);
-
-        save(groupList);
-
+        throw new DAOException(
+                new UnsupportedOperationException("Delete operation not supported while using SAX parser."));
     }
 
     @Override
     public void update(Group group) throws DAOException {
-
+        throw new DAOException(
+                new UnsupportedOperationException("Update operation not supported while using SAX parser."));
     }
 
     @Override
@@ -61,7 +46,7 @@ public class SAXUtilForGroup extends AbstractFileDAO<Group> {
 
         try {
             SAXParser saxParser = factory.newSAXParser();
-            GroupHandler groupHandler = new GroupHandler();
+            AllGroupHandler groupHandler = new AllGroupHandler();
             saxParser.parse(inputStream, groupHandler);
             groupList = groupHandler.getGroupList();
 
@@ -75,44 +60,46 @@ public class SAXUtilForGroup extends AbstractFileDAO<Group> {
 
     @Override
     public void save(List<Group> list) throws DAOException {
+        throw new DAOException(
+                new UnsupportedOperationException("Create operation not supported while using SAX parser."));
+    }
 
-        XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
-        XMLStreamWriter xMLStreamWriter = null;
+    @Override
+    public Group getById(int id) {
+        Group group = null;
+        InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml");
+        SAXParserFactory factory = SAXParserFactory.newInstance();
 
         try {
-            OutputStream outputStream = new FileOutputStream("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups2.xml");
+            SAXParser saxParser = factory.newSAXParser();
+            ByIdGroupHandler groupHandler = new ByIdGroupHandler(id);
+            saxParser.parse(inputStream, groupHandler);
+            group = groupHandler.getGroup();
 
-            xMLStreamWriter = xMLOutputFactory.createXMLStreamWriter(outputStream);
-
-            xMLStreamWriter.writeStartDocument();
-
-            xMLStreamWriter.writeStartElement("groups");
-
-            for (Group group1 : list) {
-                xMLStreamWriter.writeStartElement("group");
-                xMLStreamWriter.writeAttribute("id", String.valueOf(group1.getId()));
-
-                xMLStreamWriter.writeStartElement("name");
-                xMLStreamWriter.writeCharacters(group1.getName());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("notes");
-                xMLStreamWriter.writeCharacters(group1.getNotes());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeEndElement();
-
-            }
-
-            xMLStreamWriter.writeEndDocument();
-
-            xMLStreamWriter.flush();
-            xMLStreamWriter.close();
-
-        } catch (XMLStreamException | FileNotFoundException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
 
+        return group;
+    }
+
+    @Override
+    public List<Group> getByName(String name) {
+        List<Group> groupList = null;
+        InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml");
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+
+        try {
+            SAXParser saxParser = factory.newSAXParser();
+            ByNameGroupHandler groupHandler = new ByNameGroupHandler(name);
+            saxParser.parse(inputStream, groupHandler);
+            groupList = groupHandler.getGroupList();
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return groupList;
     }
 
 }

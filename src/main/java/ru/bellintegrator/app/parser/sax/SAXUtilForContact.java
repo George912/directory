@@ -4,15 +4,13 @@ import org.xml.sax.SAXException;
 import ru.bellintegrator.app.dao.impl.file.AbstractFileDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.parser.sax.handlers.ContactHandler;
+import ru.bellintegrator.app.parser.sax.handler.all.AllContactHandler;
+import ru.bellintegrator.app.parser.sax.handler.byid.ByIdContactHandler;
+import ru.bellintegrator.app.parser.sax.handler.byname.ByNameContactHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.io.*;
 import java.util.List;
 
@@ -23,17 +21,20 @@ public class SAXUtilForContact extends AbstractFileDAO<Contact> {
 
     @Override
     public int create(Contact contact) throws DAOException {
-        return 0;
+        throw new DAOException(
+                new UnsupportedOperationException("Create operation not supported while using SAX parser."));
     }
 
     @Override
     public void delete(Contact contact) throws DAOException {
-
+        throw new DAOException(
+                new UnsupportedOperationException("Delete operation not supported while using SAX parser."));
     }
 
     @Override
     public void update(Contact contact) throws DAOException {
-
+        throw new DAOException(
+                new UnsupportedOperationException("Update operation not supported while using SAX parser."));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class SAXUtilForContact extends AbstractFileDAO<Contact> {
 
         try {
             SAXParser saxParser = factory.newSAXParser();
-            ContactHandler contactHandler = new ContactHandler();
+            AllContactHandler contactHandler = new AllContactHandler();
             saxParser.parse(inputStream, contactHandler);
             contactList = contactHandler.getContactList();
 
@@ -59,87 +60,48 @@ public class SAXUtilForContact extends AbstractFileDAO<Contact> {
 
     @Override
     public void save(List<Contact> list) throws DAOException {
+        throw new DAOException(
+                new UnsupportedOperationException("Save operation not supported while using SAX parser."));
+    }
 
-        XMLOutputFactory xMLOutputFactory = XMLOutputFactory.newInstance();
-        XMLStreamWriter xMLStreamWriter = null;
+    @Override
+    //todo get List<Group>
+    public Contact getById(int id) {
+        Contact contact = null;
+        InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml");
+        SAXParserFactory factory = SAXParserFactory.newInstance();
 
         try {
-            OutputStream outputStream = new FileOutputStream("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts2.xml");
+            SAXParser saxParser = factory.newSAXParser();
+            ByIdContactHandler groupHandler = new ByIdContactHandler(id);
+            saxParser.parse(inputStream, groupHandler);
+            contact = groupHandler.getContact();
 
-            xMLStreamWriter = xMLOutputFactory.createXMLStreamWriter(outputStream);
-
-            xMLStreamWriter.writeStartDocument();
-
-            xMLStreamWriter.writeStartElement("contacts");
-
-            for (Contact contact : list) {
-                xMLStreamWriter.writeStartElement("contact");
-                xMLStreamWriter.writeAttribute("id", String.valueOf(contact.getId()));
-
-                xMLStreamWriter.writeStartElement("lastName");
-                xMLStreamWriter.writeCharacters(contact.getLastName());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("firstName");
-                xMLStreamWriter.writeCharacters(contact.getFirstName());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("middleName");
-                xMLStreamWriter.writeCharacters(contact.getMiddleName());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("firstPhoneNumber");
-                xMLStreamWriter.writeCharacters(contact.getFirstPhoneNumber());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("firstPhoneNumberType");
-                xMLStreamWriter.writeCharacters(contact.getFirstPhoneNumberType().name());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("secondPhoneNumber");
-                xMLStreamWriter.writeCharacters(contact.getSecondPhoneNumber());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("secondPhoneNumberType");
-                xMLStreamWriter.writeCharacters(contact.getSecondPhoneNumberType().name());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("email");
-                xMLStreamWriter.writeCharacters(contact.getEmail());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("notes");
-                xMLStreamWriter.writeCharacters(contact.getNotes());
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeStartElement("groupList");
-
-                if (contact.getGroupList() != null) {
-
-                    for (Group group : contact.getGroupList()) {
-                        xMLStreamWriter.writeStartElement("id");
-                        xMLStreamWriter.writeCharacters(String.valueOf(group.getId()));
-                        xMLStreamWriter.writeEndElement();
-
-                    }
-
-                }
-
-                xMLStreamWriter.writeEndElement();
-
-                xMLStreamWriter.writeEndElement();
-
-            }
-
-            xMLStreamWriter.writeEndDocument();
-
-            xMLStreamWriter.flush();
-            xMLStreamWriter.close();
-
-        } catch (XMLStreamException | FileNotFoundException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
 
+        return contact;
+    }
+
+    @Override
+    //todo get List<Group>
+    public List<Contact> getByName(String name) {
+        List<Contact> contactList = null;
+        InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml");
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+
+        try {
+            SAXParser saxParser = factory.newSAXParser();
+            ByNameContactHandler handler = new ByNameContactHandler(name);
+            saxParser.parse(inputStream, handler);
+            contactList = handler.getContactList();
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return contactList;
     }
 
 }

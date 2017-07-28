@@ -362,6 +362,120 @@ public class DOMUtilForContact extends AbstractFileDAO<Contact> {
 
     }
 
+    @Override
+    //todo get List<Group>
+    public Contact getById(int id) {
+        Contact contact = null;
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml")) {
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputStream);
+            doc.getDocumentElement().normalize();
+
+            StringBuilder expression = new StringBuilder("/contacts/contact[@id='");
+            expression.append(id);
+            expression.append("']");
+
+            XPath xPath = XPathFactory.newInstance().newXPath();
+
+            NodeList nList = (NodeList) xPath.compile(expression.toString()).evaluate(doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    contact = new Contact();
+
+                    contact.setId(id);
+                    contact.setLastName(eElement.getElementsByTagName("lastName").item(0).getTextContent());
+                    contact.setFirstName(eElement.getElementsByTagName("firstName").item(0).getTextContent());
+                    contact.setMiddleName(eElement.getElementsByTagName("middleName").item(0).getTextContent());
+                    contact.setFirstPhoneNumber(eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent());
+                    contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent()));
+                    contact.setSecondPhoneNumber(eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent());
+                    contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent()));
+                    contact.setEmail(eElement.getElementsByTagName("email").item(0).getTextContent());
+                    contact.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
+                }
+            }
+
+        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
+            e.printStackTrace();
+        }
+
+        return contact;
+    }
+
+    @Override
+    //todo get List<Group>
+    public List<Contact> getByName(String name) {
+        List<Contact> contactList = new ArrayList<>();
+
+        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml")) {
+
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(inputStream);
+            doc.getDocumentElement().normalize();
+
+            StringBuilder expression = new StringBuilder("/contacts/contact[firstName='");
+            expression.append(name);
+            expression.append("']");
+
+            XPath xPath = XPathFactory.newInstance().newXPath();
+
+            NodeList nList = (NodeList) xPath.compile(expression.toString()).evaluate(doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    Contact contact = new Contact();
+
+                    contact.setId(Integer.parseInt(eElement.getAttribute("id")));
+                    contact.setLastName(eElement.getElementsByTagName("lastName").item(0).getTextContent());
+                    contact.setFirstName(eElement.getElementsByTagName("firstName").item(0).getTextContent());
+                    contact.setMiddleName(eElement.getElementsByTagName("middleName").item(0).getTextContent());
+                    contact.setFirstPhoneNumber(eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent());
+                    contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent()));
+                    contact.setSecondPhoneNumber(eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent());
+                    contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent()));
+                    contact.setEmail(eElement.getElementsByTagName("email").item(0).getTextContent());
+                    contact.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
+
+                    List<Group> groupList = new ArrayList<>();
+
+                    Element groupListElement = (Element) eElement.getElementsByTagName("groupList").item(0);
+                    NodeList groupIdElements = groupListElement.getElementsByTagName("id");
+
+                    for (int j = 0; j < groupIdElements.getLength(); j++) {
+                        Node item = groupIdElements.item(j);
+
+                        if (item.getNodeType() == Node.ELEMENT_NODE) {
+                            Element element = (Element) item;
+                            Group group = new Group(Integer.parseInt(element.getTextContent().trim()), "", "");
+
+                            groupList.add(group);
+                        }
+                    }
+
+                    contact.setGroupList(groupList);
+
+                    contactList.add(contact);
+                }
+            }
+
+        } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
+            e.printStackTrace();
+        }
+
+        return contactList;
+    }
+
     private void writeToXml(Document document) {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();

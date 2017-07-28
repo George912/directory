@@ -78,6 +78,44 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
 
     }
 
+    @Override
+    public Group getById(int id) {
+        try {
+            List<Group> groupList = deserialize();
+
+            for (Group group : groupList) {
+                if (group.getId() == id) {
+                    return group;
+                }
+            }
+
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Group> getByName(String name) {
+        List<Group> groups = new ArrayList<>();
+
+        try {
+            List<Group> groupList = deserialize();
+
+            for (Group group : groupList) {
+                if (group.getName().equalsIgnoreCase(name)) {
+                    groups.add(group);
+                }
+            }
+
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        return groups;
+    }
+
     private void serialize(List<Group> groupList) throws DAOException {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.GROUP_FILE);

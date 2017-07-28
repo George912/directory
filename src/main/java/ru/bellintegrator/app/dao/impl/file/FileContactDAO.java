@@ -85,6 +85,45 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
 
     }
 
+    @Override
+    public Contact getById(int id) {
+
+        try {
+            List<Contact> contactList = deserialize();
+
+            for (Contact contact : contactList) {
+                if (contact.getId() == id) {
+                    return contact;
+                }
+            }
+
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Contact> getByName(String name) {
+        List<Contact> contacts = new ArrayList<>();
+
+        try {
+            List<Contact> contactList = deserialize();
+
+            for (Contact contact : contactList) {
+                if (contact.getFirstName().equalsIgnoreCase(name)) {
+                    contacts.add(contact);
+                }
+            }
+
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        return contacts;
+    }
+
     private void serialize(List<Contact> contactList) throws DAOException {
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.CONTACT_FILE);

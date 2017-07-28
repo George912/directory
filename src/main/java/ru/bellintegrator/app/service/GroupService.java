@@ -61,4 +61,12 @@ public class GroupService {
 
     }
 
+    public Group getGroupById(int id) {
+        return groupGenericDAO.getById(id);
+    }
+
+    public List<Group> getGroupsByName(String name) {
+        return groupGenericDAO.getByName(name);
+    }
+
 }
