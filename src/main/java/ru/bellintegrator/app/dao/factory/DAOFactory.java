@@ -2,6 +2,8 @@ package ru.bellintegrator.app.dao.factory;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.dao.factory.impl.xml.XmlDAOFactory;
+import ru.bellintegrator.app.dao.factory.impl.xml.XmlParserType;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -10,6 +12,8 @@ import ru.bellintegrator.app.model.Group;
  * Created by neste_000 on 19.07.2017.
  */
 public abstract class DAOFactory {
+
+    private static XmlParserType parserType = XmlParserType.UNKNOWN;
 
     public abstract GenericDAO<Contact> getContactDAO() throws DAOException;
 
@@ -20,7 +24,7 @@ public abstract class DAOFactory {
         switch (daoFactoryType) {
 
             case XML:
-                throw new UnsupportedOperationException("Unable to create XML dao factory. Define XML dao factory class!");
+                return new XmlDAOFactory(parserType);
 
             case ORACLE:
                 throw new UnsupportedOperationException("Unable to create ORACLE dao factory. Define ORACLE dao factory class!");
@@ -41,6 +45,10 @@ public abstract class DAOFactory {
                 throw new UnsupportedOperationException("Unable to create dao factory for target type. Type " + daoFactoryType + " is unknown!");
         }
 
+    }
+
+    public static void setParserType(XmlParserType type) {
+        parserType = type;
     }
 
 }

@@ -15,6 +15,7 @@ import ru.bellintegrator.app.controller.MainController;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.dao.factory.impl.xml.XmlParserType;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.parser.sax.SAXUtilForContact;
@@ -36,11 +37,21 @@ public class MainApp extends Application {
 
     public void start(Stage stage) throws Exception {
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+//        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+//        GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
+//        GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+//        ContactService contactService = new ContactService(contactGenericDAO);
+//        GroupService groupService = new GroupService(groupGenericDAO, contactService);
+
+        DAOFactory.setParserType(XmlParserType.SAX);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML);
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
+
+        System.out.println("contactGenericDAO class is "+contactGenericDAO.getClass());
+        System.out.println("groupGenericDAO class is "+groupGenericDAO.getClass());
 
         //test validation xml
         Validator validator = new XMLValidator("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml"
