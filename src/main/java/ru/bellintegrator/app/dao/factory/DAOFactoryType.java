@@ -5,7 +5,9 @@ package ru.bellintegrator.app.dao.factory;
  */
 public enum DAOFactoryType {
 
-    XML,
+    XML_DOM,
+    XML_SAX,
+    XML_JACKSON,
     ORACLE,
     MYSQL,
     MSSQL,

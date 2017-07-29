@@ -338,7 +338,6 @@ public class DOMUtilForContact extends AbstractFileDAO<Contact> {
 
     }
 
-    @Override
     //todo пишет всё из старого файла+новый список
     public void save(List<Contact> list) throws DAOException {
 

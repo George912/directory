@@ -31,7 +31,6 @@ public class DomContactDAO implements GenericDAO<Contact> {
         return null;
     }
 
-    @Override
     public void save(List<Contact> list) throws DAOException {
 
     }

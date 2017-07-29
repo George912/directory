@@ -58,7 +58,6 @@ public class SAXUtilForContact extends AbstractFileDAO<Contact> {
 
     }
 
-    @Override
     public void save(List<Contact> list) throws DAOException {
         throw new DAOException(
                 new UnsupportedOperationException("Save operation not supported while using SAX parser."));

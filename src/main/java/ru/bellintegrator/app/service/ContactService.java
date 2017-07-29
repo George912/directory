@@ -52,9 +52,9 @@ public class ContactService implements ContactListChangeObservable {
     }
 
     public void saveContacts(List<Contact> contactList) throws DAOException {
-
-        contactGenericDAO.save(contactList);
-
+        for (Contact contact : contactList) {
+            contactGenericDAO.create(contact);
+        }
     }
 
     public Contact getContactById(int id) {

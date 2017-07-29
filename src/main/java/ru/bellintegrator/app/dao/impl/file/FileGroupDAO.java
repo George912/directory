@@ -71,7 +71,6 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
 
     }
 
-    @Override
     public void save(List<Group> groupList) throws DAOException {
 
         serialize(groupList);

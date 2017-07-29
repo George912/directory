@@ -78,7 +78,6 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
 
     }
 
-    @Override
     public void save(List<Contact> contactList) throws DAOException {
 
         serialize(contactList);

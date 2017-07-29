@@ -31,7 +31,6 @@ public class DomGroupDAO implements GenericDAO<Group> {
         return null;
     }
 
-    @Override
     public void save(List<Group> list) throws DAOException {
 
     }

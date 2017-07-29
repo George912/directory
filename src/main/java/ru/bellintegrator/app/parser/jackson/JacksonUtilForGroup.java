@@ -1,19 +1,15 @@
 package ru.bellintegrator.app.parser.jackson;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import ru.bellintegrator.app.dao.impl.file.AbstractFileDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.parser.jackson.model.Groups;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,26 +20,48 @@ public class JacksonUtilForGroup extends AbstractFileDAO<Group> {
 
     @Override
     public int create(Group group) throws DAOException {
+        List<Group> groupList = getAll();
+
+        if (!groupList.contains(group)) {
+            groupList.add(group);
+            save(groupList);
+        }
+
         return group.getId();
     }
 
     @Override
     public void delete(Group group) throws DAOException {
+        List<Group> groupList = getAll();
 
+        if (groupList.remove(group)) {
+            save(groupList);
+        }
     }
 
     @Override
     public void update(Group group) throws DAOException {
+        List<Group> groupList = getAll();
 
+        for (int i = 0; i < groupList.size(); i++) {
+            Group editableGroup = groupList.get(i);
+
+            if (editableGroup.getId() == group.getId()) {
+                editableGroup.setName(group.getName());
+                editableGroup.setNotes(group.getNotes());
+
+                save(groupList);
+            }
+        }
     }
 
     @Override
     public List<Group> getAll() throws DAOException {
-        ObjectMapper objectMapper = new XmlMapper();
+        XmlMapper xmlMapper = new XmlMapper();
         List<ru.bellintegrator.app.model.Group> groupList = null;
 
         try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups.xml")) {
-            Groups groups = objectMapper.readValue(inputStream, Groups.class);
+            Groups groups = xmlMapper.readValue(inputStream, Groups.class);
             groupList = getGroupList(groups.getGroups());
 
         } catch (IOException e) {
@@ -53,56 +71,63 @@ public class JacksonUtilForGroup extends AbstractFileDAO<Group> {
         return groupList;
     }
 
-    @Override
     public void save(List<Group> list) throws DAOException {
-        XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
-        XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
-        StringWriter out = new StringWriter();
-        XMLStreamWriter sw = null;
+        try (OutputStream outputStream = new FileOutputStream("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups3.xml")) {
+            XmlMapper xmlMapper = new XmlMapper();
+            Groups groups = new Groups();
+            ru.bellintegrator.app.parser.jackson.model.Group[] groupArr =
+                    new ru.bellintegrator.app.parser.jackson.model.Group[list.size()];
 
-        try {
-            sw = xmlOutputFactory.createXMLStreamWriter(out);
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        }
-
-        XmlMapper mapper = new XmlMapper(xmlInputFactory);
-
-
-        try {
-            sw.writeStartDocument();
-            sw.writeStartElement("groups");
-
-            for (Group group : list) {
-                ru.bellintegrator.app.parser.jackson.model.Group group1 =
-                        new ru.bellintegrator.app.parser.jackson.model.Group(group.getId(),
-                                group.getName(),
-                                group.getNotes());
-                mapper.writeValue(sw, group1);
+            for (int i = 0; i < list.size(); i++) {
+                Group group = list.get(i);
+                groupArr[i] = getJacksonGroup(group);
             }
 
-            sw.writeEndElement();
-            sw.writeEndDocument();
+            groups.setGroups(groupArr);
 
-            sw.flush();
-            System.out.println(sw.toString());
+            xmlMapper.writeValue(outputStream, groups);
 
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public Group getById(int id) {
+        List<Group> groupList = null;
+        try {
+            groupList = getAll();
+
+            for (Group group : groupList) {
+                if (group.getId() == id) {
+                    return group;
+                }
+            }
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
     @Override
     public List<Group> getByName(String name) {
-        return null;
+        List<Group> groups = new ArrayList<>();
+
+        try {
+            List<Group> groupList = getAll();
+
+            for (Group group : groupList) {
+                if (group.getName().equalsIgnoreCase(name)) {
+                    groups.add(group);
+                }
+            }
+
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+
+        return groups;
     }
 
     private List<ru.bellintegrator.app.model.Group> getGroupList(ru.bellintegrator.app.parser.jackson.model.Group[] groups) {
@@ -115,6 +140,10 @@ public class JacksonUtilForGroup extends AbstractFileDAO<Group> {
         }
 
         return groupList;
+    }
+
+    private ru.bellintegrator.app.parser.jackson.model.Group getJacksonGroup(Group group) {
+        return new ru.bellintegrator.app.parser.jackson.model.Group(group.getId(), group.getName(), group.getNotes());
     }
 
 }

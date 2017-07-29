@@ -20,6 +20,10 @@ public class Group implements Serializable, Identifiable {
 
     }
 
+    public Group(int id) {
+        this.id = id;
+    }
+
     public Group(int id, String name) {
         this.id = id;
         this.name = name;

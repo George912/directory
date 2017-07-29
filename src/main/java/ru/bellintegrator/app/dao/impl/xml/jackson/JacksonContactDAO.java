@@ -31,7 +31,6 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
         return null;
     }
 
-    @Override
     public void save(List<Contact> list) throws DAOException {
 
     }

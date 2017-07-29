@@ -20,8 +20,6 @@ public interface GenericDAO<T extends Serializable> {
 
     List<T> getAll() throws DAOException;
 
-    void save(List<T> list) throws DAOException;
-
     T getById(int id);
 
     List<T> getByName(String name);

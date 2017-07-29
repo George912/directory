@@ -10,10 +10,10 @@ import java.util.Arrays;
  * Created by neste_000 on 27.07.2017.
  */
 @JacksonXmlRootElement(localName = "groups")
-public final class Groups {
+public class Groups {
 
-    @JacksonXmlElementWrapper(localName = "group", useWrapping = false)
     @JacksonXmlProperty(localName = "group")
+    @JacksonXmlElementWrapper(useWrapping = false)
     private Group[] groups;
 
     public Groups() {

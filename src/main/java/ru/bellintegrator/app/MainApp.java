@@ -15,10 +15,9 @@ import ru.bellintegrator.app.controller.MainController;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
-import ru.bellintegrator.app.dao.factory.impl.xml.XmlParserType;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.parser.sax.SAXUtilForContact;
+import ru.bellintegrator.app.parser.jackson.JacksonUtilForContact;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.validation.xml.Validator;
@@ -26,6 +25,7 @@ import ru.bellintegrator.app.validation.xml.impl.XMLValidator;
 
 import javax.xml.XMLConstants;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MainApp extends Application {
 
@@ -37,21 +37,21 @@ public class MainApp extends Application {
 
     public void start(Stage stage) throws Exception {
 
-//        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
-//        GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
-//        GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
-//        ContactService contactService = new ContactService(contactGenericDAO);
-//        GroupService groupService = new GroupService(groupGenericDAO, contactService);
-
-        DAOFactory.setParserType(XmlParserType.SAX);
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
 
-        System.out.println("contactGenericDAO class is "+contactGenericDAO.getClass());
-        System.out.println("groupGenericDAO class is "+groupGenericDAO.getClass());
+//        DAOFactory.setParserType(XmlParserType.SAX);
+//        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML);
+//        GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
+//        GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+//        ContactService contactService = new ContactService(contactGenericDAO);
+//        GroupService groupService = new GroupService(groupGenericDAO, contactService);
+
+//        System.out.println("contactGenericDAO class is "+contactGenericDAO.getClass());
+//        System.out.println("groupGenericDAO class is "+groupGenericDAO.getClass());
 
         //test validation xml
         Validator validator = new XMLValidator("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml"
@@ -65,9 +65,16 @@ public class MainApp extends Application {
             System.out.println(e.getLocalizedMessage());
         }
 
-        SAXUtilForContact saxUtilForContact = new SAXUtilForContact();
-        System.out.println("getById:" + saxUtilForContact.getById(2));
-        System.out.println("getByName:" + saxUtilForContact.getByName("Контакт1").toString());
+//        JacksonUtilForContact util = new JacksonUtilForContact();
+//        System.out.println("getAll:" + util.getAll().toString());
+//        Contact contact = new Contact(1, "1", "1", "1");
+//        contact.setGroupList(Arrays.asList(new Group(1), new Group(2)));
+//        util.save(Arrays.asList(contact, new Contact(2, "2", "2", "2")));
+//        utilForGroup.create(new Group(4,"Группа4","Группа4"));
+//        utilForGroup.delete(new Group(2,"Группа2","Группа2"));
+//        utilForGroup.update(new Group(2,"Группа22","Группа22"));
+//        System.out.println(utilForGroup.getById(2));
+//        System.out.println(utilForGroup.getByName("Группа3").toString());
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();
