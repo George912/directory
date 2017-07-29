@@ -41,17 +41,8 @@ public class GroupService {
 
     public void deleteGroup(Group group) throws DAOException {
 
-        List<Contact> contactList = contactService.getAllContacts();
-
-        for (Contact contact : contactList) {
-
-            contact.getGroupList().remove(group);
-
-        }
-
-        contactService.saveContacts(contactList);
-
         groupGenericDAO.delete(group);
+        contactService.deleteGroupFromContacts(group);
 
     }
 

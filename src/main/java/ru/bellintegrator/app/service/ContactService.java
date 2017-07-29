@@ -7,6 +7,7 @@ import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.Group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,14 @@ public class ContactService implements ContactListChangeObservable {
     private static final Logger log = LoggerFactory.getLogger(ContactService.class);
     private GenericDAO<Contact> contactGenericDAO;
     private List<ContactListChangeObserver> contactListChangeObserverList = new ArrayList<>();
+    private GroupService groupService;
 
     public ContactService(GenericDAO<Contact> contactGenericDAO) {
         this.contactGenericDAO = contactGenericDAO;
+    }
+
+    public void setGroupService(GroupService groupService) {
+        this.groupService = groupService;
     }
 
     public void addContact(Contact contact) throws DAOException {
@@ -46,9 +52,27 @@ public class ContactService implements ContactListChangeObservable {
     }
 
     public List<Contact> getAllContacts() throws DAOException {
+        List<Contact> contactList = contactGenericDAO.getAll();
 
-        return contactGenericDAO.getAll();
+        for (int i = 0; i < contactList.size(); i++) {
+            Contact contact = contactList.get(i);
 
+            List<Group> groupList = contact.getGroupList();
+
+            for (int i1 = 0; i1 < groupList.size(); i1++) {
+                Group group = groupList.get(i1);
+                setGroupData(group);
+            }
+        }
+
+        return contactList;
+
+    }
+
+    private void setGroupData(Group group) {
+        Group groupWithData = groupService.getGroupById(group.getId());
+        group.setName(groupWithData.getName());
+        group.setNotes(groupWithData.getNotes());
     }
 
     public void saveContacts(List<Contact> contactList) throws DAOException {
@@ -89,4 +113,14 @@ public class ContactService implements ContactListChangeObservable {
         }
 
     }
+
+    void deleteGroupFromContacts(Group group) throws DAOException {
+        List<Contact> contactList = contactGenericDAO.getAll();
+        for (Contact contact : contactList) {
+            if (contact.getGroupList().remove(group)) {
+                contactGenericDAO.update(contact);
+            }
+        }
+    }
+
 }

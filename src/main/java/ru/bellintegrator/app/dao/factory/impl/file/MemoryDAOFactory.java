@@ -13,14 +13,14 @@ import ru.bellintegrator.app.util.IdGenerator;
  * Created by neste_000 on 19.07.2017.
  */
 public class MemoryDAOFactory extends DAOFactory {
-
-    public static final String CONTACT_FILE = "contact";
-    public static final String GROUP_FILE = "group";
+    //todo get filePath for serialization/deserialization from config.properties
+    private static final String CONTACT_FILE = "contact";
+    private static final String GROUP_FILE = "group";
 
     @Override
     public GenericDAO<Contact> getContactDAO() throws DAOException {
 
-        FileContactDAO fileContactDAO = new FileContactDAO();
+        FileContactDAO fileContactDAO = new FileContactDAO(CONTACT_FILE);
         fileContactDAO.setIdGenerator(new IdGenerator(fileContactDAO.getAll()));
 
         return fileContactDAO;
@@ -30,7 +30,7 @@ public class MemoryDAOFactory extends DAOFactory {
     @Override
     public GenericDAO<Group> getGroupDAO() throws DAOException {
 
-        FileGroupDAO fileGroupDAO = new FileGroupDAO();
+        FileGroupDAO fileGroupDAO = new FileGroupDAO(GROUP_FILE);
         fileGroupDAO.setIdGenerator(new IdGenerator(fileGroupDAO.getAll()));
 
         return fileGroupDAO;

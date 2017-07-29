@@ -16,6 +16,11 @@ import java.util.List;
 public class FileContactDAO extends AbstractFileDAO<Contact> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
+    private String filePath;
+
+    public FileContactDAO(String filePath) {
+        this.filePath = filePath;
+    }
 
     @Override
     public int create(Contact contact) throws DAOException {
@@ -125,7 +130,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
 
     private void serialize(List<Contact> contactList) throws DAOException {
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.CONTACT_FILE);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
             log.debug(contactList.toString());
@@ -145,7 +150,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
 
         List<Contact> contacts = null;
 
-        try (FileInputStream fileInputStream = new FileInputStream(MemoryDAOFactory.CONTACT_FILE);
+        try (FileInputStream fileInputStream = new FileInputStream(filePath);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
             contacts = (List<Contact>) objectInputStream.readObject();

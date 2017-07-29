@@ -16,6 +16,11 @@ import java.util.List;
 public class FileGroupDAO extends AbstractFileDAO<Group> {
 
     private static final Logger log = LoggerFactory.getLogger(FileGroupDAO.class);
+    private String filePath;
+
+    public FileGroupDAO(String filePath) {
+        this.filePath = filePath;
+    }
 
     @Override
     public int create(Group group) throws DAOException {
@@ -117,7 +122,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
 
     private void serialize(List<Group> groupList) throws DAOException {
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(MemoryDAOFactory.GROUP_FILE);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
 
             log.debug(groupList.toString());
@@ -135,7 +140,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
 
         List<Group> groups = null;
 
-        try (FileInputStream fileInputStream = new FileInputStream(MemoryDAOFactory.GROUP_FILE);
+        try (FileInputStream fileInputStream = new FileInputStream(filePath);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
 
             groups = (List<Group>) objectInputStream.readObject();

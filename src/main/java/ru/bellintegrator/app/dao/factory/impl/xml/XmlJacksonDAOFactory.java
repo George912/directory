@@ -13,14 +13,18 @@ import ru.bellintegrator.app.model.Group;
  */
 public class XmlJacksonDAOFactory extends DAOFactory {
 
+    //todo serialization/deserialization from config.properties
+    private static final String CONTACT_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml";
+    private static final String GROUP_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups1.xml";
+
     @Override
     public GenericDAO<Contact> getContactDAO() throws DAOException {
-        return new JacksonContactDAO();
+        return new JacksonContactDAO(CONTACT_FILE);
     }
 
     @Override
     public GenericDAO<Group> getGroupDAO() throws DAOException {
-        return new JacksonGroupDAO();
+        return new JacksonGroupDAO(GROUP_FILE);
     }
 
 }

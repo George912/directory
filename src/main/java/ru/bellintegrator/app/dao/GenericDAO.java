@@ -1,9 +1,7 @@
 package ru.bellintegrator.app.dao;
 
 import ru.bellintegrator.app.exception.DAOException;
-import ru.bellintegrator.app.model.Contact;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
