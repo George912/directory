@@ -2,7 +2,7 @@ package ru.bellintegrator.app.dao.impl.xml.dom;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
 
@@ -17,6 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 28.07.2017.
  */
-public class DomGroupDAO implements GenericDAO<Group> {
+public class DomGroupDAO extends AbstractDAOWithIdGenerator<Group> {
 
     private String filePath;
 
@@ -34,12 +35,10 @@ public class DomGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo use idgenerator, filePath
     public int create(Group group) throws DAOException {
-        //use generateId()
-        group.setId(111);
+        group.setId(generateId());
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
@@ -47,18 +46,7 @@ public class DomGroupDAO implements GenericDAO<Group> {
 
             Node root = doc.getDocumentElement();
 
-            Element groupElement = doc.createElement("group");
-            Attr idAttr = doc.createAttribute("id");
-            idAttr.setValue(String.valueOf(group.getId()));
-            Element groupNameElement = doc.createElement("name");
-            groupNameElement.appendChild(doc.createTextNode(group.getName()));
-            Element groupNotesElement = doc.createElement("notes");
-            groupNotesElement.appendChild(doc.createTextNode(group.getNotes()));
-            groupElement.setAttributeNode(idAttr);
-            groupElement.appendChild(groupNameElement);
-            groupElement.appendChild(groupNotesElement);
-
-            root.appendChild(groupElement);
+            root.appendChild(createGroupElement(doc, group));
 
             writeToXml(doc);
 
@@ -70,9 +58,8 @@ public class DomGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
     public void delete(Group group) throws DAOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -103,9 +90,8 @@ public class DomGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
     public void update(Group group) throws DAOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -134,12 +120,11 @@ public class DomGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
     public List<Group> getAll() throws DAOException {
         List<Group> groupList = new ArrayList<>();
         Group group;
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
@@ -169,11 +154,10 @@ public class DomGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
     public Group getById(int id) {
         Group group = null;
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -207,12 +191,11 @@ public class DomGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
     public List<Group> getByName(String name) {
         List<Group> groupList = new ArrayList<>();
         Group group = null;
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -247,14 +230,13 @@ public class DomGroupDAO implements GenericDAO<Group> {
         return groupList;
     }
 
-    //todo filePath
     private void writeToXml(Document document) {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
         try {
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups1.xml"));
+            StreamResult result = new StreamResult(new File(filePath));
             transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
@@ -282,4 +264,18 @@ public class DomGroupDAO implements GenericDAO<Group> {
         }
     }
 
+    private Element createGroupElement(Document doc, Group group) {
+        Element groupElement = doc.createElement("group");
+        Attr idAttr = doc.createAttribute("id");
+        idAttr.setValue(String.valueOf(group.getId()));
+        Element groupNameElement = doc.createElement("name");
+        groupNameElement.appendChild(doc.createTextNode(group.getName()));
+        Element groupNotesElement = doc.createElement("notes");
+        groupNotesElement.appendChild(doc.createTextNode(group.getNotes()));
+        groupElement.setAttributeNode(idAttr);
+        groupElement.appendChild(groupNameElement);
+        groupElement.appendChild(groupNotesElement);
+
+        return groupElement;
+    }
 }

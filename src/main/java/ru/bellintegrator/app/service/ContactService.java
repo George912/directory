@@ -54,16 +54,7 @@ public class ContactService implements ContactListChangeObservable {
     public List<Contact> getAllContacts() throws DAOException {
         List<Contact> contactList = contactGenericDAO.getAll();
 
-        for (int i = 0; i < contactList.size(); i++) {
-            Contact contact = contactList.get(i);
-
-            List<Group> groupList = contact.getGroupList();
-
-            for (int i1 = 0; i1 < groupList.size(); i1++) {
-                Group group = groupList.get(i1);
-                setGroupData(group);
-            }
-        }
+        updateContactGroups(contactList);
 
         return contactList;
 
@@ -82,11 +73,21 @@ public class ContactService implements ContactListChangeObservable {
     }
 
     public Contact getContactById(int id) {
-        return contactGenericDAO.getById(id);
+        Contact contact = contactGenericDAO.getById(id);
+
+        List<Contact> contactList = new ArrayList<>();
+        contactList.add(contact);
+        updateContactGroups(contactList);
+
+        return contact;
     }
 
     public List<Contact> getContactsByName(String name) {
-        return contactGenericDAO.getByName(name);
+        List<Contact> contactList = contactGenericDAO.getByName(name);
+
+        updateContactGroups(contactList);
+
+        return contactList;
     }
 
     @Override
@@ -114,7 +115,7 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
-    void deleteGroupFromContacts(Group group) throws DAOException {
+    public void deleteGroupFromContacts(Group group) throws DAOException {
         List<Contact> contactList = contactGenericDAO.getAll();
         for (Contact contact : contactList) {
             if (contact.getGroupList().remove(group)) {
@@ -123,4 +124,16 @@ public class ContactService implements ContactListChangeObservable {
         }
     }
 
+    private void updateContactGroups(List<Contact> contactList){
+        for (int i = 0; i < contactList.size(); i++) {
+            Contact contact = contactList.get(i);
+
+            List<Group> groupList = contact.getGroupList();
+
+            for (int i1 = 0; i1 < groupList.size(); i1++) {
+                Group group = groupList.get(i1);
+                setGroupData(group);
+            }
+        }
+    }
 }

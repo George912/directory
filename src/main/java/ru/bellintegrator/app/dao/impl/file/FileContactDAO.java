@@ -2,7 +2,7 @@ package ru.bellintegrator.app.dao.impl.file;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 
@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 19.07.2017.
  */
-public class FileContactDAO extends AbstractFileDAO<Contact> {
+public class FileContactDAO extends AbstractDAOWithIdGenerator<Contact> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
     private String filePath;

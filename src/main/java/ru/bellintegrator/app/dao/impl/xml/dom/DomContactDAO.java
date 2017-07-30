@@ -2,7 +2,7 @@ package ru.bellintegrator.app.dao.impl.xml.dom;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -17,11 +17,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 28.07.2017.
  */
-public class DomContactDAO implements GenericDAO<Contact> {
+public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
 
     private String filePath;
 
@@ -39,12 +37,10 @@ public class DomContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    //todo use idgenerator, filePath
     public int create(Contact contact) throws DAOException {
-        //use generateId()
-        contact.setId(111);
+        contact.setId(generateId());
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
@@ -64,22 +60,19 @@ public class DomContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    //todo filePath
     public void delete(Contact contact) throws DAOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
             doc.getDocumentElement().normalize();
 
-            StringBuilder expression = new StringBuilder("/contacts/contact[@id='");
-            expression.append(contact.getId());
-            expression.append("']");
+            String expression = "/contacts/contact[@id='" + contact.getId() + "']";
 
             XPath xPath = XPathFactory.newInstance().newXPath();
 
-            NodeList nList = (NodeList) xPath.compile(expression.toString()).evaluate(doc, XPathConstants.NODESET);
+            NodeList nList = (NodeList) xPath.compile(expression).evaluate(doc, XPathConstants.NODESET);
 
             for (int i = 0; i < nList.getLength(); i++) {
                 Node nNode = nList.item(i);
@@ -99,178 +92,38 @@ public class DomContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    //todo filePath, StringBuilder -> String, method updByXpath
     public void update(Contact contact) throws DAOException {
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
             doc.getDocumentElement().normalize();
 
-            //подготовка основного выражения для поиска изменяемой группы
-            StringBuilder mainExpression = new StringBuilder("/contacts/contact[@id='");
-            mainExpression.append(contact.getId());
-            mainExpression.append("']");
-
-            //выражение для поиска /contact/lastName
-            StringBuilder lastNameExpression = new StringBuilder(mainExpression.toString());
-            lastNameExpression.append("/lastName");
-
-            //выражение для поиска /contact/firstName
-            StringBuilder firstNameExpression = new StringBuilder(mainExpression.toString());
-            firstNameExpression.append("/firstName");
-
-            //выражение для поиска /contact/middleName
-            StringBuilder middleNameExpression = new StringBuilder(mainExpression.toString());
-            middleNameExpression.append("/middleName");
-
-            //выражение для поиска /contact/firstPhoneNumber
-            StringBuilder firstPhoneNumberExpression = new StringBuilder(mainExpression.toString());
-            firstPhoneNumberExpression.append("/firstPhoneNumber");
-
-            //выражение для поиска /contact/firstPhoneNumberType
-            StringBuilder firstPhoneNumberTypeExpression = new StringBuilder(mainExpression.toString());
-            firstPhoneNumberTypeExpression.append("/firstPhoneNumberType");
-
-            //выражение для поиска /contact/secondPhoneNumber
-            StringBuilder secondPhoneNumberExpression = new StringBuilder(mainExpression.toString());
-            secondPhoneNumberExpression.append("/secondPhoneNumber");
-
-            //выражение для поиска /contact/secondPhoneNumberType
-            StringBuilder secondPhoneNumberTypeExpression = new StringBuilder(mainExpression.toString());
-            secondPhoneNumberTypeExpression.append("/secondPhoneNumberType");
-
-            //выражение для поиска /contact/email
-            StringBuilder emailExpression = new StringBuilder(mainExpression.toString());
-            emailExpression.append("/email");
-
-            //выражение для поиска /contact/notes
-            StringBuilder notesExpression = new StringBuilder(mainExpression.toString());
-            notesExpression.append("/notes");
+            String mainExpression = "/contacts/contact[@id='" + contact.getId() + "']";
+            String lastNameExpression = mainExpression + "/lastName";
+            String firstNameExpression = mainExpression + "/firstName";
+            String middleNameExpression = mainExpression + "/middleName";
+            String firstPhoneNumberExpression = mainExpression + "/firstPhoneNumber";
+            String firstPhoneNumberTypeExpression = mainExpression + "/firstPhoneNumberType";
+            String secondPhoneNumberExpression = mainExpression + "/secondPhoneNumber";
+            String secondPhoneNumberTypeExpression = mainExpression + "/secondPhoneNumberType";
+            String emailExpression = mainExpression + "/email";
+            String notesExpression = mainExpression + "/notes";
+            String groupListExpression = mainExpression + "/groupList";
 
             XPath xPath = XPathFactory.newInstance().newXPath();
 
-            //изменение /contact/lastName
-            NodeList nList = (NodeList) xPath.compile(lastNameExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getLastName());
-                }
-            }
-
-            //изменение /contact/firstName
-            nList = (NodeList) xPath.compile(firstNameExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getFirstName());
-                }
-            }
-
-            //изменение /contact/middleName
-            nList = (NodeList) xPath.compile(middleNameExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getMiddleName());
-                }
-            }
-
-            //изменение /contact/firstPhoneNumber
-            nList = (NodeList) xPath.compile(firstPhoneNumberExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getFirstPhoneNumber());
-                }
-            }
-
-            //изменение /contact/firstPhoneNumberType
-            nList = (NodeList) xPath.compile(firstPhoneNumberTypeExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getFirstPhoneNumberType().name());
-                }
-            }
-
-            //изменение /contact/secondPhoneNumber
-            nList = (NodeList) xPath.compile(secondPhoneNumberExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getSecondPhoneNumber());
-                }
-            }
-
-            //изменение /contact/secondPhoneNumberType
-            nList = (NodeList) xPath.compile(secondPhoneNumberTypeExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getSecondPhoneNumberType().name());
-                }
-            }
-
-            //изменение /contact/email
-            nList = (NodeList) xPath.compile(emailExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getEmail());
-                }
-            }
-
-            //todo upd groups
-
-            //===========================================================
-
-            //изменение /contact/notes
-            nList = (NodeList) xPath.compile(notesExpression.toString()).evaluate(doc, XPathConstants.NODESET);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-
-                    eElement.setTextContent(contact.getNotes());
-                }
-            }
+            updateTagByXpath(doc, xPath.compile(lastNameExpression), contact.getLastName());
+            updateTagByXpath(doc, xPath.compile(firstNameExpression), contact.getFirstName());
+            updateTagByXpath(doc, xPath.compile(middleNameExpression), contact.getMiddleName());
+            updateTagByXpath(doc, xPath.compile(firstPhoneNumberExpression), contact.getFirstPhoneNumber());
+            updateTagByXpath(doc, xPath.compile(firstPhoneNumberTypeExpression), contact.getFirstPhoneNumberType().name());
+            updateTagByXpath(doc, xPath.compile(secondPhoneNumberExpression), contact.getSecondPhoneNumber());
+            updateTagByXpath(doc, xPath.compile(secondPhoneNumberTypeExpression), contact.getSecondPhoneNumberType().name());
+            updateTagByXpath(doc, xPath.compile(emailExpression), contact.getEmail());
+            updateTagByXpath(doc, xPath.compile(notesExpression), contact.getNotes());
+            updateGroupsTagByXpath(doc, xPath.compile(groupListExpression), contact.getGroupList());
 
             writeToXml(doc);
 
@@ -280,13 +133,11 @@ public class DomContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    //todo get List<Group>
     public List<Contact> getAll() throws DAOException {
         List<Contact> contactList = new ArrayList<>();
         Contact contact;
-        List<Group> groupList = new ArrayList<>();
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
@@ -302,31 +153,7 @@ public class DomContactDAO implements GenericDAO<Contact> {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
 
-                    Element groupListElement = (Element) eElement.getElementsByTagName("groupList").item(0);
-                    NodeList groupListElementChildNodes = groupListElement.getChildNodes();
-
-                    for (int j = 0; j < groupListElementChildNodes.getLength(); j++) {
-                        Node node = groupListElementChildNodes.item(j);
-
-                        if (node.getNodeType() == Node.ELEMENT_NODE) {
-                            Element element = (Element) nNode;
-
-                            //get group by id from DOMUtilForGroup
-                        }
-
-                    }
-
-                    contact = new Contact(Integer.parseInt(eElement.getAttribute("id"))
-                            , eElement.getElementsByTagName("lastName").item(0).getTextContent()
-                            , eElement.getElementsByTagName("firstName").item(0).getTextContent()
-                            , eElement.getElementsByTagName("middleName").item(0).getTextContent()
-                            , eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent()
-                            , PhoneNumberType.getPhoneNumberTypeByTypeDescription(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent())
-                            , eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent()
-                            , PhoneNumberType.getPhoneNumberTypeByTypeDescription(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent())
-                            , eElement.getElementsByTagName("email").item(0).getTextContent()
-                            , eElement.getElementsByTagName("notes").item(0).getTextContent()
-                    );
+                    contact = getContact(eElement);
 
                     contactList.add(contact);
                 }
@@ -339,42 +166,28 @@ public class DomContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    //todo get List<Group>
     public Contact getById(int id) {
         Contact contact = null;
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
             doc.getDocumentElement().normalize();
 
-            StringBuilder expression = new StringBuilder("/contacts/contact[@id='");
-            expression.append(id);
-            expression.append("']");
+            String expression = "/contacts/contact[@id='" + id + "']";
 
             XPath xPath = XPathFactory.newInstance().newXPath();
 
-            NodeList nList = (NodeList) xPath.compile(expression.toString()).evaluate(doc, XPathConstants.NODESET);
+            NodeList nList = (NodeList) xPath.compile(expression).evaluate(doc, XPathConstants.NODESET);
 
             for (int i = 0; i < nList.getLength(); i++) {
                 Node nNode = nList.item(i);
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    contact = new Contact();
-
-                    contact.setId(id);
-                    contact.setLastName(eElement.getElementsByTagName("lastName").item(0).getTextContent());
-                    contact.setFirstName(eElement.getElementsByTagName("firstName").item(0).getTextContent());
-                    contact.setMiddleName(eElement.getElementsByTagName("middleName").item(0).getTextContent());
-                    contact.setFirstPhoneNumber(eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent());
-                    contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent()));
-                    contact.setSecondPhoneNumber(eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent());
-                    contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent()));
-                    contact.setEmail(eElement.getElementsByTagName("email").item(0).getTextContent());
-                    contact.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
+                    contact = getContact(eElement);
                 }
             }
 
@@ -386,62 +199,28 @@ public class DomContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    //todo get List<Group>
     public List<Contact> getByName(String name) {
         List<Contact> contactList = new ArrayList<>();
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(inputStream);
             doc.getDocumentElement().normalize();
 
-            StringBuilder expression = new StringBuilder("/contacts/contact[firstName='");
-            expression.append(name);
-            expression.append("']");
+            String expression = "/contacts/contact[firstName='" + name + "']";
 
             XPath xPath = XPathFactory.newInstance().newXPath();
 
-            NodeList nList = (NodeList) xPath.compile(expression.toString()).evaluate(doc, XPathConstants.NODESET);
+            NodeList nList = (NodeList) xPath.compile(expression).evaluate(doc, XPathConstants.NODESET);
 
             for (int i = 0; i < nList.getLength(); i++) {
                 Node nNode = nList.item(i);
 
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
-                    Contact contact = new Contact();
-
-                    contact.setId(Integer.parseInt(eElement.getAttribute("id")));
-                    contact.setLastName(eElement.getElementsByTagName("lastName").item(0).getTextContent());
-                    contact.setFirstName(eElement.getElementsByTagName("firstName").item(0).getTextContent());
-                    contact.setMiddleName(eElement.getElementsByTagName("middleName").item(0).getTextContent());
-                    contact.setFirstPhoneNumber(eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent());
-                    contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent()));
-                    contact.setSecondPhoneNumber(eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent());
-                    contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent()));
-                    contact.setEmail(eElement.getElementsByTagName("email").item(0).getTextContent());
-                    contact.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
-
-                    List<Group> groupList = new ArrayList<>();
-
-                    Element groupListElement = (Element) eElement.getElementsByTagName("groupList").item(0);
-                    NodeList groupIdElements = groupListElement.getElementsByTagName("id");
-
-                    for (int j = 0; j < groupIdElements.getLength(); j++) {
-                        Node item = groupIdElements.item(j);
-
-                        if (item.getNodeType() == Node.ELEMENT_NODE) {
-                            Element element = (Element) item;
-                            Group group = new Group(Integer.parseInt(element.getTextContent().trim()), "", "");
-
-                            groupList.add(group);
-                        }
-                    }
-
-                    contact.setGroupList(groupList);
-
-                    contactList.add(contact);
+                    contactList.add(getContact(eElement));
                 }
             }
 
@@ -477,9 +256,9 @@ public class DomContactDAO implements GenericDAO<Contact> {
         contactNotesElement.appendChild(document.createTextNode(contact.getNotes()));
 
         Element contactGroupListElement = document.createElement("groupList");
-        Element groupIdElement = null;
 
         for (Group group : contact.getGroupList()) {
+            Element groupIdElement = document.createElement("id");
             groupIdElement.appendChild(document.createTextNode(String.valueOf(group.getId())));
             contactGroupListElement.appendChild(groupIdElement);
         }
@@ -500,7 +279,6 @@ public class DomContactDAO implements GenericDAO<Contact> {
 
     }
 
-    //todo filePath
     private void writeToXml(Document document) {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -508,7 +286,7 @@ public class DomContactDAO implements GenericDAO<Contact> {
         try {
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml"));
+            StreamResult result = new StreamResult(new File(filePath));
             transformer.setOutputProperty(OutputKeys.VERSION, "1.0");
             transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
@@ -519,6 +297,81 @@ public class DomContactDAO implements GenericDAO<Contact> {
         } catch (TransformerException e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateTagByXpath(Document doc, XPathExpression xPath, String newValue) throws XPathExpressionException {
+        NodeList nList = (NodeList) xPath.evaluate(doc, XPathConstants.NODESET);
+
+        for (int i = 0; i < nList.getLength(); i++) {
+            Node nNode = nList.item(i);
+
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+
+                eElement.setTextContent(newValue);
+            }
+        }
+    }
+
+    private void updateGroupsTagByXpath(Document doc, XPathExpression xPath, List<Group> groupList) throws XPathExpressionException {
+        Node groupListNode = (Node) xPath.evaluate(doc, XPathConstants.NODE);
+        Element groupListElem = (Element) groupListNode;
+        NodeList nList = groupListElem.getElementsByTagName("id");
+
+        //удаление id групп
+        for (int i = 0; i < nList.getLength(); i++) {
+            Node nNode = nList.item(i);
+
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+
+                eElement.getParentNode().removeChild(eElement);
+            }
+        }
+
+        //добавление id групп
+        for (Group group : groupList) {
+            Element groupIdElement = doc.createElement("id");
+            groupIdElement.appendChild(doc.createTextNode(String.valueOf(group.getId())));
+            groupListElem.appendChild(groupIdElement);
+        }
+    }
+
+    private List<Group> getGroupList(Element contactElem) {
+        List<Group> groupList = new ArrayList<>();
+
+        Element groupListElement = (Element) contactElem.getElementsByTagName("groupList").item(0);
+        NodeList groupIds = groupListElement.getElementsByTagName("id");
+
+        for (int j = 0; j < groupIds.getLength(); j++) {
+            Node node = groupIds.item(j);
+
+            if (node.getNodeType() == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                groupList.add(new Group(Integer.parseInt(element.getTextContent())));
+            }
+
+        }
+
+        return groupList;
+    }
+
+    private Contact getContact(Element eElement) {
+        Contact contact = new Contact();
+
+        contact.setId(Integer.parseInt(eElement.getAttribute("id")));
+        contact.setLastName(eElement.getElementsByTagName("lastName").item(0).getTextContent());
+        contact.setFirstName(eElement.getElementsByTagName("firstName").item(0).getTextContent());
+        contact.setMiddleName(eElement.getElementsByTagName("middleName").item(0).getTextContent());
+        contact.setFirstPhoneNumber(eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent());
+        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent()));
+        contact.setSecondPhoneNumber(eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent());
+        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent()));
+        contact.setEmail(eElement.getElementsByTagName("email").item(0).getTextContent());
+        contact.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
+        contact.setGroupList(getGroupList(eElement));
+
+        return contact;
     }
 
 }
