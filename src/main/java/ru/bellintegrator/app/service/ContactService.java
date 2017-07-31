@@ -60,7 +60,7 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
-    private void setGroupData(Group group) throws DAOException {
+    private void fillGroupData(Group group) throws DAOException {
         Group groupWithData = null;
         try {
             groupWithData = groupService.getGroupById(group.getId());

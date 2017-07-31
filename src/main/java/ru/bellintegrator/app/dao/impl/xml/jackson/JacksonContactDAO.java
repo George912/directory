@@ -159,9 +159,9 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
                     , jacksonJacksonContact.getLastName()
                     , jacksonJacksonContact.getMiddleName()
                     , jacksonJacksonContact.getFirstPhoneNumber()
-                    , PhoneNumberType.getPhoneNumberTypeByTypeName(jacksonJacksonContact.getFirstPhoneNumberType())
+                    , PhoneNumberType.getTypeByName(jacksonJacksonContact.getFirstPhoneNumberType())
                     , jacksonJacksonContact.getSecondPhoneNumber()
-                    , PhoneNumberType.getPhoneNumberTypeByTypeName(jacksonJacksonContact.getSecondPhoneNumberType())
+                    , PhoneNumberType.getTypeByName(jacksonJacksonContact.getSecondPhoneNumberType())
                     , jacksonJacksonContact.getEmail(),
                     jacksonJacksonContact.getNotes());
 

@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.controller;
+package ru.bellintegrator.app.viewmodel;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,9 +25,9 @@ import ru.bellintegrator.app.validation.ContactEditorValidator;
 /**
  * Created by neste_000 on 12.07.2017.
  */
-public class ContactEditorController {
+public class ContactEditorViewModel {
 
-    private static final Logger log = LoggerFactory.getLogger(ContactEditorController.class);
+    private static final Logger log = LoggerFactory.getLogger(ContactEditorViewModel.class);
 
     @FXML
     private TextField lastNameTextField;
@@ -91,7 +91,7 @@ public class ContactEditorController {
         this.editorAction = editorAction;
     }
 
-    public ContactEditorController(ContactService contactService, GroupService groupService) {
+    public ContactEditorViewModel(ContactService contactService, GroupService groupService) {
 
         this.contactService = contactService;
         this.groupService = groupService;
@@ -177,11 +177,11 @@ public class ContactEditorController {
         contact.setEmail(emailTextField.getText());
         contact.setFirstName(nameTextField.getText());
         contact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
-        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setFirstPhoneNumberType(PhoneNumberType.getTypeFromString(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
         contact.setLastName(lastNameTextField.getText());
         contact.setMiddleName(middleNameTextField.getText());
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
-        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setSecondPhoneNumberType(PhoneNumberType.getTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
@@ -201,11 +201,11 @@ public class ContactEditorController {
         contact.setEmail(emailTextField.getText());
         contact.setFirstName(nameTextField.getText());
         contact.setFirstPhoneNumber(firstPhoneNumberTextField.getText());
-        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setFirstPhoneNumberType(PhoneNumberType.getTypeFromString(firstPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
         contact.setLastName(lastNameTextField.getText());
         contact.setMiddleName(middleNameTextField.getText());
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
-        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeDescription(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
+        contact.setSecondPhoneNumberType(PhoneNumberType.getTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
         addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 

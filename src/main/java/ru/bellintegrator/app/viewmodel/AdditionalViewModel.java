@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.controller;
+package ru.bellintegrator.app.viewmodel;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -17,7 +17,7 @@ import ru.bellintegrator.app.util.Annunciator;
 /**
  * Created by neste_000 on 21.07.2017.
  */
-public class AdditionalController implements ContactListChangeObserver {
+public class AdditionalViewModel implements ContactListChangeObserver {
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -42,9 +42,9 @@ public class AdditionalController implements ContactListChangeObserver {
 
     private ContactService contactService;
 
-    private static final Logger log = LoggerFactory.getLogger(AdditionalController.class);
+    private static final Logger log = LoggerFactory.getLogger(AdditionalViewModel.class);
 
-    public AdditionalController(ContactService contactService) {
+    public AdditionalViewModel(ContactService contactService) {
 
         this.contactService = contactService;
 

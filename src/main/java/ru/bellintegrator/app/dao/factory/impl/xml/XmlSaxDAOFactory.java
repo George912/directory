@@ -14,8 +14,8 @@ import ru.bellintegrator.app.model.Group;
 public class XmlSaxDAOFactory extends DAOFactory {
 
     //todo serialization/deserialization from config.properties
-    private static final String CONTACT_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml";
-    private static final String GROUP_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups1.xml";
+    private static final String CONTACT_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts.xml";
+    private static final String GROUP_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml";
 
     @Override
     public GenericDAO<Contact> getContactDAO() throws DAOException {

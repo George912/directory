@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<jacksonGroups>
-    <jacksonGroup id="1">
+<groups>
+    <group id="1">
         <name>Группа1</name>
         <notes>Группа1</notes>
-    </jacksonGroup>
+    </group>
 
-    <jacksonGroup id="2">
+    <group id="2">
         <name>Группа2</name>
         <notes>Группа2</notes>
-    </jacksonGroup>
+    </group>
 
-    <jacksonGroup id="3">
+    <group id="3">
         <name>Группа3</name>
         <notes>Группа3</notes>
-    </jacksonGroup>
-</jacksonGroups>
+    </group>
+</groups>

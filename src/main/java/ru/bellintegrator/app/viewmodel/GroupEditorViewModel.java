@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.controller;
+package ru.bellintegrator.app.viewmodel;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -14,9 +14,9 @@ import ru.bellintegrator.app.util.Annunciator;
 /**
  * Created by neste_000 on 12.07.2017.
  */
-public class GroupEditorController {
+public class GroupEditorViewModel {
 
-    private static final Logger log = LoggerFactory.getLogger(GroupEditorController.class);
+    private static final Logger log = LoggerFactory.getLogger(GroupEditorViewModel.class);
 
     @FXML
     private TextField groupNameTextField;
@@ -45,7 +45,7 @@ public class GroupEditorController {
         this.editorAction = editorAction;
     }
 
-    public GroupEditorController(GroupService groupService) {
+    public GroupEditorViewModel(GroupService groupService) {
 
         this.groupService = groupService;
 

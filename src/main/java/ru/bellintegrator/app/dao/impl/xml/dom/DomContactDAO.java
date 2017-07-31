@@ -364,9 +364,9 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
         contact.setFirstName(eElement.getElementsByTagName("firstName").item(0).getTextContent());
         contact.setMiddleName(eElement.getElementsByTagName("middleName").item(0).getTextContent());
         contact.setFirstPhoneNumber(eElement.getElementsByTagName("firstPhoneNumber").item(0).getTextContent());
-        contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent()));
+        contact.setFirstPhoneNumberType(PhoneNumberType.getTypeByName(eElement.getElementsByTagName("firstPhoneNumberType").item(0).getTextContent()));
         contact.setSecondPhoneNumber(eElement.getElementsByTagName("secondPhoneNumber").item(0).getTextContent());
-        contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent()));
+        contact.setSecondPhoneNumberType(PhoneNumberType.getTypeByName(eElement.getElementsByTagName("secondPhoneNumberType").item(0).getTextContent()));
         contact.setEmail(eElement.getElementsByTagName("email").item(0).getTextContent());
         contact.setNotes(eElement.getElementsByTagName("notes").item(0).getTextContent());
         contact.setGroupList(getGroupList(eElement));

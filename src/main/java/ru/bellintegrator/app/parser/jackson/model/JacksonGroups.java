@@ -9,7 +9,7 @@ import java.util.Arrays;
 /**
  * Created by neste_000 on 27.07.2017.
  */
-@JacksonXmlRootElement(localName = "jacksonGroups")
+@JacksonXmlRootElement(localName = "groups")
 public class JacksonGroups {
 
     @JacksonXmlProperty(localName = "group")

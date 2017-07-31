@@ -10,8 +10,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-import ru.bellintegrator.app.controller.AdditionalController;
-import ru.bellintegrator.app.controller.MainController;
+
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
@@ -21,108 +20,106 @@ import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.validation.xml.Validator;
 import ru.bellintegrator.app.validation.xml.impl.XMLValidator;
+import ru.bellintegrator.app.viewmodel.AdditionalViewModel;
+import ru.bellintegrator.app.viewmodel.MainViewModel;
 
 import javax.xml.XMLConstants;
 import java.io.IOException;
 
 public class MainApp extends Application {
 
-    private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+	private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
-    @Override
-    public void init() throws Exception {
-        Validator validator;
-        String xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups1.xml";
-        String xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\groups.xsd";
+	@Override
+	public void init() throws Exception {
+		String xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml";
+		String xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\groups.xsd";
 
-        validator = new XMLValidator(xmlFilePath, xsdFilePath, XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		validate(xmlFilePath, xsdFilePath);
 
-        try {
-            //validate groups xml
-            validator.validate();
-            log.debug("JacksonGroups xml is valid.");
+		xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts.xml";
+		xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd";
 
-        } catch (SAXException | IOException e) {
-            log.debug("Exception while xml validation: " + e);
-        }
+		validate(xmlFilePath, xsdFilePath);
 
-        xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml";
-        xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd";
+	}
 
-        try {
-            validator = new XMLValidator(xmlFilePath, xsdFilePath, XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	public static void main(String[] args) throws Exception {
+		launch(args);
+	}
 
-            //validate contacts xml
-            validator.validate();
-            log.debug("JacksonContacts xml is valid.");
+	public void start(Stage stage) throws Exception {
 
-        } catch (SAXException | IOException e) {
-            log.debug("Exception while xml validation: " + e);
-        }
-    }
+		DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
+		GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
+		GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+		ContactService contactService = new ContactService(contactGenericDAO);
+		GroupService groupService = new GroupService(groupGenericDAO, contactService);
+		contactService.setGroupService(groupService);
 
-    public static void main(String[] args) throws Exception {
-        launch(args);
-    }
+		String fxmlFile = "/fxml/main.fxml";
+		FXMLLoader loader = new FXMLLoader();
 
-    public void start(Stage stage) throws Exception {
+		loader.setController(new MainViewModel(contactService, groupService));
+		Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
-        GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
-        GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
-        ContactService contactService = new ContactService(contactGenericDAO);
-        GroupService groupService = new GroupService(groupGenericDAO, contactService);
-        contactService.setGroupService(groupService);
+		Scene scene = new Scene(rootNode, 800, 500);
+		scene.getStylesheets().add("/styles/styles.css");
 
-        String fxmlFile = "/fxml/main.fxml";
-        FXMLLoader loader = new FXMLLoader();
+		stage.setTitle("Справочник контактов");
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.show();
+		showAdditionalWindow(contactService);
 
-        loader.setController(new MainController(contactService, groupService));
-        Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
+	}
 
-        Scene scene = new Scene(rootNode, 800, 500);
-        scene.getStylesheets().add("/styles/styles.css");
+	private void showAdditionalWindow(ContactService contactService) {
 
-        stage.setTitle("Справочник контактов");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-        showAdditionalWindow(contactService);
+		String stageTitle = "";
+		String fxmlPath = "/fxml/additional.fxml";
+		FXMLLoader loader = null;
+		AnchorPane page = null;
+		Stage dialogStage = null;
+		Scene scene = null;
+		AdditionalViewModel additionalController = new AdditionalViewModel(contactService);
 
-    }
+		try {
+			loader = new FXMLLoader();
+			loader.setController(additionalController);
+			loader.setLocation(MainApp.class.getResource(fxmlPath));
+			page = loader.load();
 
-    private void showAdditionalWindow(ContactService contactService) {
+			dialogStage = new Stage();
+			dialogStage.setTitle(stageTitle);
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			scene = new Scene(page, 760, 240);
+			dialogStage.setScene(scene);
+			dialogStage.setResizable(false);
+			dialogStage.setTitle("Список контактов");
 
-        String stageTitle = "";
-        String fxmlPath = "/fxml/additional.fxml";
-        FXMLLoader loader = null;
-        AnchorPane page = null;
-        Stage dialogStage = null;
-        Scene scene = null;
-        AdditionalController additionalController = new AdditionalController(contactService);
+			contactService.addContactListChangeObserver(additionalController);
 
-        try {
-            loader = new FXMLLoader();
-            loader.setController(additionalController);
-            loader.setLocation(MainApp.class.getResource(fxmlPath));
-            page = loader.load();
+			dialogStage.showAndWait();
 
-            dialogStage = new Stage();
-            dialogStage.setTitle(stageTitle);
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            scene = new Scene(page, 760, 240);
-            dialogStage.setScene(scene);
-            dialogStage.setResizable(false);
-            dialogStage.setTitle("Список контактов");
+		} catch (IOException e) {
+			log.debug(e.getMessage());
+		}
 
-            contactService.addContactListChangeObserver(additionalController);
+	}
 
-            dialogStage.showAndWait();
+	private void validate(String xmlFilePath, String xsdFilePath) {
+		Validator validator;
 
-        } catch (IOException e) {
-            log.debug(e.getMessage());
-        }
+		validator = new XMLValidator(xmlFilePath, xsdFilePath, XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-    }
+		try {
+			validator.validate();
+			log.debug("File " + xmlFilePath + " is valid.");
+
+		} catch (SAXException | IOException e) {
+			log.debug("Exception while xml validation: " + e);
+		}
+	}
 
 }

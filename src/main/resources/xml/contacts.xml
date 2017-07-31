@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<jacksonContacts>
+<сontacts>
     <contact id="1">
         <lastName>Контакт1</lastName>
         <firstName>Контакт1</firstName>
@@ -59,4 +59,4 @@
         <groupList>
         </groupList>
     </contact>
-</jacksonContacts>
+</сontacts>

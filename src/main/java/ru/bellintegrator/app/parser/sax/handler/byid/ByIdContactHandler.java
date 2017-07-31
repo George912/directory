@@ -101,7 +101,7 @@ public class ByIdContactHandler extends DefaultHandler {
 
         } else if (bFirstPhoneNumberType) {
             String s = new String(ch, start, length);
-            contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(s));
+            contact.setFirstPhoneNumberType(PhoneNumberType.getTypeByName(s));
             bFirstPhoneNumberType = false;
 
         } else if (bSecondPhoneNumber) {
@@ -109,7 +109,7 @@ public class ByIdContactHandler extends DefaultHandler {
             bSecondPhoneNumber = false;
 
         } else if (bSecondPhoneNumberType) {
-            contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(new String(ch, start, length)));
+            contact.setSecondPhoneNumberType(PhoneNumberType.getTypeByName(new String(ch, start, length)));
             bSecondPhoneNumberType = false;
 
         } else if (bEmail) {

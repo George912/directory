@@ -1,8 +1,8 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="jacksonGroups">
+  <xs:element name="groups">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="jacksonGroup" maxOccurs="unbounded" minOccurs="0">
+        <xs:element name="group" maxOccurs="unbounded" minOccurs="0">
           <xs:complexType>
             <xs:all>
               <xs:element name="name">

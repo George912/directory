@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.controller;
+package ru.bellintegrator.app.viewmodel;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -31,9 +31,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainController {
+public class MainViewModel {
 
-    private static final Logger log = LoggerFactory.getLogger(MainController.class);
+    private static final Logger log = LoggerFactory.getLogger(MainViewModel.class);
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -77,7 +77,7 @@ public class MainController {
     private ContactService contactService;
     private GroupService groupService;
 
-    public MainController(ContactService contactService, GroupService groupService) {
+    public MainViewModel(ContactService contactService, GroupService groupService) {
 
         this.contactService = contactService;
         this.groupService = groupService;
@@ -145,7 +145,7 @@ public class MainController {
         Contact contact = contactTableView.getSelectionModel().getSelectedItem();
 
         if (contact != null) {
-            log.debug("deleteContact method. JacksonContact = " + contact);
+            log.debug("deleteContact method. Contact = " + contact);
             try {
                 contactService.deleteContact(contact);
 
@@ -213,7 +213,7 @@ public class MainController {
         Group group = groupTableView.getSelectionModel().getSelectedItem();
 
         if (group != null) {
-            log.debug("deleteGroup method. JacksonGroup = " + group);
+            log.debug("deleteGroup method. Group = " + group);
             try {
                 groupService.deleteGroup(group);
                 ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
@@ -240,7 +240,7 @@ public class MainController {
         GridPane page = null;
         Stage dialogStage = null;
         Scene scene = null;
-        ContactEditorController contactEditorController = new ContactEditorController(contactService, groupService);
+        ContactEditorViewModel contactEditorController = new ContactEditorViewModel(contactService, groupService);
 
         log.debug("showContactEditor method. Action = " + editorAction + ", contact = " + contact);
 
@@ -277,7 +277,7 @@ public class MainController {
         GridPane page = null;
         Stage dialogStage = null;
         Scene scene = null;
-        GroupEditorController groupEditorController = new GroupEditorController(groupService);
+        GroupEditorViewModel groupEditorController = new GroupEditorViewModel(groupService);
 
         log.debug("showGroupEditor method. Action = " + editorAction + ", group = " + group);
 
@@ -313,7 +313,7 @@ public class MainController {
 
         Set<Contact> contactSet = new HashSet<>();
 
-        log.debug("findContactByGroup method. JacksonGroup list = " + groupList);
+        log.debug("findContactByGroup method. Group list = " + groupList);
 
         if (groupList.isEmpty()) {
             contactSet.addAll(contactList);

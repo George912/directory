@@ -64,7 +64,7 @@ public class ByNameContactContactHandler extends AbstractContactHandler {
 
         } else if (bFirstPhoneNumberType && bContactIsFind) {
             String s = new String(ch, start, length);
-            contact.setFirstPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(s));
+            contact.setFirstPhoneNumberType(PhoneNumberType.getTypeByName(s));
             bFirstPhoneNumberType = false;
 
         } else if (bSecondPhoneNumber && bContactIsFind) {
@@ -72,7 +72,7 @@ public class ByNameContactContactHandler extends AbstractContactHandler {
             bSecondPhoneNumber = false;
 
         } else if (bSecondPhoneNumberType && bContactIsFind) {
-            contact.setSecondPhoneNumberType(PhoneNumberType.getPhoneNumberTypeByTypeName(new String(ch, start, length)));
+            contact.setSecondPhoneNumberType(PhoneNumberType.getTypeByName(new String(ch, start, length)));
             bSecondPhoneNumberType = false;
 
         } else if (bEmail && bContactIsFind) {
