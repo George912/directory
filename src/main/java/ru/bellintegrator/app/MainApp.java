@@ -67,23 +67,12 @@ public class MainApp extends Application {
 
     public void start(Stage stage) throws Exception {
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML_JACKSON);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
-
-        System.out.println(contactService.getAllContacts().toString());
-        contactService.addContact(new Contact(5, "Контакт5", "Контакт5", "Контакт5"));
-//        contactService.updateContact(new JacksonContact(3, "Контакт31", "Контакт31", "Контакт31"));
-//        List<JacksonGroup> groupList = new ArrayList<>();
-//        groupList.add(new JacksonGroup(3));
-//        JacksonContact contact = new JacksonContact(2, "", "", "","", PhoneNumberType.HOME
-//                ,"",PhoneNumberType.WORKING,"","");
-//        contact.setGroupList(groupList);
-//        contactService.updateContact(contact);
-
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();
