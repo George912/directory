@@ -18,8 +18,8 @@ public interface GenericDAO<T extends Serializable> {
 
     List<T> getAll() throws DAOException;
 
-    T getById(int id);
+    T getById(int id) throws DAOException;
 
-    List<T> getByName(String name);
+    List<T> getByName(String name) throws DAOException;
 
 }

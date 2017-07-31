@@ -6,7 +6,7 @@
                 <xs:element name="contact" maxOccurs="unbounded" minOccurs="0">
                     <xs:complexType>
                         <xs:all>
-                            <xs:element type="xs:string" name="lastName">
+                            <xs:element name="lastName">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
                                         <xs:minLength value="1"/>
@@ -14,7 +14,7 @@
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
-                            <xs:element type="xs:string" name="firstName">
+                            <xs:element name="firstName">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
                                         <xs:minLength value="2"/>
@@ -22,7 +22,7 @@
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
-                            <xs:element type="xs:string" name="middleName">
+                            <xs:element name="middleName">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
                                         <xs:minLength value="7"/>
@@ -30,7 +30,7 @@
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
-                            <xs:element type="xs:string" name="firstPhoneNumber">
+                            <xs:element name="firstPhoneNumber">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
                                         <xs:minLength value="6"/>
@@ -39,7 +39,7 @@
                                 </xs:simpleType>
                             </xs:element>
                             <xs:element type="phoneNumberType" name="firstPhoneNumberType"/>
-                            <xs:element type="xs:string" name="secondPhoneNumber">
+                            <xs:element name="secondPhoneNumber">
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
                                         <xs:minLength value="6"/>

@@ -17,7 +17,6 @@ import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.validation.xml.Validator;
@@ -25,8 +24,6 @@ import ru.bellintegrator.app.validation.xml.impl.XMLValidator;
 
 import javax.xml.XMLConstants;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainApp extends Application {
 
@@ -38,7 +35,7 @@ public class MainApp extends Application {
 
     public void start(Stage stage) throws Exception {
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML_DOM);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML_JACKSON);
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
@@ -46,25 +43,27 @@ public class MainApp extends Application {
         contactService.setGroupService(groupService);
 
 //        System.out.println(contactService.getContactById(1));
-//        System.out.println(contactService.getContactsByName("Контакт1"));
+//        System.out.println(groupService.getContactsByName("Контакт1"));
+//        groupService.updateGroup(new Group(3, "Группа31", "Группа3"));
+//        contactService.updateContact(new Contact(3, "Контакт31", "Контакт31", "Контакт31"));
 //        System.out.println(contactService.getAllContacts().toString());
-        List<Group> groupList = new ArrayList<>();
-        groupList.add(new Group(3));
-        Contact contact = new Contact(2, "", "", "","", PhoneNumberType.HOME
-                ,"",PhoneNumberType.WORKING,"","");
-        contact.setGroupList(groupList);
-        contactService.updateContact(contact);
+//        List<Group> groupList = new ArrayList<>();
+//        groupList.add(new Group(3));
+//        Contact contact = new Contact(2, "", "", "","", PhoneNumberType.HOME
+//                ,"",PhoneNumberType.WORKING,"","");
+//        contact.setGroupList(groupList);
+//        contactService.updateContact(contact);
 
         //test validation xml
-        Validator validator = new XMLValidator("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml"
-                , "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\groups.xsd"
+        Validator validator = new XMLValidator("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml"
+                , "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd"
                 , XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
         try {
             validator.validate();
             System.out.println("xml is valid");
         } catch (SAXException | IOException e) {
-            System.out.println(e.getLocalizedMessage());
+            log.debug("Exception while xml validation: " + e);
         }
 
         String fxmlFile = "/fxml/main.fxml";

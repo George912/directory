@@ -60,10 +60,16 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
-    private void setGroupData(Group group) {
-        Group groupWithData = groupService.getGroupById(group.getId());
-        group.setName(groupWithData.getName());
-        group.setNotes(groupWithData.getNotes());
+    private void setGroupData(Group group) throws DAOException {
+        Group groupWithData = null;
+        try {
+            groupWithData = groupService.getGroupById(group.getId());
+            group.setName(groupWithData.getName());
+            group.setNotes(groupWithData.getNotes());
+
+        } catch (DAOException e) {
+            throw new DAOException("Exception while setting group data: " + e);
+        }
     }
 
     public void saveContacts(List<Contact> contactList) throws DAOException {
@@ -72,20 +78,32 @@ public class ContactService implements ContactListChangeObservable {
         }
     }
 
-    public Contact getContactById(int id) {
-        Contact contact = contactGenericDAO.getById(id);
+    public Contact getContactById(int id) throws DAOException {
+        Contact contact = null;
 
-        List<Contact> contactList = new ArrayList<>();
-        contactList.add(contact);
-        updateContactGroups(contactList);
+        try {
+            contact = contactGenericDAO.getById(id);
+            List<Contact> contactList = new ArrayList<>();
+            contactList.add(contact);
+            updateContactGroups(contactList);
+
+        } catch (DAOException e) {
+            throw new DAOException("Exception while getting contact by id: " + e);
+        }
 
         return contact;
     }
 
-    public List<Contact> getContactsByName(String name) {
-        List<Contact> contactList = contactGenericDAO.getByName(name);
+    public List<Contact> getContactsByName(String name) throws DAOException {
+        List<Contact> contactList = null;
 
-        updateContactGroups(contactList);
+        try {
+            contactList = contactGenericDAO.getByName(name);
+            updateContactGroups(contactList);
+
+        } catch (DAOException e) {
+            throw new DAOException("Exception while getting contact by name: " + e);
+        }
 
         return contactList;
     }
@@ -124,7 +142,7 @@ public class ContactService implements ContactListChangeObservable {
         }
     }
 
-    private void updateContactGroups(List<Contact> contactList){
+    private void updateContactGroups(List<Contact> contactList) throws DAOException {
         for (int i = 0; i < contactList.size(); i++) {
             Contact contact = contactList.get(i);
 
@@ -132,7 +150,12 @@ public class ContactService implements ContactListChangeObservable {
 
             for (int i1 = 0; i1 < groupList.size(); i1++) {
                 Group group = groupList.get(i1);
-                setGroupData(group);
+
+                try {
+                    setGroupData(group);
+                } catch (DAOException e) {
+                    throw new DAOException("Exception while updating contact groups: " + e);
+                }
             }
         }
     }

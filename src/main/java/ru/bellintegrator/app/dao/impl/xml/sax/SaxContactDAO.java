@@ -11,6 +11,7 @@ import ru.bellintegrator.app.parser.sax.handler.byname.ByNameContactContactHandl
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -45,62 +46,54 @@ public class SaxContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    //todo filePath
     public List<Contact> getAll() throws DAOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/xml/contacts.xml");
         SAXParserFactory factory = SAXParserFactory.newInstance();
         List<Contact> contactList = null;
 
-        try {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             SAXParser saxParser = factory.newSAXParser();
             AllContactContactHandler contactHandler = new AllContactContactHandler();
             saxParser.parse(inputStream, contactHandler);
             contactList = contactHandler.getContactList();
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            throw new DAOException("Exception while getting all contacts" + e);
         }
 
         return contactList;
-
     }
 
     @Override
-    //todo get List<Group>
-    public Contact getById(int id) {
+    public Contact getById(int id) throws DAOException {
         Contact contact = null;
-        InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml");
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
-        try {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             SAXParser saxParser = factory.newSAXParser();
             ByIdContactHandler groupHandler = new ByIdContactHandler(id);
             saxParser.parse(inputStream, groupHandler);
             contact = groupHandler.getContact();
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            throw new DAOException("Exception while getting contact by id" + e);
         }
 
         return contact;
     }
 
     @Override
-    //todo get List<Group>
-    public List<Contact> getByName(String name) {
+    public List<Contact> getByName(String name) throws DAOException {
         List<Contact> contactList = null;
-        InputStream inputStream = getClass().getResourceAsStream("/xml/contacts1.xml");
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
-        try {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             SAXParser saxParser = factory.newSAXParser();
             ByNameContactContactHandler handler = new ByNameContactContactHandler(name);
             saxParser.parse(inputStream, handler);
             contactList = handler.getContactList();
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            throw new DAOException("Exception while getting contact by name" + e);
         }
 
         return contactList;

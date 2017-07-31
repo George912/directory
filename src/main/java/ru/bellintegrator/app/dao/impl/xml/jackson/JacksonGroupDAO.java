@@ -6,10 +6,7 @@ import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.parser.jackson.model.Groups;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,25 +59,23 @@ public class JacksonGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
     public List<Group> getAll() throws DAOException {
         XmlMapper xmlMapper = new XmlMapper();
         List<ru.bellintegrator.app.model.Group> groupList = null;
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/groups.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             Groups groups = xmlMapper.readValue(inputStream, Groups.class);
             groupList = getGroupList(groups.getGroups());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting group list: " + e);
         }
 
         return groupList;
     }
 
-    //todo filePath
     public void save(List<Group> list) throws DAOException {
-        try (OutputStream outputStream = new FileOutputStream("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups3.xml")) {
+        try (OutputStream outputStream = new FileOutputStream(filePath)) {
             XmlMapper xmlMapper = new XmlMapper();
             Groups groups = new Groups();
             ru.bellintegrator.app.parser.jackson.model.Group[] groupArr =
@@ -96,30 +91,30 @@ public class JacksonGroupDAO implements GenericDAO<Group> {
             xmlMapper.writeValue(outputStream, groups);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while saving group list: " + e);
         }
     }
 
     @Override
-    public Group getById(int id) {
-        List<Group> groupList = null;
+    public Group getById(int id) throws DAOException {
         try {
-            groupList = getAll();
+            List<Group> groupList = getAll();
 
             for (Group group : groupList) {
                 if (group.getId() == id) {
                     return group;
                 }
             }
+
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting group by id: " + e);
         }
 
         return null;
     }
 
     @Override
-    public List<Group> getByName(String name) {
+    public List<Group> getByName(String name) throws DAOException {
         List<Group> groups = new ArrayList<>();
 
         try {
@@ -132,7 +127,7 @@ public class JacksonGroupDAO implements GenericDAO<Group> {
             }
 
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting groups by name: " + e);
         }
 
         return groups;

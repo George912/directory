@@ -32,7 +32,7 @@ public class Contact {
     @JacksonXmlProperty(localName = "notes")
     private String notes;
     @JacksonXmlProperty(localName = "groupList")
-    @JacksonXmlElementWrapper(useWrapping = true)
+    @JacksonXmlElementWrapper(useWrapping = false)
     private List groupIds;
 
     public Contact() {

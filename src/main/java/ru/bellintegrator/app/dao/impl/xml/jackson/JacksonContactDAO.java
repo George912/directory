@@ -8,10 +8,7 @@ import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.parser.jackson.model.Contacts;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,38 +27,67 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
 
     @Override
     public int create(Contact contact) throws DAOException {
-        return 0;
+        List<Contact> contactList = getAll();
+
+        if (!contactList.contains(contact)) {
+            contactList.add(contact);
+            save(contactList);
+        }
+
+        return contact.getId();
     }
 
     @Override
     public void delete(Contact contact) throws DAOException {
+        List<Contact> contactList = getAll();
 
+        if (contactList.remove(contact)) {
+            save(contactList);
+        }
     }
 
     @Override
     public void update(Contact contact) throws DAOException {
+        List<Contact> contactList = getAll();
 
+        for (int i = 0; i < contactList.size(); i++) {
+            Contact updContact = contactList.get(i);
+
+            if (updContact.getId() == contact.getId()) {
+                updContact.setGroupList(contact.getGroupList());
+                updContact.setNotes(contact.getNotes());
+                updContact.setEmail(contact.getEmail());
+                updContact.setFirstName(contact.getFirstName());
+                updContact.setFirstPhoneNumber(contact.getFirstPhoneNumber());
+                updContact.setFirstPhoneNumberType(contact.getFirstPhoneNumberType());
+                updContact.setLastName(contact.getLastName());
+                updContact.setMiddleName(contact.getMiddleName());
+                updContact.setSecondPhoneNumber(contact.getSecondPhoneNumber());
+                updContact.setSecondPhoneNumberType(contact.getSecondPhoneNumberType());
+
+                save(contactList);
+            }
+        }
     }
 
     @Override
-    //todo дозаполнить группы
     public List<Contact> getAll() throws DAOException {
         XmlMapper xmlMapper = new XmlMapper();
         List<ru.bellintegrator.app.model.Contact> contactList = null;
 
-        try (InputStream inputStream = getClass().getResourceAsStream("/xml/contacts.xml")) {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             Contacts contacts = xmlMapper.readValue(inputStream, Contacts.class);
             contactList = getContactList(contacts.getContacts());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting contact list: " + e);
         }
 
         return contactList;
     }
 
     public void save(List<Contact> list) throws DAOException {
-        try (OutputStream outputStream = new FileOutputStream("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts3.xml")) {
+        try (OutputStream outputStream = new FileOutputStream(filePath)) {
             XmlMapper xmlMapper = new XmlMapper();
             Contacts contacts = new Contacts();
             ru.bellintegrator.app.parser.jackson.model.Contact[] contactArr =
@@ -78,18 +104,46 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
             xmlMapper.writeValue(outputStream, contacts);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while saving contact list: " + e);
         }
     }
 
     @Override
-    public Contact getById(int id) {
+    public Contact getById(int id) throws DAOException {
+        try {
+            List<Contact> contactList = getAll();
+
+            for (Contact contact : contactList) {
+                if (contact.getId() == id) {
+                    return contact;
+                }
+            }
+
+        } catch (DAOException e) {
+            throw new DAOException("Exception while getting contact by id: " + e);
+        }
+
         return null;
     }
 
     @Override
-    public List<Contact> getByName(String name) {
-        return null;
+    public List<Contact> getByName(String name) throws DAOException {
+        List<Contact> contactList = new ArrayList<>();
+
+        try {
+            List<Contact> contacts = getAll();
+
+            for (Contact contact : contacts) {
+                if (contact.getFirstName().equalsIgnoreCase(name)) {
+                    contactList.add(contact);
+                }
+            }
+
+        } catch (DAOException e) {
+            throw new DAOException("Exception while getting contact list by name: " + e);
+        }
+
+        return contactList;
     }
 
     private List<ru.bellintegrator.app.model.Contact> getContactList(ru.bellintegrator.app.parser.jackson.model.Contact[] contacts) {

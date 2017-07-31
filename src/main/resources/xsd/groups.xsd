@@ -5,7 +5,7 @@
         <xs:element name="group" maxOccurs="unbounded" minOccurs="0">
           <xs:complexType>
             <xs:all>
-              <xs:element type="xs:string" name="name">
+              <xs:element name="name">
                 <xs:simpleType>
                   <xs:restriction base="xs:string">
                     <xs:minLength value="2"/>

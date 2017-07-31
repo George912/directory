@@ -11,6 +11,7 @@ import ru.bellintegrator.app.parser.sax.handler.byname.ByNameGroupHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -45,21 +46,17 @@ public class SaxGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
     public List<Group> getAll() throws DAOException {
-
-        InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml");
         SAXParserFactory factory = SAXParserFactory.newInstance();
         List<Group> groupList = null;
 
-        try {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             SAXParser saxParser = factory.newSAXParser();
             AllGroupHandler groupHandler = new AllGroupHandler();
             saxParser.parse(inputStream, groupHandler);
             groupList = groupHandler.getGroupList();
-
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException | SAXException | ParserConfigurationException e) {
+            throw new DAOException("Exception while getting all groups" + e);
         }
 
         return groupList;
@@ -67,40 +64,36 @@ public class SaxGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    //todo filePath
-    public Group getById(int id) {
-        Group group = null;
-        InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml");
+    public Group getById(int id) throws DAOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
+        Group group = null;
 
-        try {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             SAXParser saxParser = factory.newSAXParser();
             ByIdGroupHandler groupHandler = new ByIdGroupHandler(id);
             saxParser.parse(inputStream, groupHandler);
             group = groupHandler.getGroup();
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting group by id " + e);
         }
 
         return group;
     }
 
     @Override
-    //todo filePath
-    public List<Group> getByName(String name) {
-        List<Group> groupList = null;
-        InputStream inputStream = getClass().getResourceAsStream("/xml/groups1.xml");
+    public List<Group> getByName(String name) throws DAOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
+        List<Group> groupList = null;
 
-        try {
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             SAXParser saxParser = factory.newSAXParser();
             ByNameGroupHandler groupHandler = new ByNameGroupHandler(name);
             saxParser.parse(inputStream, groupHandler);
             groupList = groupHandler.getGroupList();
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting group by name " + e);
         }
 
         return groupList;
