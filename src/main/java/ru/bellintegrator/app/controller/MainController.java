@@ -145,7 +145,7 @@ public class MainController {
         Contact contact = contactTableView.getSelectionModel().getSelectedItem();
 
         if (contact != null) {
-            log.debug("deleteContact method. Contact = " + contact);
+            log.debug("deleteContact method. JacksonContact = " + contact);
             try {
                 contactService.deleteContact(contact);
 
@@ -213,7 +213,7 @@ public class MainController {
         Group group = groupTableView.getSelectionModel().getSelectedItem();
 
         if (group != null) {
-            log.debug("deleteGroup method. Group = " + group);
+            log.debug("deleteGroup method. JacksonGroup = " + group);
             try {
                 groupService.deleteGroup(group);
                 ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
@@ -313,7 +313,7 @@ public class MainController {
 
         Set<Contact> contactSet = new HashSet<>();
 
-        log.debug("findContactByGroup method. Group list = " + groupList);
+        log.debug("findContactByGroup method. JacksonGroup list = " + groupList);
 
         if (groupList.isEmpty()) {
             contactSet.addAll(contactList);

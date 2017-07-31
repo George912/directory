@@ -29,6 +29,38 @@ public class MainApp extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
+    @Override
+    public void init() throws Exception {
+        Validator validator;
+        String xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups1.xml";
+        String xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\groups.xsd";
+
+        validator = new XMLValidator(xmlFilePath, xsdFilePath, XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+        try {
+            //validate groups xml
+            validator.validate();
+            log.debug("JacksonGroups xml is valid.");
+
+        } catch (SAXException | IOException e) {
+            log.debug("Exception while xml validation: " + e);
+        }
+
+        xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml";
+        xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd";
+
+        try {
+            validator = new XMLValidator(xmlFilePath, xsdFilePath, XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+            //validate contacts xml
+            validator.validate();
+            log.debug("JacksonContacts xml is valid.");
+
+        } catch (SAXException | IOException e) {
+            log.debug("Exception while xml validation: " + e);
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         launch(args);
     }
@@ -42,29 +74,16 @@ public class MainApp extends Application {
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
 
-//        System.out.println(contactService.getContactById(1));
-//        System.out.println(groupService.getContactsByName("Контакт1"));
-//        groupService.updateGroup(new Group(3, "Группа31", "Группа3"));
-//        contactService.updateContact(new Contact(3, "Контакт31", "Контакт31", "Контакт31"));
-//        System.out.println(contactService.getAllContacts().toString());
-//        List<Group> groupList = new ArrayList<>();
-//        groupList.add(new Group(3));
-//        Contact contact = new Contact(2, "", "", "","", PhoneNumberType.HOME
+        System.out.println(contactService.getAllContacts().toString());
+        contactService.addContact(new Contact(5, "Контакт5", "Контакт5", "Контакт5"));
+//        contactService.updateContact(new JacksonContact(3, "Контакт31", "Контакт31", "Контакт31"));
+//        List<JacksonGroup> groupList = new ArrayList<>();
+//        groupList.add(new JacksonGroup(3));
+//        JacksonContact contact = new JacksonContact(2, "", "", "","", PhoneNumberType.HOME
 //                ,"",PhoneNumberType.WORKING,"","");
 //        contact.setGroupList(groupList);
 //        contactService.updateContact(contact);
 
-        //test validation xml
-        Validator validator = new XMLValidator("F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml"
-                , "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd"
-                , XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-        try {
-            validator.validate();
-            System.out.println("xml is valid");
-        } catch (SAXException | IOException e) {
-            log.debug("Exception while xml validation: " + e);
-        }
 
         String fxmlFile = "/fxml/main.fxml";
         FXMLLoader loader = new FXMLLoader();

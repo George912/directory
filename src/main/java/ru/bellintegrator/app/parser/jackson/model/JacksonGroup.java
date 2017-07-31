@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by neste_000 on 11.07.2017.
  */
-public final class Group {
+public final class JacksonGroup {
 
     @JacksonXmlProperty(localName = "id", isAttribute = true)
     private int id;
@@ -17,10 +17,10 @@ public final class Group {
     @JacksonXmlProperty(localName = "notes")
     private String notes;
 
-    public Group() {
+    public JacksonGroup() {
     }
 
-    public Group(int id, String name, String notes) {
+    public JacksonGroup(int id, String name, String notes) {
         this.id = id;
         this.name = name;
         this.notes = notes;
@@ -52,7 +52,7 @@ public final class Group {
 
     @Override
     public String toString() {
-        return "Group{" +
+        return "JacksonGroup{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", notes='" + notes + '\'' +

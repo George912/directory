@@ -6,7 +6,8 @@ import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
-import ru.bellintegrator.app.parser.jackson.model.Contacts;
+import ru.bellintegrator.app.parser.jackson.model.JacksonContacts;
+import ru.bellintegrator.app.parser.jackson.model.JacksonContact;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -76,8 +77,8 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
         List<ru.bellintegrator.app.model.Contact> contactList = null;
 
         try (InputStream inputStream = new FileInputStream(filePath)) {
-            Contacts contacts = xmlMapper.readValue(inputStream, Contacts.class);
-            contactList = getContactList(contacts.getContacts());
+            JacksonContacts jacksonContacts = xmlMapper.readValue(inputStream, JacksonContacts.class);
+            contactList = getContactList(jacksonContacts.getJacksonContacts());
 
         } catch (IOException e) {
             throw new DAOException("Exception while getting contact list: " + e);
@@ -89,19 +90,19 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
     public void save(List<Contact> list) throws DAOException {
         try (OutputStream outputStream = new FileOutputStream(filePath)) {
             XmlMapper xmlMapper = new XmlMapper();
-            Contacts contacts = new Contacts();
-            ru.bellintegrator.app.parser.jackson.model.Contact[] contactArr =
-                    new ru.bellintegrator.app.parser.jackson.model.Contact[list.size()];
+            JacksonContacts jacksonContacts = new JacksonContacts();
+            JacksonContact[] jacksonContactArr =
+                    new JacksonContact[list.size()];
 
             for (int i = 0; i < list.size(); i++) {
                 Contact contact = list.get(i);
 
-                contactArr[i] = getJacksonContact(contact);
+                jacksonContactArr[i] = getJacksonContact(contact);
             }
 
-            contacts.setContacts(contactArr);
+            jacksonContacts.setJacksonContacts(jacksonContactArr);
 
-            xmlMapper.writeValue(outputStream, contacts);
+            xmlMapper.writeValue(outputStream, jacksonContacts);
 
         } catch (IOException e) {
             throw new DAOException("Exception while saving contact list: " + e);
@@ -146,26 +147,26 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
         return contactList;
     }
 
-    private List<ru.bellintegrator.app.model.Contact> getContactList(ru.bellintegrator.app.parser.jackson.model.Contact[] contacts) {
+    private List<ru.bellintegrator.app.model.Contact> getContactList(JacksonContact[] jacksonContacts) {
         List<ru.bellintegrator.app.model.Contact> contactList = new ArrayList<>();
 
-        for (int i = 0; i < contacts.length; i++) {
-            ru.bellintegrator.app.parser.jackson.model.Contact jacksonContact = contacts[i];
+        for (int i = 0; i < jacksonContacts.length; i++) {
+            JacksonContact jacksonJacksonContact = jacksonContacts[i];
 
             Contact contact = new Contact(
-                    jacksonContact.getId()
-                    , jacksonContact.getFirstName()
-                    , jacksonContact.getLastName()
-                    , jacksonContact.getMiddleName()
-                    , jacksonContact.getFirstPhoneNumber()
-                    , PhoneNumberType.getPhoneNumberTypeByTypeName(jacksonContact.getFirstPhoneNumberType())
-                    , jacksonContact.getSecondPhoneNumber()
-                    , PhoneNumberType.getPhoneNumberTypeByTypeName(jacksonContact.getSecondPhoneNumberType())
-                    , jacksonContact.getEmail(),
-                    jacksonContact.getNotes());
+                    jacksonJacksonContact.getId()
+                    , jacksonJacksonContact.getFirstName()
+                    , jacksonJacksonContact.getLastName()
+                    , jacksonJacksonContact.getMiddleName()
+                    , jacksonJacksonContact.getFirstPhoneNumber()
+                    , PhoneNumberType.getPhoneNumberTypeByTypeName(jacksonJacksonContact.getFirstPhoneNumberType())
+                    , jacksonJacksonContact.getSecondPhoneNumber()
+                    , PhoneNumberType.getPhoneNumberTypeByTypeName(jacksonJacksonContact.getSecondPhoneNumberType())
+                    , jacksonJacksonContact.getEmail(),
+                    jacksonJacksonContact.getNotes());
 
             List<Group> groupList = new ArrayList<>();
-            List groupIds = jacksonContact.getGroupIds();
+            List groupIds = jacksonJacksonContact.getGroupIds();
 
             for (Object groupId : groupIds) {
                 LinkedHashMap<String, String> hashMap = (LinkedHashMap<String, String>) groupId;
@@ -182,19 +183,29 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
         return contactList;
     }
 
-    private ru.bellintegrator.app.parser.jackson.model.Contact getJacksonContact(Contact contact) {
-        return new ru.bellintegrator.app.parser.jackson.model.Contact(
-                contact.getId()
-                , contact.getFirstName()
-                , contact.getLastName()
-                , contact.getMiddleName()
-                , contact.getFirstPhoneNumber()
-                , contact.getFirstPhoneNumberType().name()
-                , contact.getSecondPhoneNumber()
-                , contact.getSecondPhoneNumberType().name()
-                , contact.getEmail()
-                , contact.getNotes()
-                , contact.getGroupList());
+    private JacksonContact getJacksonContact(Contact contact) {
+        JacksonContact jacksonJacksonContact = new JacksonContact();
+
+        List<String> groupIds = new ArrayList<>();
+
+        jacksonJacksonContact.setId(contact.getId());
+        jacksonJacksonContact.setFirstName(contact.getFirstName());
+        jacksonJacksonContact.setLastName(contact.getLastName());
+        jacksonJacksonContact.setMiddleName(contact.getMiddleName());
+        jacksonJacksonContact.setFirstPhoneNumber(contact.getFirstPhoneNumber());
+        jacksonJacksonContact.setFirstPhoneNumberType(contact.getFirstPhoneNumberType().name());
+        jacksonJacksonContact.setSecondPhoneNumber(contact.getSecondPhoneNumber());
+        jacksonJacksonContact.setSecondPhoneNumberType(contact.getSecondPhoneNumberType().name());
+        jacksonJacksonContact.setEmail(contact.getEmail());
+        jacksonJacksonContact.setNotes(contact.getNotes());
+
+        for (Group group : contact.getGroupList()) {
+            groupIds.add(String.valueOf(group.getId()));
+        }
+
+        jacksonJacksonContact.setGroupIds(groupIds);
+
+        return jacksonJacksonContact;
     }
 
 }

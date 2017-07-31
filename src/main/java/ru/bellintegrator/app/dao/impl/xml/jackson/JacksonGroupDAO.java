@@ -4,7 +4,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.parser.jackson.model.Groups;
+import ru.bellintegrator.app.parser.jackson.model.JacksonGroups;
+import ru.bellintegrator.app.parser.jackson.model.JacksonGroup;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -64,8 +65,8 @@ public class JacksonGroupDAO implements GenericDAO<Group> {
         List<ru.bellintegrator.app.model.Group> groupList = null;
 
         try (InputStream inputStream = new FileInputStream(filePath)) {
-            Groups groups = xmlMapper.readValue(inputStream, Groups.class);
-            groupList = getGroupList(groups.getGroups());
+            JacksonGroups jacksonGroups = xmlMapper.readValue(inputStream, JacksonGroups.class);
+            groupList = getGroupList(jacksonGroups.getJacksonGroups());
 
         } catch (IOException e) {
             throw new DAOException("Exception while getting group list: " + e);
@@ -77,18 +78,18 @@ public class JacksonGroupDAO implements GenericDAO<Group> {
     public void save(List<Group> list) throws DAOException {
         try (OutputStream outputStream = new FileOutputStream(filePath)) {
             XmlMapper xmlMapper = new XmlMapper();
-            Groups groups = new Groups();
-            ru.bellintegrator.app.parser.jackson.model.Group[] groupArr =
-                    new ru.bellintegrator.app.parser.jackson.model.Group[list.size()];
+            JacksonGroups jacksonGroups = new JacksonGroups();
+            JacksonGroup[] jacksonGroupArr =
+                    new JacksonGroup[list.size()];
 
             for (int i = 0; i < list.size(); i++) {
                 Group group = list.get(i);
-                groupArr[i] = getJacksonGroup(group);
+                jacksonGroupArr[i] = getJacksonGroup(group);
             }
 
-            groups.setGroups(groupArr);
+            jacksonGroups.setJacksonGroups(jacksonGroupArr);
 
-            xmlMapper.writeValue(outputStream, groups);
+            xmlMapper.writeValue(outputStream, jacksonGroups);
 
         } catch (IOException e) {
             throw new DAOException("Exception while saving group list: " + e);
@@ -133,20 +134,20 @@ public class JacksonGroupDAO implements GenericDAO<Group> {
         return groups;
     }
 
-    private List<ru.bellintegrator.app.model.Group> getGroupList(ru.bellintegrator.app.parser.jackson.model.Group[] groups) {
+    private List<ru.bellintegrator.app.model.Group> getGroupList(JacksonGroup[] jacksonGroups) {
         List<ru.bellintegrator.app.model.Group> groupList = new ArrayList<>();
 
-        for (int i = 0; i < groups.length; i++) {
-            ru.bellintegrator.app.parser.jackson.model.Group group = groups[i];
-            groupList.add(new ru.bellintegrator.app.model.Group(group.getId(),
-                    group.getName(), group.getNotes()));
+        for (int i = 0; i < jacksonGroups.length; i++) {
+            JacksonGroup jacksonGroup = jacksonGroups[i];
+            groupList.add(new ru.bellintegrator.app.model.Group(jacksonGroup.getId(),
+                    jacksonGroup.getName(), jacksonGroup.getNotes()));
         }
 
         return groupList;
     }
 
-    private ru.bellintegrator.app.parser.jackson.model.Group getJacksonGroup(Group group) {
-        return new ru.bellintegrator.app.parser.jackson.model.Group(group.getId(), group.getName(), group.getNotes());
+    private JacksonGroup getJacksonGroup(Group group) {
+        return new JacksonGroup(group.getId(), group.getName(), group.getNotes());
     }
 
 }

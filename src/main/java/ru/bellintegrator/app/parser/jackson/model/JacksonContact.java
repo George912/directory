@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 11.07.2017.
  */
-public class Contact {
+public class JacksonContact {
 
     @JacksonXmlProperty(localName = "id", isAttribute = true)
     private int id;
@@ -31,14 +31,14 @@ public class Contact {
     private String email;
     @JacksonXmlProperty(localName = "notes")
     private String notes;
-    @JacksonXmlProperty(localName = "groupList")
-    @JacksonXmlElementWrapper(useWrapping = false)
+    @JacksonXmlElementWrapper(localName = "groupList")
+    @JacksonXmlProperty(localName="groupId")
     private List groupIds;
 
-    public Contact() {
+    public JacksonContact() {
     }
 
-    public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, String firstPhoneNumberType, String secondPhoneNumber, String secondPhoneNumberType, String email, String notes, List groupIds) {
+    public JacksonContact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, String firstPhoneNumberType, String secondPhoneNumber, String secondPhoneNumberType, String email, String notes, List groupIds) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -142,7 +142,7 @@ public class Contact {
 
     @Override
     public String toString() {
-        return "Contact{" +
+        return "JacksonContact{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

@@ -144,7 +144,7 @@ public class Contact implements Serializable, Identifiable {
 
     @Override
     public String toString() {
-        return "Contact{" +
+        return "JacksonContact{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

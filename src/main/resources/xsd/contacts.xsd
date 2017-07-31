@@ -1,6 +1,6 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="contacts">
+    <xs:element name="jacksonContacts">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="contact" maxOccurs="unbounded" minOccurs="0">
@@ -53,7 +53,7 @@
                             <xs:element name="groupList">
                                 <xs:complexType mixed="true">
                                     <xs:sequence>
-                                        <xs:element type="xs:int" name="id" maxOccurs="unbounded" minOccurs="0"/>
+                                        <xs:element type="xs:int" name="groupId" maxOccurs="unbounded" minOccurs="0"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

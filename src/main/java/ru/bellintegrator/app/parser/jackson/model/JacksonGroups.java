@@ -9,32 +9,32 @@ import java.util.Arrays;
 /**
  * Created by neste_000 on 27.07.2017.
  */
-@JacksonXmlRootElement(localName = "groups")
-public class Groups {
+@JacksonXmlRootElement(localName = "jacksonGroups")
+public class JacksonGroups {
 
     @JacksonXmlProperty(localName = "group")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private Group[] groups;
+    private JacksonGroup[] jacksonGroups;
 
-    public Groups() {
+    public JacksonGroups() {
     }
 
-    public Groups(Group[] groups) {
-        this.groups = groups;
+    public JacksonGroups(JacksonGroup[] jacksonGroups) {
+        this.jacksonGroups = jacksonGroups;
     }
 
-    public Group[] getGroups() {
-        return groups;
+    public JacksonGroup[] getJacksonGroups() {
+        return jacksonGroups;
     }
 
-    public void setGroups(Group[] groups) {
-        this.groups = groups;
+    public void setJacksonGroups(JacksonGroup[] jacksonGroups) {
+        this.jacksonGroups = jacksonGroups;
     }
 
     @Override
     public String toString() {
-        return "Groups{" +
-                "groups=" + Arrays.toString(groups) +
+        return "JacksonGroups{" +
+                "jacksonGroups=" + Arrays.toString(jacksonGroups) +
                 '}';
     }
 
