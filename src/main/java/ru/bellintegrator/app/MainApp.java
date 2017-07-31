@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
-
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
@@ -25,101 +24,110 @@ import ru.bellintegrator.app.viewmodel.MainViewModel;
 
 import javax.xml.XMLConstants;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainApp extends Application {
 
-	private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+    private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
-	@Override
-	public void init() throws Exception {
-		String xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml";
-		String xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\groups.xsd";
+    @Override
+    public void init() throws Exception {
+        String xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml";
+        String xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\groups.xsd";
 
-		validate(xmlFilePath, xsdFilePath);
+        validate(xmlFilePath, xsdFilePath);
 
-		xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts.xml";
-		xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd";
+        xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts.xml";
+        xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd";
 
-		validate(xmlFilePath, xsdFilePath);
+        validate(xmlFilePath, xsdFilePath);
 
-	}
+    }
 
-	public static void main(String[] args) throws Exception {
-		launch(args);
-	}
+    public static void main(String[] args) throws Exception {
+        launch(args);
+    }
 
-	public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws Exception {
 
-		DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.FILE);
-		GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
-		GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
-		ContactService contactService = new ContactService(contactGenericDAO);
-		GroupService groupService = new GroupService(groupGenericDAO, contactService);
-		contactService.setGroupService(groupService);
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML_JACKSON);
+        GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
+        GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+        ContactService contactService = new ContactService(contactGenericDAO);
+        GroupService groupService = new GroupService(groupGenericDAO, contactService);
+        contactService.setGroupService(groupService);
 
-		String fxmlFile = "/fxml/main.fxml";
-		FXMLLoader loader = new FXMLLoader();
+//        Contact contact = new Contact(5, "Контакт5", "Контакт5", "Контакт5");
+//        List<Group> groupList = Arrays.asList(new Group(1), new Group(2), new Group(3));
+//        contact.setGroupList(groupList);
 
-		loader.setController(new MainViewModel(contactService, groupService));
-		Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
+//        contactService.addContact(contact);
+		System.out.println(contactService.getAllContacts().toString());
 
-		Scene scene = new Scene(rootNode, 800, 500);
-		scene.getStylesheets().add("/styles/styles.css");
+        String fxmlFile = "/fxml/main.fxml";
+        FXMLLoader loader = new FXMLLoader();
 
-		stage.setTitle("Справочник контактов");
-		stage.setScene(scene);
-		stage.setResizable(false);
-		stage.show();
-		showAdditionalWindow(contactService);
+        loader.setController(new MainViewModel(contactService, groupService));
+        Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
 
-	}
+        Scene scene = new Scene(rootNode, 800, 500);
+        scene.getStylesheets().add("/styles/styles.css");
 
-	private void showAdditionalWindow(ContactService contactService) {
+        stage.setTitle("Справочник контактов");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        showAdditionalWindow(contactService);
 
-		String stageTitle = "";
-		String fxmlPath = "/fxml/additional.fxml";
-		FXMLLoader loader = null;
-		AnchorPane page = null;
-		Stage dialogStage = null;
-		Scene scene = null;
-		AdditionalViewModel additionalController = new AdditionalViewModel(contactService);
+    }
 
-		try {
-			loader = new FXMLLoader();
-			loader.setController(additionalController);
-			loader.setLocation(MainApp.class.getResource(fxmlPath));
-			page = loader.load();
+    private void showAdditionalWindow(ContactService contactService) {
 
-			dialogStage = new Stage();
-			dialogStage.setTitle(stageTitle);
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			scene = new Scene(page, 760, 240);
-			dialogStage.setScene(scene);
-			dialogStage.setResizable(false);
-			dialogStage.setTitle("Список контактов");
+        String stageTitle = "";
+        String fxmlPath = "/fxml/additional.fxml";
+        FXMLLoader loader = null;
+        AnchorPane page = null;
+        Stage dialogStage = null;
+        Scene scene = null;
+        AdditionalViewModel additionalController = new AdditionalViewModel(contactService);
 
-			contactService.addContactListChangeObserver(additionalController);
+        try {
+            loader = new FXMLLoader();
+            loader.setController(additionalController);
+            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            page = loader.load();
 
-			dialogStage.showAndWait();
+            dialogStage = new Stage();
+            dialogStage.setTitle(stageTitle);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            scene = new Scene(page, 760, 240);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+            dialogStage.setTitle("Список контактов");
 
-		} catch (IOException e) {
-			log.debug(e.getMessage());
-		}
+            contactService.addContactListChangeObserver(additionalController);
 
-	}
+            dialogStage.showAndWait();
 
-	private void validate(String xmlFilePath, String xsdFilePath) {
-		Validator validator;
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
 
-		validator = new XMLValidator(xmlFilePath, xsdFilePath, XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    }
 
-		try {
-			validator.validate();
-			log.debug("File " + xmlFilePath + " is valid.");
+    private void validate(String xmlFilePath, String xsdFilePath) {
+        Validator validator;
 
-		} catch (SAXException | IOException e) {
-			log.debug("Exception while xml validation: " + e);
-		}
-	}
+        validator = new XMLValidator(xmlFilePath, xsdFilePath, XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+        try {
+            validator.validate();
+            log.debug("File " + xmlFilePath + " is valid.");
+
+        } catch (SAXException | IOException e) {
+            log.debug("Exception while xml validation: " + e);
+        }
+    }
 
 }

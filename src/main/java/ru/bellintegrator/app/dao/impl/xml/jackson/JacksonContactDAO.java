@@ -6,14 +6,12 @@ import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
-import ru.bellintegrator.app.parser.jackson.model.JacksonContacts;
 import ru.bellintegrator.app.parser.jackson.model.JacksonContact;
+import ru.bellintegrator.app.parser.jackson.model.JacksonContacts;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by neste_000 on 28.07.2017.
@@ -166,13 +164,12 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
                     jacksonJacksonContact.getNotes());
 
             List<Group> groupList = new ArrayList<>();
-            List groupIds = jacksonJacksonContact.getGroupIds();
+            String[] groupIds = jacksonJacksonContact.getGroupIds();
 
-            for (Object groupId : groupIds) {
-                LinkedHashMap<String, String> hashMap = (LinkedHashMap<String, String>) groupId;
+            if (groupIds != null) {
+                for (String s : groupIds) {
+                    groupList.add(new Group(Integer.parseInt(s)));
 
-                for (Map.Entry<String, String> entry : hashMap.entrySet()) {
-                    groupList.add(new Group(Integer.parseInt(entry.getValue().toString())));
                 }
             }
 
@@ -186,7 +183,7 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
     private JacksonContact getJacksonContact(Contact contact) {
         JacksonContact jacksonJacksonContact = new JacksonContact();
 
-        List<String> groupIds = new ArrayList<>();
+        String[] groupIds = new String[contact.getGroupList().size()];
 
         jacksonJacksonContact.setId(contact.getId());
         jacksonJacksonContact.setFirstName(contact.getFirstName());
@@ -199,8 +196,8 @@ public class JacksonContactDAO implements GenericDAO<Contact> {
         jacksonJacksonContact.setEmail(contact.getEmail());
         jacksonJacksonContact.setNotes(contact.getNotes());
 
-        for (Group group : contact.getGroupList()) {
-            groupIds.add(String.valueOf(group.getId()));
+        for (int i = 0; i < contact.getGroupList().size(); i++) {
+            groupIds[i] = String.valueOf(contact.getGroupList().get(i).getId());
         }
 
         jacksonJacksonContact.setGroupIds(groupIds);

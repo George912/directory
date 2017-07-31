@@ -34,12 +34,12 @@ public class JacksonContact {
     private String notes;
     @JacksonXmlElementWrapper(localName = "groupList")
     @JacksonXmlProperty(localName="groupId")
-    private List groupIds;
+    private String[] groupIds;
 
     public JacksonContact() {
     }
 
-    public JacksonContact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, String firstPhoneNumberType, String secondPhoneNumber, String secondPhoneNumberType, String email, String notes, List groupIds) {
+    public JacksonContact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, String firstPhoneNumberType, String secondPhoneNumber, String secondPhoneNumberType, String email, String notes, String[] groupIds) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -133,14 +133,6 @@ public class JacksonContact {
         this.notes = notes;
     }
 
-    public List getGroupIds() {
-        return groupIds;
-    }
-
-    public void setGroupIds(List groupIds) {
-        this.groupIds = groupIds;
-    }
-
     @Override
     public String toString() {
         return "JacksonContact{" +
@@ -157,4 +149,11 @@ public class JacksonContact {
                 '}';
     }
 
+    public String[] getGroupIds() {
+        return groupIds;
+    }
+
+    public void setGroupIds(String[] groupIds) {
+        this.groupIds = groupIds;
+    }
 }

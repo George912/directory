@@ -152,7 +152,7 @@ public class ContactService implements ContactListChangeObservable {
                 Group group = groupList.get(i1);
 
                 try {
-                    setGroupData(group);
+                    fillGroupData(group);
                 } catch (DAOException e) {
                     throw new DAOException("Exception while updating contact groups: " + e);
                 }
