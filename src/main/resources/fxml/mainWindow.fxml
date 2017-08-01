@@ -27,12 +27,12 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="493.0" minWidth="10.0" prefWidth="490.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints maxHeight="184.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
-                                <RowConstraints maxHeight="311.0" minHeight="10.0" prefHeight="304.0" vgrow="SOMETIMES" />
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="74.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="387.0" minHeight="10.0" prefHeight="353.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="71.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <TableView id="contactTableView" fx:id="contactTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="2">
+                                <TableView id="contactTableView" fx:id="contactTableView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
                                     <columns>
                                         <TableColumn id="contactTableViewLastNameColumn" fx:id="contactTableViewLastNameColumn" prefWidth="75.0" text="Фамилия" />
                                         <TableColumn id="contactTableViewNameColumn" fx:id="contactTableViewNameColumn" prefWidth="75.0" text="Имя" />
@@ -102,6 +102,16 @@
                                     </children>
                                 </GridPane>
                         <CheckListView id="checkListView" fx:id="checkListView" />
+                        <TextField id="contactSearchField" fx:id="contactSearchField" promptText="Поиск контакта" GridPane.rowIndex="2" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView id="searchContactImageView" fx:id="searchContactImageView" fitHeight="12.0" fitWidth="12.0" onMouseClicked="#searchContact" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@/images/search.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </VBox>
                             </children>
                         </GridPane>
                     </content>

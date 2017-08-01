@@ -87,6 +87,8 @@ public class MainViewModel {
     private ImageView editGroupImageView;
     @FXML
     private ImageView deleteGroupImageView;
+    @FXML
+    private TextField contactSearchField;
 
     private ContactService contactService;
     private GroupService groupService;
@@ -245,6 +247,19 @@ public class MainViewModel {
             Annunciator.showAlert("Удаление группы", "Не выбрана группа для удаления.", "Выберите группу в таблице и нажмите кнопку удаления.");
         }
 
+    }
+
+    @FXML
+    private void searchContact() {
+        ObservableList<Contact> items = FXCollections.observableArrayList();
+
+        try {
+            items.addAll(contactService.getContactsByName(contactSearchField.getText()));
+            contactTableView.setItems(items);
+
+        } catch (DAOException e) {
+            log.debug("Exception while contact searching: " + e);
+        }
     }
 
     private void showContactEditor(Contact contact, EditorAction editorAction) {
@@ -521,7 +536,7 @@ public class MainViewModel {
         }
     }
 
-    private void turnOnReadOnlyMode(boolean b){
+    private void turnOnReadOnlyMode(boolean b) {
         addContactImageView.setDisable(b);
         editContactImageView.setDisable(b);
         deleteContactImageView.setDisable(b);
