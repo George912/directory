@@ -7,6 +7,7 @@ import ru.bellintegrator.app.dao.impl.xml.dom.DomGroupDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.util.IdGenerator;
 
 /**
  * Created by neste_000 on 28.07.2017.
@@ -19,12 +20,18 @@ public class XmlDomDAOFactory extends DAOFactory {
 
     @Override
     public GenericDAO<Contact> getContactDAO() throws DAOException {
-        return new DomContactDAO(CONTACT_FILE);
+        DomContactDAO dao = new DomContactDAO(CONTACT_FILE);
+        dao.setIdGenerator(new IdGenerator(dao.getAll()));
+
+        return dao;
     }
 
     @Override
     public GenericDAO<Group> getGroupDAO() throws DAOException {
-        return new DomGroupDAO(GROUP_FILE);
+        DomGroupDAO dao = new DomGroupDAO(GROUP_FILE);
+        dao.setIdGenerator(new IdGenerator(dao.getAll()));
+
+        return dao;
     }
 
 }

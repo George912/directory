@@ -258,7 +258,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
         Element contactGroupListElement = document.createElement("groupList");
 
         for (Group group : contact.getGroupList()) {
-            Element groupIdElement = document.createElement("id");
+            Element groupIdElement = document.createElement("groupId");
             groupIdElement.appendChild(document.createTextNode(String.valueOf(group.getId())));
             contactGroupListElement.appendChild(groupIdElement);
         }
@@ -316,32 +316,33 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
     private void updateGroupsTagByXpath(Document doc, XPathExpression xPath, List<Group> groupList) throws XPathExpressionException {
         Node groupListNode = (Node) xPath.evaluate(doc, XPathConstants.NODE);
         Element groupListElem = (Element) groupListNode;
-        NodeList nList = groupListElem.getElementsByTagName("id");
+        NodeList nList = groupListElem.getElementsByTagName("groupId");
 
         //удаление id групп
         for (int i = 0; i < nList.getLength(); i++) {
             Node nNode = nList.item(i);
-
-            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element eElement = (Element) nNode;
-
-                eElement.getParentNode().removeChild(eElement);
-            }
+            Element eElement = (Element) nNode;
+            eElement.getParentNode().removeChild(eElement);
         }
 
         //добавление id групп
-        for (Group group : groupList) {
-            Element groupIdElement = doc.createElement("id");
-            groupIdElement.appendChild(doc.createTextNode(String.valueOf(group.getId())));
-            groupListElem.appendChild(groupIdElement);
+        if (!groupList.isEmpty()) {
+            for (Group group : groupList) {
+                Element groupIdElement = doc.createElement("groupId");
+                groupIdElement.appendChild(doc.createTextNode(String.valueOf(group.getId())));
+                groupListElem.appendChild(groupIdElement);
+            }
+        } else {
+            groupListElem.setTextContent("");
         }
+
     }
 
     private List<Group> getGroupList(Element contactElem) {
         List<Group> groupList = new ArrayList<>();
 
         Element groupListElement = (Element) contactElem.getElementsByTagName("groupList").item(0);
-        NodeList groupIds = groupListElement.getElementsByTagName("id");
+        NodeList groupIds = groupListElement.getElementsByTagName("groupId");
 
         for (int j = 0; j < groupIds.getLength(); j++) {
             Node node = groupIds.item(j);

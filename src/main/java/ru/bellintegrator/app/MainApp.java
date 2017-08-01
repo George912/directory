@@ -51,34 +51,6 @@ public class MainApp extends Application {
     }
 
     public void start(Stage stage) throws Exception {
-//        Contact contact = new Contact(5, "Контакт5", "Контакт5", "Контакт5");
-//        List<Group> groupList = Arrays.asList(new Group(1), new Group(2), new Group(3));
-//        contact.setGroupList(groupList);
-
-//        contactService.addContact(contact);
-//		System.out.println(contactService.getAllContacts().toString());
-//========================================================================
-//        String fxmlFile = "/fxml/startWindow.fxml";
-//        FXMLLoader loader = new FXMLLoader();
-
-//        loader.setController(new MainViewModel(contactService, groupService));
-//        StartViewModel viewModel = new StartViewModel(getDaoTypeNameList());
-//        viewModel.setStage(stage);
-//        loader.setController(viewModel);
-//        Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
-//        log.debug(viewModel.getDaoFactoryType().name());
-//
-//        Scene scene = new Scene(rootNode, 800, 500);
-//        scene.getStylesheets().add("/styles/styles.css");
-//
-//        stage.setTitle("Справочник контактов");
-//        stage.setScene(scene);
-//        stage.setResizable(false);
-//        stage.show();
-
-
-//        showAdditionalWindow(contactService);
-
         DAOFactoryType daoFactoryType = showStartWindow();
 
         DAOFactory daoFactory = DAOFactory.getDAOFactory(daoFactoryType);

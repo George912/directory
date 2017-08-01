@@ -2,6 +2,7 @@ package ru.bellintegrator.app.dao.impl.xml.jackson;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 28.07.2017.
  */
-public class JacksonContactDAO implements GenericDAO<Contact> {
+public class JacksonContactDAO extends AbstractDAOWithIdGenerator<Contact> {
 
     private String filePath;
 
