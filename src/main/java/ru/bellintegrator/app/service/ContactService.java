@@ -126,11 +126,9 @@ public class ContactService implements ContactListChangeObservable {
 
     @Override
     public void notifyContactListChangeObserver() {
-
         for (ContactListChangeObserver observer : contactListChangeObserverList) {
             observer.listChanged();
         }
-
     }
 
     public void deleteGroupFromContacts(Group group) throws DAOException {

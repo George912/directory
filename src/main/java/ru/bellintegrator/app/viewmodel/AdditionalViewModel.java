@@ -61,6 +61,7 @@ public class AdditionalViewModel implements ContactListChangeObserver {
     public void listChanged() {
 
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
+
         try {
             contactObservableList.addAll(contactService.getAllContacts());
 

@@ -98,9 +98,7 @@
                                         <ComboBox id="secondPhoneNumberTypeComboBox" fx:id="secondPhoneNumberTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <Label text="Группы" GridPane.rowIndex="9" />
                               <CheckListView id="groupCheckListView" fx:id="groupCheckListView" minHeight="50.0" prefHeight="50.0" GridPane.columnIndex="1" GridPane.rowIndex="9">
-                                 <GridPane.margin>
-                                    <Insets bottom="10.0" top="10.0" />
-                                 </GridPane.margin></CheckListView>
+                                 </CheckListView>
                                     </children>
                                 </GridPane>
                         <CheckListView id="checkListView" fx:id="checkListView" />

@@ -32,15 +32,14 @@ public enum PhoneNumberType {
 	}
 
 	/**
-	 * Является заменой метода valueOf, только возвращает UNKNOWN константу
-	 * перечисления вместо IllegalArgumentException.
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ valueOf, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ UNKNOWN пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	 * пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ IllegalArgumentException.
 	 * 
 	 * @param typeName
-	 *            - имя типа
-	 * @return тип телефонного номера
+	 *            - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+	 * @return пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	 */
 	public static PhoneNumberType getTypeByName(String typeName) {
-
 		for (PhoneNumberType phoneNumberType : values()) {
 			if (phoneNumberType.name().equalsIgnoreCase(typeName)) {
 				return phoneNumberType;
@@ -48,6 +47,5 @@ public enum PhoneNumberType {
 		}
 
 		return UNKNOWN;
-
 	}
 }

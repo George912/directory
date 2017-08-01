@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.MainApp;
+import ru.bellintegrator.app.Mode;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -73,9 +75,22 @@ public class MainViewModel {
     private ComboBox<String> secondPhoneNumberTypeComboBox;
     @FXML
     private CheckListView<Group> groupCheckListView;
+    @FXML
+    private ImageView addContactImageView;
+    @FXML
+    private ImageView editContactImageView;
+    @FXML
+    private ImageView deleteContactImageView;
+    @FXML
+    private ImageView addGroupImageView;
+    @FXML
+    private ImageView editGroupImageView;
+    @FXML
+    private ImageView deleteGroupImageView;
 
     private ContactService contactService;
     private GroupService groupService;
+    private Mode mode;
 
     public MainViewModel(ContactService contactService, GroupService groupService) {
 
@@ -84,19 +99,19 @@ public class MainViewModel {
 
     }
 
+    public MainViewModel(ContactService contactService, GroupService groupService, Mode mode) {
+        this(contactService, groupService);
+        this.mode = mode;
+    }
+
     @FXML
     private void initialize() {
-
         initContactTableView();
-
         initGroupTableView();
-
         initCheckListView();
-
         initPhoneNumberTypeComboBoxes();
-
         initGroupCheckListView();
-
+        changeAppMode(mode);
     }
 
     @FXML
@@ -235,7 +250,7 @@ public class MainViewModel {
     private void showContactEditor(Contact contact, EditorAction editorAction) {
 
         String stageTitle = "";
-        String fxmlPath = "/fxml/contact_editor.fxml";
+        String fxmlPath = "/fxml/contactEditorWindow.fxml.fxml";
         FXMLLoader loader = null;
         GridPane page = null;
         Stage dialogStage = null;
@@ -272,7 +287,7 @@ public class MainViewModel {
     private void showGroupEditor(Group group, EditorAction editorAction) {
 
         String stageTitle = "";
-        String fxmlPath = "/fxml/group_editor.fxml";
+        String fxmlPath = "/fxml/groupEditorWindow.fxml";
         FXMLLoader loader = null;
         GridPane page = null;
         Stage dialogStage = null;
@@ -492,6 +507,28 @@ public class MainViewModel {
             Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
+    }
+
+    private void changeAppMode(Mode mode) {
+        switch (mode) {
+            case READ_ONLY:
+                turnOnReadOnlyMode(true);
+                break;
+
+            case READ_WRITE:
+                turnOnReadOnlyMode(false);
+                break;
+        }
+    }
+
+    private void turnOnReadOnlyMode(boolean b){
+        addContactImageView.setDisable(b);
+        editContactImageView.setDisable(b);
+        deleteContactImageView.setDisable(b);
+
+        addGroupImageView.setDisable(b);
+        editGroupImageView.setDisable(b);
+        deleteGroupImageView.setDisable(b);
     }
 
 }

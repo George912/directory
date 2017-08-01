@@ -12,6 +12,17 @@ public enum DAOFactoryType {
     MYSQL,
     MSSQL,
     POSTGRESQL,
-    FILE
+    FILE,
+    UNKNOWN;
+
+    public static DAOFactoryType getTypeByName(String typeName) {
+        for (DAOFactoryType type : values()) {
+            if (type.name().equalsIgnoreCase(typeName)) {
+                return type;
+            }
+        }
+
+        return UNKNOWN;
+    }
 
 }

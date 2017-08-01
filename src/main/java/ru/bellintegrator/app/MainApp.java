@@ -2,9 +2,9 @@ package ru.bellintegrator.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -21,10 +21,11 @@ import ru.bellintegrator.app.validation.xml.Validator;
 import ru.bellintegrator.app.validation.xml.impl.XMLValidator;
 import ru.bellintegrator.app.viewmodel.AdditionalViewModel;
 import ru.bellintegrator.app.viewmodel.MainViewModel;
+import ru.bellintegrator.app.viewmodel.StartViewModel;
 
 import javax.xml.XMLConstants;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainApp extends Application {
@@ -50,70 +51,124 @@ public class MainApp extends Application {
     }
 
     public void start(Stage stage) throws Exception {
+//        Contact contact = new Contact(5, "Контакт5", "Контакт5", "Контакт5");
+//        List<Group> groupList = Arrays.asList(new Group(1), new Group(2), new Group(3));
+//        contact.setGroupList(groupList);
 
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(DAOFactoryType.XML_JACKSON);
+//        contactService.addContact(contact);
+//		System.out.println(contactService.getAllContacts().toString());
+//========================================================================
+//        String fxmlFile = "/fxml/startWindow.fxml";
+//        FXMLLoader loader = new FXMLLoader();
+
+//        loader.setController(new MainViewModel(contactService, groupService));
+//        StartViewModel viewModel = new StartViewModel(getDaoTypeNameList());
+//        viewModel.setStage(stage);
+//        loader.setController(viewModel);
+//        Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
+//        log.debug(viewModel.getDaoFactoryType().name());
+//
+//        Scene scene = new Scene(rootNode, 800, 500);
+//        scene.getStylesheets().add("/styles/styles.css");
+//
+//        stage.setTitle("Справочник контактов");
+//        stage.setScene(scene);
+//        stage.setResizable(false);
+//        stage.show();
+
+
+//        showAdditionalWindow(contactService);
+
+        DAOFactoryType daoFactoryType = showStartWindow();
+
+        DAOFactory daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
 
-//        Contact contact = new Contact(5, "Контакт5", "Контакт5", "Контакт5");
-//        List<Group> groupList = Arrays.asList(new Group(1), new Group(2), new Group(3));
-//        contact.setGroupList(groupList);
-
-//        contactService.addContact(contact);
-		System.out.println(contactService.getAllContacts().toString());
-
-        String fxmlFile = "/fxml/main.fxml";
-        FXMLLoader loader = new FXMLLoader();
-
-        loader.setController(new MainViewModel(contactService, groupService));
-        Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
-
-        Scene scene = new Scene(rootNode, 800, 500);
-        scene.getStylesheets().add("/styles/styles.css");
-
-        stage.setTitle("Справочник контактов");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-        showAdditionalWindow(contactService);
-
+        Mode mode = defineMode(daoFactoryType);
+        showMainlWindow(stage, mode, contactService, groupService);
     }
 
-    private void showAdditionalWindow(ContactService contactService) {
-
-        String stageTitle = "";
-        String fxmlPath = "/fxml/additional.fxml";
-        FXMLLoader loader = null;
-        AnchorPane page = null;
-        Stage dialogStage = null;
-        Scene scene = null;
-        AdditionalViewModel additionalController = new AdditionalViewModel(contactService);
+    private DAOFactoryType showStartWindow() {
+        String fxmlPath = "/fxml/startWindow.fxml";
+        StartViewModel viewModel = new StartViewModel(getDaoTypeNameList());
 
         try {
-            loader = new FXMLLoader();
-            loader.setController(additionalController);
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(viewModel);
             loader.setLocation(MainApp.class.getResource(fxmlPath));
-            page = loader.load();
+            GridPane page = loader.load();
 
-            dialogStage = new Stage();
-            dialogStage.setTitle(stageTitle);
+            Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            scene = new Scene(page, 760, 240);
+            Scene scene = new Scene(page, 400, 150);
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
-            dialogStage.setTitle("Список контактов");
-
-            contactService.addContactListChangeObserver(additionalController);
+            viewModel.setStage(dialogStage);
 
             dialogStage.showAndWait();
+
+            return viewModel.getDaoFactoryType();
 
         } catch (IOException e) {
             log.debug(e.getMessage());
         }
 
+        return DAOFactoryType.UNKNOWN;
+    }
+
+    private void showAdditionalWindow(AdditionalViewModel viewModel, ContactService contactService) {
+        String fxmlPath = "/fxml/additionalWindow.fxml";
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(viewModel);
+            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            AnchorPane page = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            Scene scene = new Scene(page, 760, 240);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+            dialogStage.setTitle("Список контактов");
+
+            contactService.addContactListChangeObserver(viewModel);
+
+            dialogStage.show();
+
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
+    }
+
+    private void showMainlWindow(Stage stage, Mode mode, ContactService contactService, GroupService groupService) {
+        String fxmlPath = "/fxml/mainWindow.fxml";
+        MainViewModel mainViewModel = new MainViewModel(contactService, groupService, mode);
+        AdditionalViewModel additionalViewModel = new AdditionalViewModel(contactService);
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(mainViewModel);
+            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            GridPane page = loader.load();
+
+            Scene scene = new Scene(page, 800, 500);
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.setTitle("Список контактов");
+
+            contactService.addContactListChangeObserver(additionalViewModel);
+            showAdditionalWindow(additionalViewModel, contactService);
+
+            stage.show();
+
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
     }
 
     private void validate(String xmlFilePath, String xsdFilePath) {
@@ -128,6 +183,24 @@ public class MainApp extends Application {
         } catch (SAXException | IOException e) {
             log.debug("Exception while xml validation: " + e);
         }
+    }
+
+    private List<String> getDaoTypeNameList() {
+        List<String> daoTypeNameList = new ArrayList<>();
+        daoTypeNameList.add(DAOFactoryType.FILE.name());
+        daoTypeNameList.add(DAOFactoryType.XML_DOM.name());
+        daoTypeNameList.add(DAOFactoryType.XML_JACKSON.name());
+        daoTypeNameList.add(DAOFactoryType.XML_SAX.name());
+
+        return daoTypeNameList;
+    }
+
+    private Mode defineMode(DAOFactoryType type) {
+        if (!type.equals(DAOFactoryType.XML_SAX)) {
+            return Mode.READ_WRITE;
+        }
+
+        return Mode.READ_ONLY;
     }
 
 }

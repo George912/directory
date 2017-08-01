@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane prefHeight="150.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="Тип ДАО" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+         <children>
+            <Button id="saveButton" fx:id="saveButton" layoutX="116.0" layoutY="13.0" mnemonicParsing="false" onAction="#saveButtonClick" text="Сохранить" />
+            <Button id="cancelButton" fx:id="cancelButton" layoutX="201.0" layoutY="13.0" mnemonicParsing="false" onAction="#cancelButtonClick" text="Отмена" />
+         </children>
+      </AnchorPane>
+      <ComboBox id="daoTypeComboBox" fx:id="daoTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
+   </children>
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="81.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="284.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <padding>
+      <Insets left="10.0" right="10.0" />
+   </padding>
+</GridPane>
