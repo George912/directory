@@ -2,24 +2,21 @@ package ru.bellintegrator.app.dao.impl.file;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by neste_000 on 19.07.2017.
  */
-public class FileContactDAO extends AbstractDAOWithIdGenerator<Contact> {
+public class FileContactDAO extends AbstractFileDAO<Contact> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContactDAO.class);
-    private String filePath;
 
     public FileContactDAO(String filePath) {
-        this.filePath = filePath;
+        this.setFilePath(filePath);
     }
 
     @Override
@@ -126,42 +123,6 @@ public class FileContactDAO extends AbstractDAOWithIdGenerator<Contact> {
         }
 
         return contacts;
-    }
-
-    private void serialize(List<Contact> contactList) throws DAOException {
-
-        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath);
-             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-
-            log.debug(contactList.toString());
-            objectOutputStream.writeObject(contactList);
-
-            objectOutputStream.flush();
-
-        } catch (IOException e) {
-
-            throw new DAOException(e);
-
-        }
-
-    }
-
-    private List<Contact> deserialize() throws DAOException {
-
-        List<Contact> contacts = null;
-
-        try (FileInputStream fileInputStream = new FileInputStream(filePath);
-             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-
-            contacts = (List<Contact>) objectInputStream.readObject();
-
-        } catch (IOException | ClassNotFoundException e) {
-
-            throw new DAOException(e);
-        }
-
-        return contacts == null ? new ArrayList<>() : contacts;
-
     }
 
 }

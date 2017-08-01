@@ -19,22 +19,18 @@ public class MemoryDAOFactory extends DAOFactory {
 
     @Override
     public GenericDAO<Contact> getContactDAO() throws DAOException {
-
         FileContactDAO fileContactDAO = new FileContactDAO(CONTACT_FILE);
         fileContactDAO.setIdGenerator(new IdGenerator(fileContactDAO.getAll()));
 
         return fileContactDAO;
-
     }
 
     @Override
     public GenericDAO<Group> getGroupDAO() throws DAOException {
-
         FileGroupDAO fileGroupDAO = new FileGroupDAO(GROUP_FILE);
         fileGroupDAO.setIdGenerator(new IdGenerator(fileGroupDAO.getAll()));
 
         return fileGroupDAO;
-
     }
 
 }
