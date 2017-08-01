@@ -17,7 +17,7 @@ import ru.bellintegrator.app.util.Annunciator;
 /**
  * Created by neste_000 on 21.07.2017.
  */
-public class AdditionalViewModel implements ContactListChangeObserver {
+public class AdditionalViewModel extends AbstractViewModel implements ContactListChangeObserver {
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -71,7 +71,7 @@ public class AdditionalViewModel implements ContactListChangeObserver {
             contactTableView.setItems(contactObservableList);
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
@@ -96,7 +96,7 @@ public class AdditionalViewModel implements ContactListChangeObserver {
             notesTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNotes()));
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }

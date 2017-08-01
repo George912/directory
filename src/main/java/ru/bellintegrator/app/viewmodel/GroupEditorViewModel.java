@@ -14,7 +14,7 @@ import ru.bellintegrator.app.util.Annunciator;
 /**
  * Created by neste_000 on 12.07.2017.
  */
-public class GroupEditorViewModel {
+public class GroupEditorViewModel extends AbstractViewModel{
 
     private static final Logger log = LoggerFactory.getLogger(GroupEditorViewModel.class);
 
@@ -62,8 +62,9 @@ public class GroupEditorViewModel {
                 log.debug("create group: " + group);
                 try {
                     groupService.addGroup(group);
+
                 } catch (DAOException e) {
-                    Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                    showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
                 }
                 break;
 
@@ -71,8 +72,9 @@ public class GroupEditorViewModel {
                 log.debug("update group: " + group);
                 try {
                     groupService.updateGroup(group);
+
                 } catch (DAOException e) {
-                    Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                    showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
                 }
                 break;
 

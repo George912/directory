@@ -33,7 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainViewModel {
+public class MainViewModel extends AbstractViewModel{
 
     private static final Logger log = LoggerFactory.getLogger(MainViewModel.class);
 
@@ -128,7 +128,7 @@ public class MainViewModel {
             contactTableView.setItems(contactObservableList);
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
@@ -147,11 +147,11 @@ public class MainViewModel {
                 contactTableView.setItems(contactObservableList);
 
             } catch (DAOException e) {
-                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
             }
 
         } else {
-            Annunciator.showAlert("Редактирование контакта", "Не выбран контакт для редактирования.", "Выберите контакт в таблице и нажмите кнопку редактирования.");
+            showAlert("Редактирование контакта", "Не выбран контакт для редактирования.", "Выберите контакт в таблице и нажмите кнопку редактирования.");
         }
 
     }
@@ -171,11 +171,11 @@ public class MainViewModel {
                 contactTableView.setItems(contactObservableList);
 
             } catch (DAOException e) {
-                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
             }
 
         } else {
-            Annunciator.showAlert("Удаление контакта", "Не выбран контакт для удаления.", "Выберите контакт в таблице и нажмите кнопку удаления.");
+            showAlert("Удаление контакта", "Не выбран контакт для удаления.", "Выберите контакт в таблице и нажмите кнопку удаления.");
         }
 
     }
@@ -194,7 +194,7 @@ public class MainViewModel {
             groupCheckListView.setItems(groupObservableList);
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
@@ -215,11 +215,11 @@ public class MainViewModel {
                 groupCheckListView.setItems(groupObservableList);
 
             } catch (DAOException e) {
-                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
             }
 
         } else {
-            Annunciator.showAlert("Редактирование группы", "Не выбрана группа для редактирования.", "Выберите группу в таблице и нажмите кнопку редактирования.");
+            showAlert("Редактирование группы", "Не выбрана группа для редактирования.", "Выберите группу в таблице и нажмите кнопку редактирования.");
         }
 
     }
@@ -240,11 +240,11 @@ public class MainViewModel {
                 groupCheckListView.setItems(groupObservableList);
 
             } catch (DAOException e) {
-                Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
             }
 
         } else {
-            Annunciator.showAlert("Удаление группы", "Не выбрана группа для удаления.", "Выберите группу в таблице и нажмите кнопку удаления.");
+            showAlert("Удаление группы", "Не выбрана группа для удаления.", "Выберите группу в таблице и нажмите кнопку удаления.");
         }
 
     }
@@ -382,7 +382,7 @@ public class MainViewModel {
             groupCheckListView.getCheckModel().clearChecks();
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
@@ -429,7 +429,7 @@ public class MainViewModel {
             });
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
 
@@ -459,7 +459,7 @@ public class MainViewModel {
             });
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
@@ -479,13 +479,14 @@ public class MainViewModel {
                 contactTableView.getItems().clear();
                 try {
                     findContactByGroup(checkListView.getCheckModel().getCheckedItems(), contactService.getAllContacts());
+
                 } catch (DAOException e) {
-                    Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+                    showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
                 }
             });
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
 
@@ -519,7 +520,7 @@ public class MainViewModel {
             groupCheckListView.setItems(groupObservableList);
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }

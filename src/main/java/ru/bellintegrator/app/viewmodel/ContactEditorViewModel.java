@@ -25,7 +25,7 @@ import ru.bellintegrator.app.validation.ContactEditorValidator;
 /**
  * Created by neste_000 on 12.07.2017.
  */
-public class ContactEditorViewModel {
+public class ContactEditorViewModel extends AbstractViewModel{
 
     private static final Logger log = LoggerFactory.getLogger(ContactEditorViewModel.class);
 
@@ -110,7 +110,7 @@ public class ContactEditorViewModel {
             groupCheckListView.setItems(groupObservableList);
 
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
@@ -189,8 +189,9 @@ public class ContactEditorViewModel {
 
         try {
             contactService.addContact(contact);
+
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
@@ -214,7 +215,7 @@ public class ContactEditorViewModel {
         try {
             contactService.updateContact(contact);
         } catch (DAOException e) {
-            Annunciator.showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
+            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
     }
