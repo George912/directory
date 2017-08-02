@@ -15,26 +15,24 @@ import java.util.List;
  */
 public class ByNameContactContactHandler extends AbstractContactHandler {
 
-    Contact contact = null;
     List<Contact> contactList = new ArrayList<>();
     private boolean bContactIsFind;
     private int contactId;
     private String name;
-    List<Group> groupList;
     private String lastName;
 
     public ByNameContactContactHandler(String name) {
         this.name = name;
     }
 
-    protected void templateMethod(String qName, Attributes attributes) {
+    protected void templateStartElementSubMethod(String qName, Attributes attributes) {
         if ("contact".equalsIgnoreCase(qName)) {
             contactId = Integer.parseInt(attributes.getValue("id"));
         }
     }
 
     @Override
-    public void characters(char[] ch, int start, int length) throws SAXException {
+    protected void templateCharacters(char[] ch, int start, int length) {
         if (bLastName) {
             lastName = new String(ch, start, length);
             bLastName = false;
@@ -89,7 +87,7 @@ public class ByNameContactContactHandler extends AbstractContactHandler {
 
         } else if (bGroupId && bContactIsFind) {
             if (groupList != null) {
-                groupList.add(new Group(Integer.parseInt(new String(ch, start, length)), "", ""));
+                groupList.add(new Group(Integer.parseInt(new String(ch, start, length))));
             }
             bGroupId = false;
         }
