@@ -1,5 +1,3 @@
-DROP DATABASE IF EXISTS directory;
-
 CREATE DATABASE directory
   WITH OWNER = postgres
        ENCODING = 'UTF8'
