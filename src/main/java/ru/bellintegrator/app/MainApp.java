@@ -17,6 +17,7 @@ import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.util.ConfigLoader;
 import ru.bellintegrator.app.validation.xml.Validator;
 import ru.bellintegrator.app.validation.xml.impl.XMLValidator;
 import ru.bellintegrator.app.viewmodel.AdditionalViewModel;
@@ -31,19 +32,14 @@ import java.util.List;
 public class MainApp extends Application {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+    ConfigLoader configLoader;
 
     @Override
     public void init() throws Exception {
-        String xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups.xml";
-        String xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\groups.xsd";
+        configLoader = ConfigLoader.getInstance();
 
-        validate(xmlFilePath, xsdFilePath);
-
-        xmlFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts.xml";
-        xsdFilePath = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xsd\\contacts.xsd";
-
-        validate(xmlFilePath, xsdFilePath);
-
+        validate(configLoader.getXmlGroupsPath(), configLoader.getXsdGroupsPath());
+        validate(configLoader.getXmlContactsPath(), configLoader.getXsdContactsPath());
     }
 
     public static void main(String[] args) throws Exception {
@@ -65,13 +61,12 @@ public class MainApp extends Application {
     }
 
     private DAOFactoryType showStartWindow() {
-        String fxmlPath = "/fxml/startWindow.fxml";
         StartViewModel viewModel = new StartViewModel(getDaoTypeNameList());
 
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setController(viewModel);
-            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlStartWindowPath()));
             GridPane page = loader.load();
 
             Stage dialogStage = new Stage();
@@ -93,12 +88,10 @@ public class MainApp extends Application {
     }
 
     private void showAdditionalWindow(AdditionalViewModel viewModel, ContactService contactService) {
-        String fxmlPath = "/fxml/additionalWindow.fxml";
-
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setController(viewModel);
-            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlAdditionalWindowPath()));
             AnchorPane page = loader.load();
 
             Stage dialogStage = new Stage();
@@ -118,14 +111,13 @@ public class MainApp extends Application {
     }
 
     private void showMainlWindow(Stage stage, Mode mode, ContactService contactService, GroupService groupService) {
-        String fxmlPath = "/fxml/mainWindow.fxml";
         MainViewModel mainViewModel = new MainViewModel(contactService, groupService, mode);
         AdditionalViewModel additionalViewModel = new AdditionalViewModel(contactService);
 
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setController(mainViewModel);
-            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlMainWindowPath()));
             GridPane page = loader.load();
 
             Scene scene = new Scene(page, 800, 500);

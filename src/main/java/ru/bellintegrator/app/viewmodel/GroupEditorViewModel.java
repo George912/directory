@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.service.GroupService;
-import ru.bellintegrator.app.util.Annunciator;
 
 /**
  * Created by neste_000 on 12.07.2017.

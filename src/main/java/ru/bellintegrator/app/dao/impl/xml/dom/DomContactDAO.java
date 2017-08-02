@@ -53,7 +53,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
             writeToXml(doc);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while creating contact:" + e);
         }
 
         return contact.getId();
@@ -87,7 +87,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
             writeToXml(doc);
 
         } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while removing contact:" + e);
         }
     }
 
@@ -128,7 +128,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
             writeToXml(doc);
 
         } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while updating contact:" + e);
         }
     }
 
@@ -159,14 +159,14 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting contact list:" + e);
         }
 
         return contactList;
     }
 
     @Override
-    public Contact getById(int id) {
+    public Contact getById(int id) throws DAOException {
         Contact contact = null;
 
         try (InputStream inputStream = new FileInputStream(filePath)) {
@@ -192,14 +192,14 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
             }
 
         } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting contact by id:" + e);
         }
 
         return contact;
     }
 
     @Override
-    public List<Contact> getByName(String name) {
+    public List<Contact> getByName(String name) throws DAOException {
         List<Contact> contactList = new ArrayList<>();
 
         try (InputStream inputStream = new FileInputStream(filePath)) {
@@ -225,7 +225,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
             }
 
         } catch (IOException | ParserConfigurationException | SAXException | XPathExpressionException e) {
-            e.printStackTrace();
+            throw new DAOException("Exception while getting contact list by name:" + e);
         }
 
         return contactList;

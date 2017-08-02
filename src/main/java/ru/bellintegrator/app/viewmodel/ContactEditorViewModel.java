@@ -19,7 +19,6 @@ import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
-import ru.bellintegrator.app.util.Annunciator;
 import ru.bellintegrator.app.validation.ContactEditorValidator;
 
 /**

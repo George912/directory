@@ -12,7 +12,6 @@ import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.service.ContactService;
-import ru.bellintegrator.app.util.Annunciator;
 
 /**
  * Created by neste_000 on 21.07.2017.

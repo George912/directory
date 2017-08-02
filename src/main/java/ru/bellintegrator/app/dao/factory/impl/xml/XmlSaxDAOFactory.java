@@ -7,24 +7,23 @@ import ru.bellintegrator.app.dao.impl.xml.sax.SaxGroupDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.util.ConfigLoader;
 
 /**
  * Created by neste_000 on 28.07.2017.
  */
 public class XmlSaxDAOFactory extends DAOFactory {
 
-    //todo serialization/deserialization from config.properties
-    private static final String CONTACT_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\contacts1.xml";
-    private static final String GROUP_FILE = "F:\\Data\\idea\\projects\\directory\\src\\main\\resources\\xml\\groups1.xml";
+    ConfigLoader configLoader = ConfigLoader.getInstance();
 
     @Override
     public GenericDAO<Contact> getContactDAO() throws DAOException {
-        return new SaxContactDAO(CONTACT_FILE);
+        return new SaxContactDAO(configLoader.getXmlContactsPath());
     }
 
     @Override
     public GenericDAO<Group> getGroupDAO() throws DAOException {
-        return new SaxGroupDAO(GROUP_FILE);
+        return new SaxGroupDAO(configLoader.getXmlGroupsPath());
     }
 
 }

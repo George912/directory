@@ -25,7 +25,7 @@ import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
-import ru.bellintegrator.app.util.Annunciator;
+import ru.bellintegrator.app.util.ConfigLoader;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -93,12 +93,12 @@ public class MainViewModel extends AbstractViewModel{
     private ContactService contactService;
     private GroupService groupService;
     private Mode mode;
+    private ConfigLoader configLoader;
 
     public MainViewModel(ContactService contactService, GroupService groupService) {
-
         this.contactService = contactService;
         this.groupService = groupService;
-
+        configLoader = ConfigLoader.getInstance();
     }
 
     public MainViewModel(ContactService contactService, GroupService groupService, Mode mode) {
@@ -263,27 +263,19 @@ public class MainViewModel extends AbstractViewModel{
     }
 
     private void showContactEditor(Contact contact, EditorAction editorAction) {
-
-        String stageTitle = "";
-        String fxmlPath = "/fxml/contactEditorWindow.fxml.fxml";
-        FXMLLoader loader = null;
-        GridPane page = null;
-        Stage dialogStage = null;
-        Scene scene = null;
         ContactEditorViewModel contactEditorController = new ContactEditorViewModel(contactService, groupService);
 
         log.debug("showContactEditor method. Action = " + editorAction + ", contact = " + contact);
 
         try {
-            loader = new FXMLLoader();
+            FXMLLoader loader = new FXMLLoader();
             loader.setController(contactEditorController);
-            loader.setLocation(MainApp.class.getResource(fxmlPath));
-            page = loader.load();
+            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlContactEditorWindowPath()));
+            GridPane page = loader.load();
 
-            dialogStage = new Stage();
-            dialogStage.setTitle(stageTitle);
+            Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
-            scene = new Scene(page, 400, 350);
+            Scene scene = new Scene(page, 400, 350);
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 
@@ -300,34 +292,26 @@ public class MainViewModel extends AbstractViewModel{
     }
 
     private void showGroupEditor(Group group, EditorAction editorAction) {
-
-        String stageTitle = "";
-        String fxmlPath = "/fxml/groupEditorWindow.fxml";
-        FXMLLoader loader = null;
-        GridPane page = null;
-        Stage dialogStage = null;
-        Scene scene = null;
         GroupEditorViewModel groupEditorController = new GroupEditorViewModel(groupService);
 
         log.debug("showGroupEditor method. Action = " + editorAction + ", group = " + group);
 
         try {
 
-            loader = new FXMLLoader();
+            FXMLLoader loader = new FXMLLoader();
             loader.setController(groupEditorController);
-            loader.setLocation(MainApp.class.getResource(fxmlPath));
+            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlGroupEditorWindowPath()));
 
-            dialogStage = new Stage();
-            dialogStage.setTitle(stageTitle);
+            Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
 
-            page = loader.load();
+            GridPane page = loader.load();
 
             groupEditorController.setDialogStage(dialogStage);
             groupEditorController.setGroup(group);
             groupEditorController.setEditorAction(editorAction);
 
-            scene = new Scene(page, 380, 200);
+            Scene scene = new Scene(page, 380, 200);
             dialogStage.setScene(scene);
             dialogStage.setResizable(false);
 

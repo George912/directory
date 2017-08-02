@@ -278,4 +278,5 @@ public class DomGroupDAO extends AbstractDAOWithIdGenerator<Group> {
 
         return groupElement;
     }
+
 }

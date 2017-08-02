@@ -35,6 +35,7 @@
                                     <xs:restriction base="xs:string">
                                         <xs:minLength value="6"/>
                                         <xs:maxLength value="11"/>
+                                        <xs:pattern value="([0-9])*"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>
@@ -44,6 +45,7 @@
                                     <xs:restriction base="xs:string">
                                         <xs:minLength value="6"/>
                                         <xs:maxLength value="11"/>
+                                        <xs:pattern value="([0-9])*"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:element>

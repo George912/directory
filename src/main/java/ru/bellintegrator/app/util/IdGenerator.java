@@ -14,7 +14,7 @@ public class IdGenerator {
     }
 
     private int getMax(List<? extends Identifiable> list) {
-        int maxId = 1;
+        int maxId = 0;
         for (Identifiable identifiable : list) {
             if (identifiable.getId() > maxId) {
                 maxId = identifiable.getId();
@@ -24,9 +24,7 @@ public class IdGenerator {
     }
 
     public int generateId() {
-
         return ++id;
-
     }
 
 }
