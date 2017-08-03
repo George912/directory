@@ -2,6 +2,7 @@ CREATE TABLE "groups" (
   "id" serial NOT NULL,
   "name" varchar(30) NOT NULL,
   "notes" varchar(300) NOT NULL,
+  "owner" int NOT NULL,
   CONSTRAINT groups_pk PRIMARY KEY ("id")
 ) WITH (
 OIDS=FALSE
@@ -18,6 +19,7 @@ CREATE TABLE "contacts" (
   "secondphonenumbertype" varchar(10) NOT NULL,
   "email" varchar(30) NOT NULL,
   "notes" varchar(300) NOT NULL,
+  "owner" int NOT NULL,
   CONSTRAINT contacts_pk PRIMARY KEY ("id")
 ) WITH (
 OIDS=FALSE
@@ -42,25 +44,10 @@ CREATE TABLE "users" (
 OIDS=FALSE
 );
 
-CREATE TABLE "users_groups" (
-  "user_id" int NOT NULL,
-  "group_id" int NOT NULL
-) WITH (
-OIDS=FALSE
-);
+ALTER TABLE "groups" ADD CONSTRAINT "groups_fk0" FOREIGN KEY ("owner") REFERENCES "users"("id");
 
-CREATE TABLE "users_contacts" (
-  "user_id" int NOT NULL,
-  "contact_id" int NOT NULL
-) WITH (
-OIDS=FALSE
-);
+ALTER TABLE "contacts" ADD CONSTRAINT "contacts_fk0" FOREIGN KEY ("owner") REFERENCES "users"("id");
 
 ALTER TABLE "contacts_groups" ADD CONSTRAINT "contacts_groups_fk0" FOREIGN KEY ("contact_id") REFERENCES "contacts"("id");
 ALTER TABLE "contacts_groups" ADD CONSTRAINT "contacts_groups_fk1" FOREIGN KEY ("group_id") REFERENCES "groups"("id");
 
-ALTER TABLE "users_groups" ADD CONSTRAINT "users_groups_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
-ALTER TABLE "users_groups" ADD CONSTRAINT "users_groups_fk1" FOREIGN KEY ("group_id") REFERENCES "groups"("id");
-
-ALTER TABLE "users_contacts" ADD CONSTRAINT "users_contacts_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
-ALTER TABLE "users_contacts" ADD CONSTRAINT "users_contacts_fk1" FOREIGN KEY ("contact_id") REFERENCES "contacts"("id");
