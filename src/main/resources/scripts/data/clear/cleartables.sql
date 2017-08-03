@@ -6,3 +6,6 @@ delete from groups;
 
 -- delete test data from table contacts
 delete from contacts;
+
+-- delete test data from table contacts_groups
+delete from contacts_groups;
