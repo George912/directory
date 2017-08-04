@@ -108,3 +108,24 @@ CREATE OR REPLACE FUNCTION get_contacts_by_name(c_firstname varchar(30), c_owner
     WHERE lower(firstname) = lower(c_firstname)
     AND owner = c_owner;
 $$ LANGUAGE SQL;
+
+-- create functions for triggers
+CREATE OR REPLACE FUNCTION delete_groups_info() RETURNS trigger AS $$
+  BEGIN
+    IF TG_OP = 'DELETE' THEN
+      DELETE FROM contacts_groups
+      WHERE group_id = OLD.id;
+      RETURN OLD;
+    END IF;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION delete_contacts_info() RETURNS trigger AS $$
+  BEGIN
+    IF TG_OP = 'DELETE' THEN
+      DELETE FROM contacts_groups
+      WHERE contact_id = OLD.id;
+      RETURN OLD;
+    END IF;
+  END;
+$$ LANGUAGE plpgsql;
