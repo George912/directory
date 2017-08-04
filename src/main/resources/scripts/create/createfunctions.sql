@@ -129,3 +129,37 @@ CREATE FUNCTION delete_contacts_info() RETURNS trigger AS $$
     END IF;
   END;
 $$ LANGUAGE plpgsql;
+
+-- create analytic functions
+CREATE FUNCTION get_all_users() RETURNS int AS $$
+  DECLARE
+    user_count int;
+  BEGIN
+    SELECT COUNT(*)
+    INTO user_count
+    FROM users;
+    RETURN user_count;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_each_user_contact_count() RETURNS TABLE(user_id int, contact_count bigint) AS $$
+  SELECT u.id as user_id, count(c.id) as contact_count
+  FROM users u
+    INNER JOIN contacts c ON u.id = c."owner"
+  GROUP BY user_id;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_each_user_group_count() RETURNS TABLE(user_id int, group_count bigint) AS $$
+  SELECT u.id as user_id, count(g.id) as group_count
+  FROM users u
+    INNER JOIN groups g ON u.id = g."owner"
+  GROUP BY user_id;
+$$ LANGUAGE SQL;
+
+--не робит
+CREATE OR REPLACE FUNCTION get_avg_user_count_in_each_group() RETURNS TABLE(group_name varchar(30), avg_user_count bigint) AS $$
+  SELECT g."name" as group_name, avg(u.id) as avg_user_count
+  FROM users u
+    INNER JOIN groups g ON u.id = g."owner"
+  GROUP BY group_name;
+$$ LANGUAGE SQL;
