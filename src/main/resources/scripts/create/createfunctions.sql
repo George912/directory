@@ -156,10 +156,26 @@ CREATE OR REPLACE FUNCTION get_each_user_group_count() RETURNS TABLE(user_id int
   GROUP BY user_id;
 $$ LANGUAGE SQL;
 
---не робит
-CREATE OR REPLACE FUNCTION get_avg_user_count_in_each_group() RETURNS TABLE(group_name varchar(30), avg_user_count bigint) AS $$
-  SELECT g."name" as group_name, avg(u.id) as avg_user_count
+CREATE OR REPLACE FUNCTION avg_user_count_in_groups() RETURNS TABLE(avg_count numeric) AS $$
+  SELECT avg(s.user_count) as avg_count
+  FROM(SELECT g."name" as group_name, count(u.id) as user_count
+       FROM users u
+         INNER JOIN groups g ON u.id = g."owner"
+       GROUP BY group_name) s
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_inactive_user_count() RETURNS TABLE(user_id int, contact_count bigint) AS $$
+  SELECT u.id as user_id, count(c.id) as contact_count
   FROM users u
-    INNER JOIN groups g ON u.id = g."owner"
-  GROUP BY group_name;
+    INNER JOIN contacts c ON u.id = c."owner"
+  GROUP BY user_id
+  HAVING count(c.id) < 10;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION avg_users_contact_count() RETURNS TABLE(avg_count numeric) AS $$
+  SELECT avg(s.contact_count) as avg_count
+  FROM(SELECT u.id as user_id, count(c.id) as contact_count
+       FROM users u
+         INNER JOIN contacts c ON u.id = c."owner"
+       GROUP BY user_id) s
 $$ LANGUAGE SQL;

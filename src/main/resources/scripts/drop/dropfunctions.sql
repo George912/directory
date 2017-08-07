@@ -23,3 +23,11 @@ DROP FUNCTION IF EXISTS get_contacts_by_name(varchar(30), int);
 -- delete trigger functions
 DROP FUNCTION IF EXISTS delete_groups_info();
 DROP FUNCTION IF EXISTS delete_contacts_info();
+
+-- delete analytic functions
+DROP FUNCTION IF EXISTS get_all_users();
+DROP FUNCTION IF EXISTS get_each_user_contact_count();
+DROP FUNCTION IF EXISTS get_each_user_group_count();
+DROP FUNCTION IF EXISTS avg_user_count_in_groups();
+DROP FUNCTION IF EXISTS get_inactive_user_count();
+DROP FUNCTION IF EXISTS avg_users_contact_count();

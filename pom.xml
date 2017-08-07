@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.bellintegrator</groupId>
-    <artifactId>app</artifactId>
+    <artifactId>directory</artifactId>
     <name></name>
 
     <packaging>jar</packaging>
@@ -23,6 +23,14 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>mvnrepository</id>
+            <name>mvnrepository</name>
+            <url>https://mvnrepository.com</url>
+        </repository>
+    </repositories>
+
     <build>
 
         <finalName>directory</finalName>
@@ -39,10 +47,95 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.4.1208-jdbc42-atlassian-hosted</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgressql://localhost:5432:directory</url>
+                    <username>postgres</username>
+                    <password>root</password>
+                    <settingsKey>sensibleKey</settingsKey>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>create-db</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <url>jdbc:postgressql://localhost:5432:directory</url>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/resources/scripts/create/createdb.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-schema</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/resources/scripts/create/createtables.sql</srcFile>
+                                <srcFile>src/main/resources/scripts/create/createindexes.sql</srcFile>
+                                <srcFile>src/main/resources/scripts/create/createfunctions.sql</srcFile>
+                                <srcFile>src/main/resources/scripts/create/createtriggers.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>create-data</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/resources/scripts/data/fill/filltables.sql</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>drop-db-after-install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <url>jdbc:postgressql://localhost:5432:postgres</url>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>src/main/resources/scripts/drop/dropdb.sql</srcFile>
+                            </srcFiles>
+                            <onError>continue</onError>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
-
 
     <dependencies>
 
