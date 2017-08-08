@@ -6,13 +6,12 @@
 
     <groupId>ru.bellintegrator</groupId>
     <artifactId>directory</artifactId>
-    <name></name>
+    <name>directory</name>
 
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <organization>
-        <!-- Used as the 'Vendor' for JNLP generation -->
         <name>directory</name>
     </organization>
 
@@ -21,10 +20,14 @@
         <log4j.version>1.2.17</log4j.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <jdbc.url>jdbc:postgresql:directory</jdbc.url>
+        <jdbc.driver>org.postgresql.Driver</jdbc.driver>
+        <jdbc.driver.version>42.1.4</jdbc.driver.version>
+        <jdbc.username>postgres</jdbc.username>
+        <jdbc.password>root</jdbc.password>
     </properties>
 
     <build>
-
         <finalName>directory</finalName>
 
         <plugins>
@@ -45,20 +48,21 @@
                 <version>1.5</version>
 
                 <dependencies>
-                    <!-- JDBC driver for postgresql -->
                     <dependency>
-                        <groupId>postgresql</groupId>
+                        <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <version>9.1-901.jdbc4</version>
+                        <version>${jdbc.driver.version}</version>
                     </dependency>
+
                 </dependencies>
 
                 <configuration>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgressql://localhost:5432:directory</url>
-                    <username>postgres</username>
-                    <password>root</password>
+                    <driver>${jdbc.driver}</driver>
+                    <url>${jdbc.url}</url>
+                    <username>${jdbc.username}</username>
+                    <password>${jdbc.password}</password>
                     <settingsKey>sensibleKey</settingsKey>
+                    <delimiterType>row</delimiterType>
                 </configuration>
 
                 <executions>
@@ -69,7 +73,7 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <url>jdbc:postgressql://localhost:5432:directory</url>
+                            <url>jdbc:postgresql:postgres</url>
                             <autocommit>true</autocommit>
                             <srcFiles>
                                 <srcFile>src/main/resources/scripts/create/createdb.sql</srcFile>
@@ -105,22 +109,6 @@
                             <srcFiles>
                                 <srcFile>src/main/resources/scripts/data/fill/filltables.sql</srcFile>
                             </srcFiles>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>drop-db-after-install</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <url>jdbc:postgressql://localhost:5432:postgres</url>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/scripts/drop/dropdb.sql</srcFile>
-                            </srcFiles>
-                            <onError>continue</onError>
                         </configuration>
                     </execution>
                 </executions>
