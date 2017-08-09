@@ -1,7 +1,5 @@
 package ru.bellintegrator.app.dao.impl;
 
-import ru.bellintegrator.app.dao.GenericDAO;
-
 import java.io.Serializable;
 
 /**

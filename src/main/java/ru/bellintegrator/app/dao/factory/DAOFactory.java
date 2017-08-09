@@ -2,6 +2,7 @@ package ru.bellintegrator.app.dao.factory;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
+import ru.bellintegrator.app.dao.factory.impl.sql.SqlPostgresqlDAOFactory;
 import ru.bellintegrator.app.dao.factory.impl.xml.XmlDomDAOFactory;
 import ru.bellintegrator.app.dao.factory.impl.xml.XmlJacksonDAOFactory;
 import ru.bellintegrator.app.dao.factory.impl.xml.XmlSaxDAOFactory;
@@ -31,17 +32,17 @@ public abstract class DAOFactory {
             case XML_SAX:
                 return new XmlSaxDAOFactory();
 
-            case ORACLE:
-                throw new UnsupportedOperationException("Unable to create ORACLE dao factory. Define ORACLE dao factory class!");
+            case SQL_ORACLE:
+                throw new UnsupportedOperationException("Unable to create ORACLE dao factory. Define SQL_ORACLE dao factory class!");
 
-            case MYSQL:
-                throw new UnsupportedOperationException("Unable to create MYSQL dao factory. Define MYSQL dao factory class!");
+            case SQL_MYSQL:
+                throw new UnsupportedOperationException("Unable to create SQL_MYSQL dao factory. Define SQL_MYSQL dao factory class!");
 
-            case MSSQL:
-                throw new UnsupportedOperationException("Unable to create MSSQL dao factory. Define MSSQL dao factory class!");
+            case SQL_MSSQL:
+                throw new UnsupportedOperationException("Unable to create SQL_MSSQL dao factory. Define SQL_MSSQL dao factory class!");
 
-            case POSTGRESQL:
-                throw new UnsupportedOperationException("Unable to create POSTGRESQL dao factory. Define POSTGRESQL dao factory class!");
+            case SQL_POSTGRESQL:
+                return new SqlPostgresqlDAOFactory();
 
             case FILE:
                 return new MemoryDAOFactory();

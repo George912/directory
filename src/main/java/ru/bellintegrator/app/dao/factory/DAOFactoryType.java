@@ -8,10 +8,10 @@ public enum DAOFactoryType {
     XML_DOM,
     XML_SAX,
     XML_JACKSON,
-    ORACLE,
-    MYSQL,
-    MSSQL,
-    POSTGRESQL,
+    SQL_ORACLE,
+    SQL_MYSQL,
+    SQL_MSSQL,
+    SQL_POSTGRESQL,
     FILE,
     UNKNOWN;
 
