@@ -7,8 +7,10 @@ import ru.bellintegrator.app.dao.factory.impl.xml.XmlDomDAOFactory;
 import ru.bellintegrator.app.dao.factory.impl.xml.XmlJacksonDAOFactory;
 import ru.bellintegrator.app.dao.factory.impl.xml.XmlSaxDAOFactory;
 import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.model.User;
 
 /**
  * Created by neste_000 on 19.07.2017.
@@ -18,6 +20,10 @@ public abstract class DAOFactory {
     public abstract GenericDAO<Contact> getContactDAO() throws DAOException;
 
     public abstract GenericDAO<Group> getGroupDAO() throws DAOException;
+
+    public abstract GenericDAO<User> getUserDAO() throws DAOException;
+
+    public abstract GenericDAO<AnalyticalInfo> getAnalyticalInfoDAO() throws DAOException;
 
     public static DAOFactory getDAOFactory(DAOFactoryType daoFactoryType) {
 

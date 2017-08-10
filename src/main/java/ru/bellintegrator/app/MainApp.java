@@ -15,6 +15,7 @@ import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.util.ConfigLoader;
@@ -38,8 +39,8 @@ public class MainApp extends Application {
     public void init() throws Exception {
         configLoader = ConfigLoader.getInstance();
 
-        validate(configLoader.getXmlGroupsPath(), configLoader.getXsdGroupsPath());
-        validate(configLoader.getXmlContactsPath(), configLoader.getXsdContactsPath());
+//        validate(configLoader.getXmlGroupsPath(), configLoader.getXsdGroupsPath());
+//        validate(configLoader.getXmlContactsPath(), configLoader.getXsdContactsPath());
     }
 
     public static void main(String[] args) throws Exception {
@@ -47,17 +48,21 @@ public class MainApp extends Application {
     }
 
     public void start(Stage stage) throws Exception {
-        DAOFactoryType daoFactoryType = showStartWindow();
+//        DAOFactoryType daoFactoryType = showStartWindow();
+        DAOFactoryType daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
 
         DAOFactory daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
+        GenericDAO<User> userGenericDAO = daoFactory.getUserDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
 
+        userGenericDAO.create(new User(1));
+
         Mode mode = defineMode(daoFactoryType);
-        showMainlWindow(stage, mode, contactService, groupService);
+//        showMainlWindow(stage, mode, contactService, groupService);
     }
 
     private DAOFactoryType showStartWindow() {

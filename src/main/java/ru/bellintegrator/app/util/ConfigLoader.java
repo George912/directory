@@ -27,6 +27,10 @@ public class ConfigLoader {
     private String fxmlMainWindowPath;
     private String fxmlContactEditorWindowPath;
     private String fxmlGroupEditorWindowPath;
+    private String jdbcDriver;
+    private String jdbcUrl;
+    private String jdbcUser;
+    private String jdbcPassword;
 
     private ConfigLoader() {
         Properties property = new Properties();
@@ -48,6 +52,11 @@ public class ConfigLoader {
             fxmlMainWindowPath = property.getProperty("fxml.mainWindow");
             fxmlContactEditorWindowPath = property.getProperty("fxml.contactEditorWindow");
             fxmlGroupEditorWindowPath = property.getProperty("fxml.groupEditorWindow");
+
+            jdbcDriver = property.getProperty("jdbc.driver");
+            jdbcUrl = property.getProperty("jdbc.url");
+            jdbcUser = property.getProperty("jdbc.user");
+            jdbcPassword = property.getProperty("jdbc.password");
 
         } catch (IOException e) {
             logger.debug("Exception while getting properties: " + e);
@@ -98,12 +107,49 @@ public class ConfigLoader {
         return fxmlGroupEditorWindowPath;
     }
 
+    public String getJdbcDriver() {
+        return jdbcDriver;
+    }
+
+    public String getJdbcUrl() {
+        return jdbcUrl;
+    }
+
+    public String getJdbcUser() {
+        return jdbcUser;
+    }
+
+    public String getJdbcPassword() {
+        return jdbcPassword;
+    }
+
     public static ConfigLoader getInstance() {
         if (instance == null) {
             instance = new ConfigLoader();
         }
 
         return instance;
+    }
+
+    @Override
+    public String toString() {
+        return "ConfigLoader{" +
+                "fileContactsPath='" + fileContactsPath + '\'' +
+                ", fileGroupsPath='" + fileGroupsPath + '\'' +
+                ", xmlContactsPath='" + xmlContactsPath + '\'' +
+                ", xmlGroupsPath='" + xmlGroupsPath + '\'' +
+                ", xsdContactsPath='" + xsdContactsPath + '\'' +
+                ", xsdGroupsPath='" + xsdGroupsPath + '\'' +
+                ", fxmlStartWindowPath='" + fxmlStartWindowPath + '\'' +
+                ", fxmlAdditionalWindowPath='" + fxmlAdditionalWindowPath + '\'' +
+                ", fxmlMainWindowPath='" + fxmlMainWindowPath + '\'' +
+                ", fxmlContactEditorWindowPath='" + fxmlContactEditorWindowPath + '\'' +
+                ", fxmlGroupEditorWindowPath='" + fxmlGroupEditorWindowPath + '\'' +
+                ", jdbcDriver='" + jdbcDriver + '\'' +
+                ", jdbcUrl='" + jdbcUrl + '\'' +
+                ", jdbcUser='" + jdbcUser + '\'' +
+                ", jdbcPassword='" + jdbcPassword + '\'' +
+                '}';
     }
 
 }

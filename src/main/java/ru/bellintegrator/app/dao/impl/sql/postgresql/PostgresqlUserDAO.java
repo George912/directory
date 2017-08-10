@@ -1,17 +1,38 @@
 package ru.bellintegrator.app.dao.impl.sql.postgresql;
 
 import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator;
+import ru.bellintegrator.app.dao.impl.sql.Connectable;
 import ru.bellintegrator.app.dao.impl.sql.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.User;
+import ru.bellintegrator.app.util.ConfigLoader;
 
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implements UserDAO{
+public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implements UserDAO, Connectable {
+
+    ConfigLoader configLoader = ConfigLoader.getInstance();
 
     @Override
     public int create(User user) throws DAOException {
-        return 0;
+//        user.setId(generateId());
+        String query = "{call get_all_users()}";
+
+        try (CallableStatement statement = getConnection().prepareCall(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt(1) + "");
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("Exception while preparing statement:" + e);
+        }
+
+        return user.getId();
     }
 
     @Override
@@ -26,7 +47,19 @@ public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implemen
 
     @Override
     public List<User> getAll() throws DAOException {
-        return null;
+        String query = "{call get_all_users()}";
+
+        try (CallableStatement statement = getConnection().prepareCall(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt(1) + "");
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException("Exception while preparing statement:" + e);
+        }
+
     }
 
     @Override

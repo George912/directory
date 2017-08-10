@@ -164,6 +164,14 @@
             <version>4.4.1</version>
         </dependency>
 
+        <!--JDBC-->
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${jdbc.driver.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

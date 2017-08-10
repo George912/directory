@@ -155,7 +155,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- create analytic functions
-CREATE FUNCTION get_all_users()
+CREATE FUNCTION get_user_count()
   RETURNS INT AS $$
 DECLARE
   user_count INT;
@@ -213,31 +213,29 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- CREATE OR REPLACE FUNCTION avg_users_contact_count()
---   RETURNS TABLE(avg_count NUMERIC) AS $$
--- SELECT avg(s.contact_count) AS avg_count
--- FROM (SELECT
---         u.id        AS user_id,
---         count(c.id) AS contact_count
---       FROM users u
---         INNER JOIN contacts c ON u.id = c."owner"
---       GROUP BY user_id) s
--- $$ LANGUAGE SQL;\
+CREATE OR REPLACE FUNCTION avg_users_contact_count()
+  RETURNS TABLE(avg_count NUMERIC) AS $$
+SELECT avg(s.contact_count) AS avg_count
+FROM (SELECT
+        u.id        AS user_id,
+        count(c.id) AS contact_count
+      FROM users u
+        INNER JOIN contacts c ON u.id = c."owner"
+      GROUP BY user_id) s
+$$ LANGUAGE SQL;
 
--- todo не робит
-CREATE FUNCTION avg_users_contact_count()
-  RETURNS DOUBLE PRECISION AS $$
-DECLARE
-  contact_count DOUBLE PRECISION;
-BEGIN
-  SELECT avg(s.contact_count)
-  INTO  contact_count
-  FROM (SELECT
-          u.id        AS user_id,
-          count(c.id) AS contact_count
-        FROM users u
-          INNER JOIN contacts c ON u.id = c."owner"
-        GROUP BY user_id) s
-  RETURN contact_count;
-END;
-$$ LANGUAGE plpgsql;
+-- create functions for table users
+CREATE OR REPLACE FUNCTION get_all_users()
+  RETURNS TABLE(id INT, login VARCHAR(20), password VARCHAR(20),
+                firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
+SELECT *
+FROM users;
+$$ LANGUAGE SQL;
+
+-- не робит
+CREATE OR REPLACE FUNCTION add_user(login VARCHAR(20), password VARCHAR(20),
+                                    firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50))
+  RETURNS VOID AS $$
+INSERT INTO users (id, login, password, firstname, middlename, lastname) VALUES
+  (nextval('users_id_seq'), login, password, firstname, middlename, lastname);
+$$ LANGUAGE SQL;

@@ -5,8 +5,10 @@ import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.xml.sax.SaxContactDAO;
 import ru.bellintegrator.app.dao.impl.xml.sax.SaxGroupDAO;
 import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.util.ConfigLoader;
 
 /**
@@ -24,6 +26,16 @@ public class XmlSaxDAOFactory extends DAOFactory {
     @Override
     public GenericDAO<Group> getGroupDAO() throws DAOException {
         return new SaxGroupDAO(configLoader.getXmlGroupsPath());
+    }
+
+    @Override
+    public GenericDAO<User> getUserDAO() throws DAOException {
+        throw new DAOException(new UnsupportedOperationException("Not allowed here!"));
+    }
+
+    @Override
+    public GenericDAO<AnalyticalInfo> getAnalyticalInfoDAO() throws DAOException {
+        throw new DAOException(new UnsupportedOperationException("Not allowed here!"));
     }
 
 }
