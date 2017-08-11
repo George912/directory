@@ -1,14 +1,17 @@
 package ru.bellintegrator.app.dao.impl.sql;
 
+import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.model.User;
+
 public interface UserDAO {
 
     /**
-     * Проверяет существование пользователя в базе данных.
+     * Получает пользователя по логину и паролю.
      * @param login
      * @param password
      * @return
      */
-    boolean isExist(String login, String password);
+    User getUserByCredential(String login, String password) throws DAOException;
 
     /**
      * Получает id пользователя в базе данных.
@@ -16,6 +19,6 @@ public interface UserDAO {
      * @param password
      * @return
      */
-    int getUserId(String login, String password);
+    int getUserId(String login, String password) throws DAOException;
 
 }

@@ -59,7 +59,7 @@ public class MainApp extends Application {
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
 
-        userGenericDAO.create(new User(1));
+        userGenericDAO.create(new User(1, "l11","p11"));
 
         Mode mode = defineMode(daoFactoryType);
 //        showMainlWindow(stage, mode, contactService, groupService);

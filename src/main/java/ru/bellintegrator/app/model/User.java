@@ -16,6 +16,11 @@ public class User implements Serializable, Identifiable {
 
     public User(int id) {
         this.id = id;
+        this.login = "";
+        this.password = "";
+        this.firstName = "";
+        this.middleName = "";
+        this.lastName = "";
     }
 
     public User(int id, String login, String password) {

@@ -232,10 +232,60 @@ SELECT *
 FROM users;
 $$ LANGUAGE SQL;
 
--- не робит
 CREATE OR REPLACE FUNCTION add_user(login VARCHAR(20), password VARCHAR(20),
                                     firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50))
   RETURNS VOID AS $$
 INSERT INTO users (id, login, password, firstname, middlename, lastname) VALUES
   (nextval('users_id_seq'), login, password, firstname, middlename, lastname);
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION update_user(u_id INT, u_login VARCHAR(20), u_password VARCHAR(20),
+                                       u_firstname VARCHAR(30), u_middlename VARCHAR(30), u_lastname VARCHAR(50))
+  RETURNS VOID AS $$
+UPDATE users
+SET login = u_login,
+  password = u_password,
+  firstname = u_firstname,
+  middlename = u_middlename,
+  lastname = u_lastname
+WHERE id = u_id;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_user_by_name(u_firstname VARCHAR(30))
+  RETURNS TABLE(id INT, login VARCHAR(20), password VARCHAR(20),
+                firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
+SELECT *
+FROM users
+WHERE lower(firstname) = lower(u_firstname);
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION delete_user(u_id INT)
+  RETURNS VOID AS $$
+DELETE FROM users
+WHERE id = u_id;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_user_by_id(u_id INT)
+  RETURNS TABLE(id INT, login VARCHAR(20), password VARCHAR(20),
+                firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
+SELECT *
+FROM users
+WHERE id = u_id;
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_user_id(u_login VARCHAR(20), u_password VARCHAR(20))
+  RETURNS INT AS $$
+SELECT id
+FROM users
+WHERE lower(login) = lower(u_login)
+      AND lower(password) = lower(u_password);
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION get_user_by_credential(u_login VARCHAR(20), u_password VARCHAR(20))
+  RETURNS TABLE(id INT, login VARCHAR(20), password VARCHAR(20),
+                firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
+SELECT *
+FROM users
+WHERE lower(login) = lower(u_login)
+      AND lower(password) = lower(u_password);
 $$ LANGUAGE SQL;
