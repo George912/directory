@@ -2,6 +2,7 @@ package ru.bellintegrator.app.dao.factory.impl.xml;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
 import ru.bellintegrator.app.dao.impl.xml.sax.SaxContactDAO;
 import ru.bellintegrator.app.dao.impl.xml.sax.SaxGroupDAO;
 import ru.bellintegrator.app.exception.DAOException;
@@ -34,7 +35,7 @@ public class XmlSaxDAOFactory extends DAOFactory {
     }
 
     @Override
-    public GenericDAO<AnalyticalInfo> getAnalyticalInfoDAO() throws DAOException {
+    public AnalyticalInfoDAO getAnalyticalInfoDAO() throws DAOException {
         throw new DAOException(new UnsupportedOperationException("Not allowed here!"));
     }
 

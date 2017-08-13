@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane prefHeight="150.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="Пароль" GridPane.rowIndex="1" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+         <children>
+            <Button id="loginButton" fx:id="loginButton" layoutX="116.0" layoutY="13.0" mnemonicParsing="false" onAction="#loginButtonClick" text="Войти" />
+            <Button id="cancelButton" fx:id="cancelButton" layoutX="201.0" layoutY="13.0" mnemonicParsing="false" onAction="#cancelButtonClick" text="Отмена" />
+         </children>
+      </AnchorPane>
+      <Label text="Логин" />
+      <TextField id="loginTextField" fx:id="loginTextField" GridPane.columnIndex="1" />
+      <PasswordField id="pwdPasswordField" fx:id="pwdPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+   </children>
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.0" minWidth="10.0" prefWidth="81.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="284.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <padding>
+      <Insets left="10.0" right="10.0" />
+   </padding>
+</GridPane>

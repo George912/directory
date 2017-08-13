@@ -23,6 +23,7 @@ import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
+import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.util.ConfigLoader;
@@ -33,9 +34,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class MainViewModel extends AbstractViewModel{
+public class MainViewModel extends AbstractViewModel {
 
     private static final Logger log = LoggerFactory.getLogger(MainViewModel.class);
+    private User user;
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -106,6 +108,11 @@ public class MainViewModel extends AbstractViewModel{
         this.mode = mode;
     }
 
+    public MainViewModel(ContactService contactService, GroupService groupService, Mode mode, User user) {
+        this(contactService, groupService, mode);
+        this.user = user;
+    }
+
     @FXML
     private void initialize() {
         initContactTableView();
@@ -124,7 +131,7 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
 
         try {
-            contactObservableList.addAll(contactService.getAllContacts());
+            contactObservableList.addAll(contactService.getAllContacts(user.getId()));
             contactTableView.setItems(contactObservableList);
 
         } catch (DAOException e) {
@@ -142,7 +149,7 @@ public class MainViewModel extends AbstractViewModel{
             showContactEditor(contact, EditorAction.UPDATE);
             ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
             try {
-                contactObservableList.addAll(contactService.getAllContacts());
+                contactObservableList.addAll(contactService.getAllContacts(user.getId()));
                 contactTableView.getItems().clear();
                 contactTableView.setItems(contactObservableList);
 
@@ -167,7 +174,7 @@ public class MainViewModel extends AbstractViewModel{
                 contactService.deleteContact(contact);
 
                 ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-                contactObservableList.addAll(contactService.getAllContacts());
+                contactObservableList.addAll(contactService.getAllContacts(user.getId()));
                 contactTableView.setItems(contactObservableList);
 
             } catch (DAOException e) {
@@ -187,8 +194,7 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            //todo: int ownerId
-            groupObservableList.addAll(groupService.getAllGroups(1));
+            groupObservableList.addAll(groupService.getAllGroups(user.getId()));
 
             groupTableView.setItems(groupObservableList);
             checkListView.setItems(groupObservableList);
@@ -209,8 +215,7 @@ public class MainViewModel extends AbstractViewModel{
             showGroupEditor(group, EditorAction.UPDATE);
             ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
             try {
-                //todo: int ownerId
-                groupObservableList.addAll(groupService.getAllGroups(1));
+                groupObservableList.addAll(groupService.getAllGroups(user.getId()));
                 groupTableView.getItems().clear();
                 groupTableView.setItems(groupObservableList);
                 checkListView.setItems(groupObservableList);
@@ -237,8 +242,7 @@ public class MainViewModel extends AbstractViewModel{
                 groupService.deleteGroup(group);
                 ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
-                //todo: int ownerId
-                groupObservableList.addAll(groupService.getAllGroups(1));
+                groupObservableList.addAll(groupService.getAllGroups(user.getId()));
                 groupTableView.setItems(groupObservableList);
                 checkListView.setItems(groupObservableList);
                 groupCheckListView.setItems(groupObservableList);
@@ -253,13 +257,12 @@ public class MainViewModel extends AbstractViewModel{
 
     }
 
-    //todo: search by name and ownerId
     @FXML
     private void searchContact() {
         ObservableList<Contact> items = FXCollections.observableArrayList();
 
         try {
-            items.addAll(contactService.getContactsByName(contactSearchField.getText(), 1));
+            items.addAll(contactService.getContactsByName(contactSearchField.getText(), user.getId()));
             contactTableView.setItems(items);
 
         } catch (DAOException e) {
@@ -268,7 +271,7 @@ public class MainViewModel extends AbstractViewModel{
     }
 
     private void showContactEditor(Contact contact, EditorAction editorAction) {
-        ContactEditorViewModel contactEditorController = new ContactEditorViewModel(contactService, groupService);
+        ContactEditorViewModel contactEditorController = new ContactEditorViewModel(contactService, groupService, user);
 
         log.debug("showContactEditor method. Action = " + editorAction + ", contact = " + contact);
 
@@ -366,8 +369,7 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            //todo: int ownerId
-            groupObservableList.addAll(groupService.getAllGroups(1));
+            groupObservableList.addAll(groupService.getAllGroups(user.getId()));
             groupCheckListView.setItems(groupObservableList);
             groupCheckListView.getCheckModel().clearChecks();
 
@@ -382,7 +384,7 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
 
         try {
-            contactObservableList.addAll(contactService.getAllContacts());
+            contactObservableList.addAll(contactService.getAllContacts(user.getId()));
             log.debug("initContactTableView method. Items = " + contactObservableList);
 
             contactTableView.setItems(contactObservableList);
@@ -430,8 +432,7 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            //todo: int ownerId
-            groupObservableList.addAll(groupService.getAllGroups(1));
+            groupObservableList.addAll(groupService.getAllGroups(user.getId()));
 
             log.debug("initGroupTableView method. Items = " + groupObservableList);
 
@@ -460,8 +461,7 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            //todo: int ownerId
-            groupObservableList.addAll(groupService.getAllGroups(1));
+            groupObservableList.addAll(groupService.getAllGroups(user.getId()));
 
             log.debug("initCheckListView method. Items = " + groupObservableList);
 
@@ -470,7 +470,7 @@ public class MainViewModel extends AbstractViewModel{
             checkListView.getCheckModel().getCheckedItems().addListener((ListChangeListener<Group>) c -> {
                 contactTableView.getItems().clear();
                 try {
-                    findContactByGroup(checkListView.getCheckModel().getCheckedItems(), contactService.getAllContacts());
+                    findContactByGroup(checkListView.getCheckModel().getCheckedItems(), contactService.getAllContacts(user.getId()));
 
                 } catch (DAOException e) {
                     showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
@@ -506,8 +506,7 @@ public class MainViewModel extends AbstractViewModel{
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         try {
-            //todo: int ownerId
-            groupObservableList.addAll(groupService.getAllGroups(1));
+            groupObservableList.addAll(groupService.getAllGroups(user.getId()));
             log.debug("initGroupCheckListView method. Items = " + groupObservableList);
 
             groupCheckListView.setItems(groupObservableList);

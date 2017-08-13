@@ -27,6 +27,7 @@ public class ConfigLoader {
     private String fxmlMainWindowPath;
     private String fxmlContactEditorWindowPath;
     private String fxmlGroupEditorWindowPath;
+    private String fxmlAuthorizationWindowPath;
     private String jdbcDriver;
     private String jdbcUrl;
     private String jdbcUser;
@@ -52,6 +53,7 @@ public class ConfigLoader {
             fxmlMainWindowPath = property.getProperty("fxml.mainWindow");
             fxmlContactEditorWindowPath = property.getProperty("fxml.contactEditorWindow");
             fxmlGroupEditorWindowPath = property.getProperty("fxml.groupEditorWindow");
+            fxmlAuthorizationWindowPath = property.getProperty("fxml.authorizationWindow");
 
             jdbcDriver = property.getProperty("jdbc.driver");
             jdbcUrl = property.getProperty("jdbc.url");
@@ -123,6 +125,10 @@ public class ConfigLoader {
         return jdbcPassword;
     }
 
+    public String getFxmlAuthorizationWindowPath() {
+        return fxmlAuthorizationWindowPath;
+    }
+
     public static ConfigLoader getInstance() {
         if (instance == null) {
             instance = new ConfigLoader();
@@ -145,6 +151,7 @@ public class ConfigLoader {
                 ", fxmlMainWindowPath='" + fxmlMainWindowPath + '\'' +
                 ", fxmlContactEditorWindowPath='" + fxmlContactEditorWindowPath + '\'' +
                 ", fxmlGroupEditorWindowPath='" + fxmlGroupEditorWindowPath + '\'' +
+                ", fxmlAuthorizationWindowPath='" + fxmlAuthorizationWindowPath + '\'' +
                 ", jdbcDriver='" + jdbcDriver + '\'' +
                 ", jdbcUrl='" + jdbcUrl + '\'' +
                 ", jdbcUser='" + jdbcUser + '\'' +

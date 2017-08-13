@@ -9,8 +9,8 @@ public class AnalyticalInfoService {
 
     AnalyticalInfoDAO dao;
 
-    public AnalyticalInfoService(GenericDAO<AnalyticalInfo> dao) {
-        this.dao = (AnalyticalInfoDAO) dao;
+    public AnalyticalInfoService(AnalyticalInfoDAO dao) {
+        this.dao = dao;
     }
 
     public AnalyticalInfo collectAnalyticalInfo() throws DAOException {

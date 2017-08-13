@@ -51,9 +51,8 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
-    //todo: int ownerId
-    public List<Contact> getAllContacts() throws DAOException {
-        List<Contact> contactList = contactGenericDAO.getAll(1);
+    public List<Contact> getAllContacts(int ownerId) throws DAOException {
+        List<Contact> contactList = contactGenericDAO.getAll(ownerId);
 
         updateContactGroups(contactList);
 
@@ -132,9 +131,8 @@ public class ContactService implements ContactListChangeObservable {
         }
     }
 
-    //todo: int ownerId
-    public void deleteGroupFromContacts(Group group) throws DAOException {
-        List<Contact> contactList = contactGenericDAO.getAll(1);
+    public void deleteGroupFromContacts(Group group, int ownerId) throws DAOException {
+        List<Contact> contactList = contactGenericDAO.getAll(ownerId);
         for (Contact contact : contactList) {
             if (contact.getGroupList().remove(group)) {
                 contactGenericDAO.update(contact);
@@ -159,4 +157,5 @@ public class ContactService implements ContactListChangeObservable {
             }
         }
     }
+
 }

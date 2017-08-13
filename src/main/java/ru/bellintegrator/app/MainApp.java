@@ -1,6 +1,7 @@
 package ru.bellintegrator.app;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -13,7 +14,7 @@ import org.xml.sax.SAXException;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
-import ru.bellintegrator.app.model.AnalyticalInfo;
+import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
@@ -25,6 +26,7 @@ import ru.bellintegrator.app.util.ConfigLoader;
 import ru.bellintegrator.app.validation.xml.Validator;
 import ru.bellintegrator.app.validation.xml.impl.XMLValidator;
 import ru.bellintegrator.app.viewmodel.AdditionalViewModel;
+import ru.bellintegrator.app.viewmodel.AuthorizationViewModel;
 import ru.bellintegrator.app.viewmodel.MainViewModel;
 import ru.bellintegrator.app.viewmodel.StartViewModel;
 
@@ -33,25 +35,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainApp extends Application {
+public class MainApp extends Application implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
-    ConfigLoader configLoader;
-
-    @Override
-    public void init() throws Exception {
-        configLoader = ConfigLoader.getInstance();
-
-//        validate(configLoader.getXmlGroupsPath(), configLoader.getXsdGroupsPath());
-//        validate(configLoader.getXmlContactsPath(), configLoader.getXsdContactsPath());
-    }
+    private final ConfigLoader configLoader = ConfigLoader.getInstance();
 
     public static void main(String[] args) throws Exception {
-        launch(args);
+        Platform.runLater(new Runnable() {
+            public void run() {
+                try {
+                    new MainApp().start(new Stage());
+                    new MainApp().start(new Stage());
+                    new MainApp().start(new Stage());
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            }
+        });
     }
 
     public void start(Stage stage) throws Exception {
-//        DAOFactoryType daoFactoryType = showStartWindow();
         DAOFactoryType daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
 
         DAOFactory daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
@@ -59,7 +62,7 @@ public class MainApp extends Application {
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         GenericDAO<User> userGenericDAO = daoFactory.getUserDAO();
-        GenericDAO<AnalyticalInfo> infoGenericDAO = daoFactory.getAnalyticalInfoDAO();
+        AnalyticalInfoDAO infoGenericDAO = daoFactory.getAnalyticalInfoDAO();
 
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
@@ -67,10 +70,12 @@ public class MainApp extends Application {
         UserService userService = new UserService(userGenericDAO);
         AnalyticalInfoService infoService = new AnalyticalInfoService(infoGenericDAO);
 
-        System.out.println(infoService.collectAnalyticalInfo());
+        Mode mode = Mode.READ_WRITE;
+        User user = showAuthorizationWindow(userService);
 
-        Mode mode = defineMode(daoFactoryType);
-//        showMainlWindow(stage, mode, contactService, groupService);
+        if (user != null) {
+            showMainlWindow(stage, mode, contactService, groupService, user);
+        }
     }
 
     private DAOFactoryType showStartWindow() {
@@ -100,6 +105,31 @@ public class MainApp extends Application {
         return DAOFactoryType.UNKNOWN;
     }
 
+    private User showAuthorizationWindow(UserService userService) {
+        AuthorizationViewModel viewModel = new AuthorizationViewModel(userService);
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(viewModel);
+            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlAuthorizationWindowPath()));
+            GridPane page = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            Scene scene = new Scene(page, 400, 150);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+            viewModel.setStage(dialogStage);
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            log.debug(e.getMessage());
+        }
+
+        return viewModel.getUser();
+    }
+
     private void showAdditionalWindow(AdditionalViewModel viewModel, ContactService contactService) {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -123,9 +153,9 @@ public class MainApp extends Application {
         }
     }
 
-    private void showMainlWindow(Stage stage, Mode mode, ContactService contactService, GroupService groupService) {
-        MainViewModel mainViewModel = new MainViewModel(contactService, groupService, mode);
-        AdditionalViewModel additionalViewModel = new AdditionalViewModel(contactService);
+    private void showMainlWindow(Stage stage, Mode mode, ContactService contactService, GroupService groupService, User user) {
+        MainViewModel mainViewModel = new MainViewModel(contactService, groupService, mode, user);
+        AdditionalViewModel additionalViewModel = new AdditionalViewModel(contactService, user);
 
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -178,6 +208,11 @@ public class MainApp extends Application {
         }
 
         return Mode.READ_ONLY;
+    }
+
+    @Override
+    public void run() {
+        launch();
     }
 
 }

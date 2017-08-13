@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.ContactService;
 
 /**
@@ -42,11 +43,15 @@ public class AdditionalViewModel extends AbstractViewModel implements ContactLis
     private ContactService contactService;
 
     private static final Logger log = LoggerFactory.getLogger(AdditionalViewModel.class);
+    private User user;
 
     public AdditionalViewModel(ContactService contactService) {
-
         this.contactService = contactService;
+    }
 
+    public AdditionalViewModel(ContactService contactService, User user) {
+        this(contactService);
+        this.user = user;
     }
 
     @FXML
@@ -62,7 +67,7 @@ public class AdditionalViewModel extends AbstractViewModel implements ContactLis
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
 
         try {
-            contactObservableList.addAll(contactService.getAllContacts());
+            contactObservableList.addAll(contactService.getAllContacts(user.getId()));
 
             log.debug("listChanged method. Items = " + contactObservableList);
 
@@ -79,7 +84,7 @@ public class AdditionalViewModel extends AbstractViewModel implements ContactLis
 
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
         try {
-            contactObservableList.addAll(contactService.getAllContacts());
+            contactObservableList.addAll(contactService.getAllContacts(user.getId()));
             log.debug("initializeContactTableView method. Items = " + contactObservableList);
 
             contactTableView.setItems(contactObservableList);

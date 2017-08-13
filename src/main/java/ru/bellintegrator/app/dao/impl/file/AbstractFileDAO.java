@@ -1,6 +1,5 @@
 package ru.bellintegrator.app.dao.impl.file;
 
-import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGeneratorImpl;
 import ru.bellintegrator.app.exception.DAOException;
 
 import java.io.*;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * Created by neste_000 on 01.08.2017.
  */
-public abstract class AbstractFileDAO<T extends Serializable> extends AbstractDAOWithIdGeneratorImpl<T> {
+public abstract class AbstractFileDAO<T extends Serializable> extends ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator<T> {
 
     private String filePath;
 

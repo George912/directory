@@ -18,12 +18,10 @@ public class PostgresqlGroupDAO extends AbstractDAOWithIdGenerator<Group> implem
 
     private final static Object monitor = new Object();
 
-    //todo: idgenerator
     @Override
     public int create(Group group) throws DAOException {
         synchronized (monitor) {
             String query = "{call add_group(?, ?, ?)}";
-//        user.setId(generateId());
 
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setString(1, group.getName());

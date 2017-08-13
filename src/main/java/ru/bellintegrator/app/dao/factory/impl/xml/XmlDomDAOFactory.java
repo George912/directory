@@ -2,15 +2,14 @@ package ru.bellintegrator.app.dao.factory.impl.xml;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
 import ru.bellintegrator.app.dao.impl.xml.dom.DomContactDAO;
 import ru.bellintegrator.app.dao.impl.xml.dom.DomGroupDAO;
 import ru.bellintegrator.app.exception.DAOException;
-import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.util.ConfigLoader;
-import ru.bellintegrator.app.util.IdGenerator;
 
 /**
  * Created by neste_000 on 28.07.2017.
@@ -43,7 +42,7 @@ public class XmlDomDAOFactory extends DAOFactory {
     }
 
     @Override
-    public GenericDAO<AnalyticalInfo> getAnalyticalInfoDAO() throws DAOException {
+    public AnalyticalInfoDAO getAnalyticalInfoDAO() throws DAOException {
         throw new DAOException(new UnsupportedOperationException("Not allowed here!"));
     }
 

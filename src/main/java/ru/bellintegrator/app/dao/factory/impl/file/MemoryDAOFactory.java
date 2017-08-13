@@ -4,6 +4,7 @@ import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.file.FileContactDAO;
 import ru.bellintegrator.app.dao.impl.file.FileGroupDAO;
+import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.model.Contact;
@@ -43,7 +44,7 @@ public class MemoryDAOFactory extends DAOFactory {
     }
 
     @Override
-    public GenericDAO<AnalyticalInfo> getAnalyticalInfoDAO() throws DAOException {
+    public AnalyticalInfoDAO getAnalyticalInfoDAO() throws DAOException {
         throw new DAOException(new UnsupportedOperationException("Not allowed here!"));
     }
 

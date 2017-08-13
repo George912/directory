@@ -17,6 +17,7 @@ import ru.bellintegrator.app.exception.PhoneNumberFormatException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
+import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.validation.ContactEditorValidator;
@@ -24,9 +25,10 @@ import ru.bellintegrator.app.validation.ContactEditorValidator;
 /**
  * Created by neste_000 on 12.07.2017.
  */
-public class ContactEditorViewModel extends AbstractViewModel{
+public class ContactEditorViewModel extends AbstractViewModel {
 
     private static final Logger log = LoggerFactory.getLogger(ContactEditorViewModel.class);
+    private User user;
 
     @FXML
     private TextField lastNameTextField;
@@ -97,6 +99,11 @@ public class ContactEditorViewModel extends AbstractViewModel{
 
     }
 
+    public ContactEditorViewModel(ContactService contactService, GroupService groupService, User user) {
+        this(contactService, groupService);
+        this.user = user;
+    }
+
     @FXML
     private void initialize() {
 
@@ -105,8 +112,7 @@ public class ContactEditorViewModel extends AbstractViewModel{
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         try {
-            //todo: int ownerId
-            groupObservableList.addAll(groupService.getAllGroups(1));
+            groupObservableList.addAll(groupService.getAllGroups(user.getId()));
             groupCheckListView.setItems(groupObservableList);
 
         } catch (DAOException e) {

@@ -18,12 +18,10 @@ public class PostgresqlContactDAO extends AbstractDAOWithIdGenerator<Contact> im
 
     private final static Object monitor = new Object();
 
-    //todo: idgenerator
     @Override
     public int create(Contact contact) throws DAOException {
         synchronized (monitor) {
             String query = "{call add_contact(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
-//        user.setId(generateId());
 
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setString(1, contact.getFirstName());
