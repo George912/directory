@@ -13,13 +13,14 @@ import org.xml.sax.SAXException;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
-import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
 import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
+import ru.bellintegrator.app.service.AnalyticalInfoService;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.service.UserService;
 import ru.bellintegrator.app.util.ConfigLoader;
 import ru.bellintegrator.app.validation.xml.Validator;
 import ru.bellintegrator.app.validation.xml.impl.XMLValidator;
@@ -52,18 +53,21 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 //        DAOFactoryType daoFactoryType = showStartWindow();
         DAOFactoryType daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
+
         DAOFactory daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
+
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         GenericDAO<User> userGenericDAO = daoFactory.getUserDAO();
         GenericDAO<AnalyticalInfo> infoGenericDAO = daoFactory.getAnalyticalInfoDAO();
+
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
+        UserService userService = new UserService(userGenericDAO);
+        AnalyticalInfoService infoService = new AnalyticalInfoService(infoGenericDAO);
 
-        AnalyticalInfoDAO dao = (AnalyticalInfoDAO) infoGenericDAO;
-
-        System.out.println(dao.getEachUserGroupCount());
+        System.out.println(infoService.collectAnalyticalInfo());
 
         Mode mode = defineMode(daoFactoryType);
 //        showMainlWindow(stage, mode, contactService, groupService);

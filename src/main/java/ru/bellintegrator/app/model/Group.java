@@ -16,9 +16,7 @@ public class Group implements Serializable, Identifiable {
     private int ownerId;
 
     public Group() {
-
         this(0, "");
-
     }
 
     public Group(int id) {

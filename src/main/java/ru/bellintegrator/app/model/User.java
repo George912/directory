@@ -11,8 +11,12 @@ public class User implements Serializable, Identifiable {
     private String login;
     private String password;
     private String firstName;
-    private String lastName;
     private String middleName;
+    private String lastName;
+
+    public User() {
+        this(0);
+    }
 
     public User(int id) {
         this.id = id;
@@ -29,11 +33,11 @@ public class User implements Serializable, Identifiable {
         this.password = password;
     }
 
-    public User(int id, String login, String password, String firstName, String lastName, String middleName) {
+    public User(int id, String login, String password, String firstName, String middleName, String lastName) {
         this(id, login, password);
         this.firstName = firstName;
-        this.lastName = lastName;
         this.middleName = middleName;
+        this.lastName = lastName;
     }
 
     public int getId() {
