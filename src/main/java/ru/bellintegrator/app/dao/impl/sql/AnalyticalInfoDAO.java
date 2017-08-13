@@ -10,9 +10,9 @@ public interface AnalyticalInfoDAO extends GenericDAO<AnalyticalInfo>{
 
     int getUserCount() throws DAOException;
 
-    Map<Integer, Integer> getEachUserContactCount() throws DAOException;
+    Map<Integer, Long> getEachUserContactCount() throws DAOException;
 
-    Map<Integer, Integer> getEachUserGroupCount() throws DAOException;
+    Map<Integer, Long> getEachUserGroupCount() throws DAOException;
 
     double getAvgUserCountInGroup() throws DAOException;
 

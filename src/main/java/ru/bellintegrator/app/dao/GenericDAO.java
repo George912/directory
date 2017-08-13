@@ -16,10 +16,10 @@ public interface GenericDAO<T extends Serializable> {
 
     void update(T t) throws DAOException;
 
-    List<T> getAll() throws DAOException;
+    List<T> getAll(int ownerId) throws DAOException;
 
-    T getById(int id) throws DAOException;
+    T getById(int id, int ownerId) throws DAOException;
 
-    List<T> getByName(String name) throws DAOException;
+    List<T> getByName(String name, int ownerId) throws DAOException;
 
 }

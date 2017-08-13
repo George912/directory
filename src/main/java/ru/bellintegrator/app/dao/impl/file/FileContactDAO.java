@@ -74,7 +74,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
     }
 
     @Override
-    public List<Contact> getAll() throws DAOException {
+    public List<Contact> getAll(int ownerId) throws DAOException {
 
         return deserialize();
 
@@ -87,7 +87,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
     }
 
     @Override
-    public Contact getById(int id) {
+    public Contact getById(int id, int ownerId) {
 
         try {
             List<Contact> contactList = deserialize();
@@ -106,7 +106,7 @@ public class FileContactDAO extends AbstractFileDAO<Contact> {
     }
 
     @Override
-    public List<Contact> getByName(String name) {
+    public List<Contact> getByName(String name, int ownerId) {
         List<Contact> contacts = new ArrayList<>();
 
         try {

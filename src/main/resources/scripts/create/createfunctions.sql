@@ -1,8 +1,8 @@
 -- create functions for table groups
-CREATE OR REPLACE FUNCTION add_group(name VARCHAR(30), notes VARCHAR(300), owner INT)
+CREATE OR REPLACE FUNCTION add_group(name VARCHAR(30), notes VARCHAR(300), ownerId INT)
   RETURNS VOID AS $$
-INSERT INTO groups (id, name, notes, owner) VALUES
-  (nextval('groups_id_seq'), name, notes, owner)
+INSERT INTO groups (id, name, notes, ownerId) VALUES
+  (nextval('groups_id_seq'), name, notes, ownerId)
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION update_group(group_id INT, group_name VARCHAR(30), group_notes VARCHAR(300), group_owner INT)
@@ -11,37 +11,37 @@ UPDATE groups
 SET name = group_name,
   notes  = group_notes
 WHERE id = group_id
-      AND owner = group_owner
+      AND ownerId = group_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_all_groups(g_owner INT)
-  RETURNS TABLE(id INT, name VARCHAR(30), notes VARCHAR(300), owner INT) AS $$
+  RETURNS TABLE(id INT, name VARCHAR(30), notes VARCHAR(300), ownerId INT) AS $$
 SELECT *
 FROM groups
-WHERE owner = g_owner
+WHERE ownerId = g_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_group_by_id(group_id INT, g_owner INT)
-  RETURNS TABLE(id INT, name VARCHAR(30), notes VARCHAR(300), owner INT) AS $$
+  RETURNS TABLE(id INT, name VARCHAR(30), notes VARCHAR(300), ownerId INT) AS $$
 SELECT *
 FROM groups
 WHERE id = group_id
-      AND owner = g_owner
+      AND ownerId = g_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_groups_by_name(group_name VARCHAR(30), g_owner INT)
-  RETURNS TABLE(id INT, name VARCHAR(30), notes VARCHAR(300), owner INT) AS $$
+  RETURNS TABLE(id INT, name VARCHAR(30), notes VARCHAR(300), ownerId INT) AS $$
 SELECT *
 FROM groups
 WHERE lower(name) = lower(group_name)
-      AND owner = g_owner
+      AND ownerId = g_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION delete_group(group_id INT, g_owner INT)
   RETURNS VOID AS $$
 DELETE FROM groups
 WHERE id = group_id
-      AND owner = g_owner
+      AND ownerId = g_owner
 $$ LANGUAGE SQL;
 
 -- create functions for table contacts_groups
@@ -63,12 +63,12 @@ CREATE OR REPLACE FUNCTION add_contact(firstname             VARCHAR(30), middle
                                        firstphonenumber      VARCHAR(11), firstphonenumbertype VARCHAR(10),
                                        secondphonenumber     VARCHAR(11),
                                        secondphonenumbertype VARCHAR(10), email VARCHAR(30), notes VARCHAR(300),
-                                       owner                 INT)
+                                       ownerId                 INT)
   RETURNS VOID AS $$
 INSERT INTO contacts (id, firstname, middlename, lastname, firstphonenumber, firstphonenumbertype,
-                      secondphonenumber, secondphonenumbertype, email, notes, owner) VALUES
+                      secondphonenumber, secondphonenumbertype, email, notes, ownerId) VALUES
   (nextval('contacts_id_seq'), firstname, middlename, lastname, firstphonenumber, firstphonenumbertype,
-                               secondphonenumber, secondphonenumbertype, email, notes, owner)
+                               secondphonenumber, secondphonenumbertype, email, notes, ownerId)
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION update_contact(c_id                    INT, c_firstname VARCHAR(30),
@@ -88,45 +88,45 @@ SET firstname           = c_firstname,
   secondphonenumbertype = c_secondphonenumbertype,
   email                 = c_email,
   notes                 = c_notes,
-  owner                 = c_owner
+  ownerId                 = c_owner
 WHERE id = c_id
-      AND owner = c_owner
+      AND ownerId = c_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION delete_contact(contact_id INT, contact_owner INT)
   RETURNS VOID AS $$
 DELETE FROM contacts
 WHERE id = contact_id
-      AND owner = contact_owner
+      AND ownerId = contact_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_all_contacts(contact_owner INT)
   RETURNS TABLE(id                    INT, firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50),
                 firstphonenumber      VARCHAR(11), firstphonenumbertype VARCHAR(10), secondphonenumber VARCHAR(11),
-                secondphonenumbertype VARCHAR(10), email VARCHAR(30), notes VARCHAR(300), owner INT) AS $$
+                secondphonenumbertype VARCHAR(10), email VARCHAR(30), notes VARCHAR(300), ownerId INT) AS $$
 SELECT *
 FROM contacts
-WHERE owner = contact_owner
+WHERE ownerId = contact_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_contact_by_id(contact_id INT, contact_owner INT)
   RETURNS TABLE(id                    INT, firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50),
                 firstphonenumber      VARCHAR(11), firstphonenumbertype VARCHAR(10), secondphonenumber VARCHAR(11),
-                secondphonenumbertype VARCHAR(10), email VARCHAR(30), notes VARCHAR(300), owner INT) AS $$
+                secondphonenumbertype VARCHAR(10), email VARCHAR(30), notes VARCHAR(300), ownerId INT) AS $$
 SELECT *
 FROM contacts
 WHERE id = contact_id
-      AND owner = contact_owner
+      AND ownerId = contact_owner
 $$ LANGUAGE SQL;
 
 CREATE OR REPLACE FUNCTION get_contacts_by_name(c_firstname VARCHAR(30), c_owner INT)
   RETURNS TABLE(id                    INT, firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50),
                 firstphonenumber      VARCHAR(11), firstphonenumbertype VARCHAR(10), secondphonenumber VARCHAR(11),
-                secondphonenumbertype VARCHAR(10), email VARCHAR(30), notes VARCHAR(300), owner INT) AS $$
+                secondphonenumbertype VARCHAR(10), email VARCHAR(30), notes VARCHAR(300), ownerId INT) AS $$
 SELECT *
 FROM contacts
 WHERE lower(firstname) = lower(c_firstname)
-      AND owner = c_owner
+      AND ownerId = c_owner
 $$ LANGUAGE SQL;
 
 -- create functions for triggers
@@ -173,7 +173,7 @@ SELECT
   u.id        AS user_id,
   count(c.id) AS contact_count
 FROM users u
-  INNER JOIN contacts c ON u.id = c."owner"
+  INNER JOIN contacts c ON u.id = c."ownerId"
 GROUP BY user_id
 $$ LANGUAGE SQL;
 
@@ -183,7 +183,7 @@ SELECT
   u.id        AS user_id,
   count(g.id) AS group_count
 FROM users u
-  INNER JOIN groups g ON u.id = g."owner"
+  INNER JOIN groups g ON u.id = g."ownerId"
 GROUP BY user_id
 $$ LANGUAGE SQL;
 
@@ -194,7 +194,7 @@ FROM (SELECT
         g."name"    AS group_name,
         count(u.id) AS user_count
       FROM users u
-        INNER JOIN groups g ON u.id = g."owner"
+        INNER JOIN groups g ON u.id = g."ownerId"
       GROUP BY group_name) s
 $$ LANGUAGE SQL;
 
@@ -206,7 +206,7 @@ BEGIN
   SELECT COUNT(u.id)
   INTO user_count
   FROM users u
-    INNER JOIN contacts c ON u.id = c."owner"
+    INNER JOIN contacts c ON u.id = c."ownerId"
   GROUP BY u.id
   HAVING count(c.id) < 10;
   RETURN user_count;
@@ -220,7 +220,7 @@ FROM (SELECT
         u.id        AS user_id,
         count(c.id) AS contact_count
       FROM users u
-        INNER JOIN contacts c ON u.id = c."owner"
+        INNER JOIN contacts c ON u.id = c."ownerId"
       GROUP BY user_id) s
 $$ LANGUAGE SQL;
 

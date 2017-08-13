@@ -120,7 +120,7 @@ public class DomGroupDAO extends AbstractDAOWithIdGenerator<Group> {
     }
 
     @Override
-    public List<Group> getAll() throws DAOException {
+    public List<Group> getAll(int ownerId) throws DAOException {
         List<Group> groupList = new ArrayList<>();
         Group group;
 
@@ -154,7 +154,7 @@ public class DomGroupDAO extends AbstractDAOWithIdGenerator<Group> {
     }
 
     @Override
-    public Group getById(int id) {
+    public Group getById(int id, int ownerId) {
         Group group = null;
 
         try (InputStream inputStream = new FileInputStream(filePath)) {
@@ -191,7 +191,7 @@ public class DomGroupDAO extends AbstractDAOWithIdGenerator<Group> {
     }
 
     @Override
-    public List<Group> getByName(String name) {
+    public List<Group> getByName(String name, int ownerId) {
         List<Group> groupList = new ArrayList<>();
         Group group = null;
 

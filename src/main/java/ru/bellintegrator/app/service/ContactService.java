@@ -51,8 +51,9 @@ public class ContactService implements ContactListChangeObservable {
 
     }
 
+    //todo: int ownerId
     public List<Contact> getAllContacts() throws DAOException {
-        List<Contact> contactList = contactGenericDAO.getAll();
+        List<Contact> contactList = contactGenericDAO.getAll(1);
 
         updateContactGroups(contactList);
 
@@ -63,7 +64,7 @@ public class ContactService implements ContactListChangeObservable {
     private void fillGroupData(Group group) throws DAOException {
         Group groupWithData = null;
         try {
-            groupWithData = groupService.getGroupById(group.getId());
+            groupWithData = groupService.getGroupById(group.getId(), group.getOwnerId());
             group.setName(groupWithData.getName());
             group.setNotes(groupWithData.getNotes());
 
@@ -78,11 +79,11 @@ public class ContactService implements ContactListChangeObservable {
         }
     }
 
-    public Contact getContactById(int id) throws DAOException {
+    public Contact getContactById(int id, int ownerId) throws DAOException {
         Contact contact = null;
 
         try {
-            contact = contactGenericDAO.getById(id);
+            contact = contactGenericDAO.getById(id, ownerId);
             List<Contact> contactList = new ArrayList<>();
             contactList.add(contact);
             updateContactGroups(contactList);
@@ -94,11 +95,11 @@ public class ContactService implements ContactListChangeObservable {
         return contact;
     }
 
-    public List<Contact> getContactsByName(String name) throws DAOException {
+    public List<Contact> getContactsByName(String name, int ownerId) throws DAOException {
         List<Contact> contactList = null;
 
         try {
-            contactList = contactGenericDAO.getByName(name);
+            contactList = contactGenericDAO.getByName(name, ownerId);
             updateContactGroups(contactList);
 
         } catch (DAOException e) {
@@ -131,8 +132,9 @@ public class ContactService implements ContactListChangeObservable {
         }
     }
 
+    //todo: int ownerId
     public void deleteGroupFromContacts(Group group) throws DAOException {
-        List<Contact> contactList = contactGenericDAO.getAll();
+        List<Contact> contactList = contactGenericDAO.getAll(1);
         for (Contact contact : contactList) {
             if (contact.getGroupList().remove(group)) {
                 contactGenericDAO.update(contact);

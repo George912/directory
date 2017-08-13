@@ -13,6 +13,8 @@ import org.xml.sax.SAXException;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
+import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
@@ -50,16 +52,18 @@ public class MainApp extends Application {
     public void start(Stage stage) throws Exception {
 //        DAOFactoryType daoFactoryType = showStartWindow();
         DAOFactoryType daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
-
         DAOFactory daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
         GenericDAO<Contact> contactGenericDAO = daoFactory.getContactDAO();
         GenericDAO<Group> groupGenericDAO = daoFactory.getGroupDAO();
         GenericDAO<User> userGenericDAO = daoFactory.getUserDAO();
+        GenericDAO<AnalyticalInfo> infoGenericDAO = daoFactory.getAnalyticalInfoDAO();
         ContactService contactService = new ContactService(contactGenericDAO);
         GroupService groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
 
-        userGenericDAO.create(new User(1, "l11","p11"));
+        AnalyticalInfoDAO dao = (AnalyticalInfoDAO) infoGenericDAO;
+
+        System.out.println(dao.getEachUserGroupCount());
 
         Mode mode = defineMode(daoFactoryType);
 //        showMainlWindow(stage, mode, contactService, groupService);

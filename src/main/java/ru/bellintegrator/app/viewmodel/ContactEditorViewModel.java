@@ -105,7 +105,8 @@ public class ContactEditorViewModel extends AbstractViewModel{
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         try {
-            groupObservableList.addAll(groupService.getAllGroups());
+            //todo: int ownerId
+            groupObservableList.addAll(groupService.getAllGroups(1));
             groupCheckListView.setItems(groupObservableList);
 
         } catch (DAOException e) {

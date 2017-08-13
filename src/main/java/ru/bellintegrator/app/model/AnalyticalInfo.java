@@ -7,8 +7,8 @@ public class AnalyticalInfo implements Serializable{
 
     private static final long serialVersionUID = -9048196856895867642L;
     private int userCount;
-    private Map<Integer, Integer> eachUserContactCount;
-    private Map<Integer, Integer> eachUserGroupCount;
+    private Map<Integer, Long> eachUserContactCount;
+    private Map<Integer, Long> eachUserGroupCount;
     private double avgUserCountInGroups;
     private int inactiveUserCount;
     private double avgUsersContactCount;
@@ -21,19 +21,19 @@ public class AnalyticalInfo implements Serializable{
         this.userCount = userCount;
     }
 
-    public Map<Integer, Integer> getEachUserContactCount() {
+    public Map<Integer, Long> getEachUserContactCount() {
         return eachUserContactCount;
     }
 
-    public void setEachUserContactCount(Map<Integer, Integer> eachUserContactCount) {
+    public void setEachUserContactCount(Map<Integer, Long> eachUserContactCount) {
         this.eachUserContactCount = eachUserContactCount;
     }
 
-    public Map<Integer, Integer> getEachUserGroupCount() {
+    public Map<Integer, Long> getEachUserGroupCount() {
         return eachUserGroupCount;
     }
 
-    public void setEachUserGroupCount(Map<Integer, Integer> eachUserGroupCount) {
+    public void setEachUserGroupCount(Map<Integer, Long> eachUserGroupCount) {
         this.eachUserGroupCount = eachUserGroupCount;
     }
 

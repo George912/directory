@@ -67,7 +67,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
     }
 
     @Override
-    public List<Group> getAll() throws DAOException {
+    public List<Group> getAll(int ownerId) throws DAOException {
 
         return deserialize();
 
@@ -78,7 +78,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
     }
 
     @Override
-    public Group getById(int id) {
+    public Group getById(int id, int ownerId) {
         try {
             List<Group> groupList = deserialize();
 
@@ -96,7 +96,7 @@ public class FileGroupDAO extends AbstractFileDAO<Group> {
     }
 
     @Override
-    public List<Group> getByName(String name) {
+    public List<Group> getByName(String name, int ownerId) {
         List<Group> groups = new ArrayList<>();
 
         try {

@@ -46,7 +46,7 @@ public class SaxGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    public List<Group> getAll() throws DAOException {
+    public List<Group> getAll(int ownerId) throws DAOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         List<Group> groupList = null;
 
@@ -64,7 +64,7 @@ public class SaxGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    public Group getById(int id) throws DAOException {
+    public Group getById(int id, int ownerId) throws DAOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         Group group = null;
 
@@ -82,7 +82,7 @@ public class SaxGroupDAO implements GenericDAO<Group> {
     }
 
     @Override
-    public List<Group> getByName(String name) throws DAOException {
+    public List<Group> getByName(String name, int ownerId) throws DAOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         List<Group> groupList = null;
 

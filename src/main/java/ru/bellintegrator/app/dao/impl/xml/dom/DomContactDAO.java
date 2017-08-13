@@ -133,7 +133,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
     }
 
     @Override
-    public List<Contact> getAll() throws DAOException {
+    public List<Contact> getAll(int ownerId) throws DAOException {
         List<Contact> contactList = new ArrayList<>();
         Contact contact;
 
@@ -166,7 +166,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
     }
 
     @Override
-    public Contact getById(int id) throws DAOException {
+    public Contact getById(int id, int ownerId) throws DAOException {
         Contact contact = null;
 
         try (InputStream inputStream = new FileInputStream(filePath)) {
@@ -199,7 +199,7 @@ public class DomContactDAO extends AbstractDAOWithIdGenerator<Contact> {
     }
 
     @Override
-    public List<Contact> getByName(String name) throws DAOException {
+    public List<Contact> getByName(String name, int ownerId) throws DAOException {
         List<Contact> contactList = new ArrayList<>();
 
         try (InputStream inputStream = new FileInputStream(filePath)) {

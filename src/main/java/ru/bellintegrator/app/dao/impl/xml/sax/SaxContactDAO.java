@@ -46,7 +46,7 @@ public class SaxContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    public List<Contact> getAll() throws DAOException {
+    public List<Contact> getAll(int ownerId) throws DAOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         List<Contact> contactList = null;
 
@@ -64,7 +64,7 @@ public class SaxContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    public Contact getById(int id) throws DAOException {
+    public Contact getById(int id, int ownerId) throws DAOException {
         Contact contact = null;
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
@@ -82,7 +82,7 @@ public class SaxContactDAO implements GenericDAO<Contact> {
     }
 
     @Override
-    public List<Contact> getByName(String name) throws DAOException {
+    public List<Contact> getByName(String name, int ownerId) throws DAOException {
         List<Contact> contactList = null;
         SAXParserFactory factory = SAXParserFactory.newInstance();
 

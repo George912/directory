@@ -23,9 +23,10 @@ public class JacksonGroupDAO extends AbstractDAOWithIdGenerator<Group> {
         this.filePath = filePath;
     }
 
+    //todo: int ownerId
     @Override
     public int create(Group group) throws DAOException {
-        List<Group> groupList = getAll();
+        List<Group> groupList = getAll(1);
 
         if (!groupList.contains(group)) {
             groupList.add(group);
@@ -35,9 +36,10 @@ public class JacksonGroupDAO extends AbstractDAOWithIdGenerator<Group> {
         return group.getId();
     }
 
+    //todo: int ownerId
     @Override
     public void delete(Group group) throws DAOException {
-        List<Group> groupList = getAll();
+        List<Group> groupList = getAll(1);
 
         if (groupList.remove(group)) {
             save(groupList);
@@ -46,7 +48,8 @@ public class JacksonGroupDAO extends AbstractDAOWithIdGenerator<Group> {
 
     @Override
     public void update(Group group) throws DAOException {
-        List<Group> groupList = getAll();
+        //todo: int ownerId
+        List<Group> groupList = getAll(1);
 
         for (int i = 0; i < groupList.size(); i++) {
             Group editableGroup = groupList.get(i);
@@ -61,7 +64,7 @@ public class JacksonGroupDAO extends AbstractDAOWithIdGenerator<Group> {
     }
 
     @Override
-    public List<Group> getAll() throws DAOException {
+    public List<Group> getAll(int ownerId) throws DAOException {
         XmlMapper xmlMapper = new XmlMapper();
         List<ru.bellintegrator.app.model.Group> groupList = null;
 
@@ -98,9 +101,10 @@ public class JacksonGroupDAO extends AbstractDAOWithIdGenerator<Group> {
     }
 
     @Override
-    public Group getById(int id) throws DAOException {
+    public Group getById(int id, int ownerId) throws DAOException {
         try {
-            List<Group> groupList = getAll();
+            //todo: int ownerId
+            List<Group> groupList = getAll(1);
 
             for (Group group : groupList) {
                 if (group.getId() == id) {
@@ -116,11 +120,12 @@ public class JacksonGroupDAO extends AbstractDAOWithIdGenerator<Group> {
     }
 
     @Override
-    public List<Group> getByName(String name) throws DAOException {
+    public List<Group> getByName(String name, int ownerId) throws DAOException {
         List<Group> groups = new ArrayList<>();
 
         try {
-            List<Group> groupList = getAll();
+            //todo: int ownerId
+            List<Group> groupList = getAll(1);
 
             for (Group group : groupList) {
                 if (group.getName().equalsIgnoreCase(name)) {

@@ -13,6 +13,7 @@ public class Group implements Serializable, Identifiable {
     private int id;
     private String name;
     private String notes;
+    private int ownerId;
 
     public Group() {
 
@@ -34,6 +35,11 @@ public class Group implements Serializable, Identifiable {
         this.notes = notes;
     }
 
+    public Group(int id, String name, String notes, int ownerId) {
+        this(id, name, notes);
+        this.ownerId = ownerId;
+    }
+
     public String getName() {
         return name;
     }
@@ -50,6 +56,14 @@ public class Group implements Serializable, Identifiable {
         this.notes = notes;
     }
 
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
     @Override
     public int getId() {
         return id;
@@ -60,11 +74,6 @@ public class Group implements Serializable, Identifiable {
     }
 
     @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -72,9 +81,9 @@ public class Group implements Serializable, Identifiable {
         Group group = (Group) o;
 
         if (id != group.id) return false;
+        if (ownerId != group.ownerId) return false;
         if (name != null ? !name.equals(group.name) : group.name != null) return false;
-        return !(notes != null ? !notes.equals(group.notes) : group.notes != null);
-
+        return notes != null ? notes.equals(group.notes) : group.notes == null;
     }
 
     @Override
@@ -82,7 +91,18 @@ public class Group implements Serializable, Identifiable {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
+        result = 31 * result + ownerId;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Group{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", notes='" + notes + '\'' +
+                ", ownerId=" + ownerId +
+                '}';
     }
 
 }

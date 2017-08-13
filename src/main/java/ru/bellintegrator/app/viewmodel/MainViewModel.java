@@ -187,7 +187,8 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            groupObservableList.addAll(groupService.getAllGroups());
+            //todo: int ownerId
+            groupObservableList.addAll(groupService.getAllGroups(1));
 
             groupTableView.setItems(groupObservableList);
             checkListView.setItems(groupObservableList);
@@ -208,7 +209,8 @@ public class MainViewModel extends AbstractViewModel{
             showGroupEditor(group, EditorAction.UPDATE);
             ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
             try {
-                groupObservableList.addAll(groupService.getAllGroups());
+                //todo: int ownerId
+                groupObservableList.addAll(groupService.getAllGroups(1));
                 groupTableView.getItems().clear();
                 groupTableView.setItems(groupObservableList);
                 checkListView.setItems(groupObservableList);
@@ -234,7 +236,9 @@ public class MainViewModel extends AbstractViewModel{
             try {
                 groupService.deleteGroup(group);
                 ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
-                groupObservableList.addAll(groupService.getAllGroups());
+
+                //todo: int ownerId
+                groupObservableList.addAll(groupService.getAllGroups(1));
                 groupTableView.setItems(groupObservableList);
                 checkListView.setItems(groupObservableList);
                 groupCheckListView.setItems(groupObservableList);
@@ -249,12 +253,13 @@ public class MainViewModel extends AbstractViewModel{
 
     }
 
+    //todo: search by name and ownerId
     @FXML
     private void searchContact() {
         ObservableList<Contact> items = FXCollections.observableArrayList();
 
         try {
-            items.addAll(contactService.getContactsByName(contactSearchField.getText()));
+            items.addAll(contactService.getContactsByName(contactSearchField.getText(), 1));
             contactTableView.setItems(items);
 
         } catch (DAOException e) {
@@ -361,7 +366,8 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            groupObservableList.addAll(groupService.getAllGroups());
+            //todo: int ownerId
+            groupObservableList.addAll(groupService.getAllGroups(1));
             groupCheckListView.setItems(groupObservableList);
             groupCheckListView.getCheckModel().clearChecks();
 
@@ -424,7 +430,8 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            groupObservableList.addAll(groupService.getAllGroups());
+            //todo: int ownerId
+            groupObservableList.addAll(groupService.getAllGroups(1));
 
             log.debug("initGroupTableView method. Items = " + groupObservableList);
 
@@ -453,7 +460,8 @@ public class MainViewModel extends AbstractViewModel{
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
-            groupObservableList.addAll(groupService.getAllGroups());
+            //todo: int ownerId
+            groupObservableList.addAll(groupService.getAllGroups(1));
 
             log.debug("initCheckListView method. Items = " + groupObservableList);
 
@@ -498,7 +506,8 @@ public class MainViewModel extends AbstractViewModel{
 
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         try {
-            groupObservableList.addAll(groupService.getAllGroups());
+            //todo: int ownerId
+            groupObservableList.addAll(groupService.getAllGroups(1));
             log.debug("initGroupCheckListView method. Items = " + groupObservableList);
 
             groupCheckListView.setItems(groupObservableList);

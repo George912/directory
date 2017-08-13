@@ -43,17 +43,17 @@ public class GroupService {
 
     }
 
-    public List<Group> getAllGroups() throws DAOException {
+    public List<Group> getAllGroups(int ownerId) throws DAOException {
 
-        return groupGenericDAO.getAll();
+        return groupGenericDAO.getAll(ownerId);
 
     }
 
-    public Group getGroupById(int id) throws DAOException {
+    public Group getGroupById(int id, int ownerId) throws DAOException {
         Group group = null;
 
         try {
-            group = groupGenericDAO.getById(id);
+            group = groupGenericDAO.getById(id, ownerId);
         } catch (DAOException e) {
             throw new DAOException("Exception while getting group list by id: " + e);
         }
@@ -61,11 +61,11 @@ public class GroupService {
         return group;
     }
 
-    public List<Group> getGroupsByName(String name) throws DAOException {
+    public List<Group> getGroupsByName(String name, int ownerId) throws DAOException {
         List<Group> groupList = null;
 
         try {
-            groupList = groupGenericDAO.getByName(name);
+            groupList = groupGenericDAO.getByName(name, ownerId);
         } catch (DAOException e) {
             throw new DAOException("Exception while getting group list by name: " + e);
         }

@@ -25,9 +25,10 @@ public class JacksonContactDAO extends AbstractDAOWithIdGenerator<Contact> {
         this.filePath = filePath;
     }
 
+    //todo: int ownerId
     @Override
     public int create(Contact contact) throws DAOException {
-        List<Contact> contactList = getAll();
+        List<Contact> contactList = getAll(1);
 
         if (!contactList.contains(contact)) {
             contactList.add(contact);
@@ -37,18 +38,20 @@ public class JacksonContactDAO extends AbstractDAOWithIdGenerator<Contact> {
         return contact.getId();
     }
 
+    //todo: int ownerId
     @Override
     public void delete(Contact contact) throws DAOException {
-        List<Contact> contactList = getAll();
+        List<Contact> contactList = getAll(1);
 
         if (contactList.remove(contact)) {
             save(contactList);
         }
     }
 
+    //todo: int ownerId
     @Override
     public void update(Contact contact) throws DAOException {
-        List<Contact> contactList = getAll();
+        List<Contact> contactList = getAll(1);
 
         for (int i = 0; i < contactList.size(); i++) {
             Contact updContact = contactList.get(i);
@@ -71,7 +74,7 @@ public class JacksonContactDAO extends AbstractDAOWithIdGenerator<Contact> {
     }
 
     @Override
-    public List<Contact> getAll() throws DAOException {
+    public List<Contact> getAll(int ownerId) throws DAOException {
         XmlMapper xmlMapper = new XmlMapper();
         List<ru.bellintegrator.app.model.Contact> contactList = null;
 
@@ -108,10 +111,11 @@ public class JacksonContactDAO extends AbstractDAOWithIdGenerator<Contact> {
         }
     }
 
+    //todo: int ownerId
     @Override
-    public Contact getById(int id) throws DAOException {
+    public Contact getById(int id, int ownerId) throws DAOException {
         try {
-            List<Contact> contactList = getAll();
+            List<Contact> contactList = getAll(1);
 
             for (Contact contact : contactList) {
                 if (contact.getId() == id) {
@@ -126,12 +130,13 @@ public class JacksonContactDAO extends AbstractDAOWithIdGenerator<Contact> {
         return null;
     }
 
+    //todo: int ownerId
     @Override
-    public List<Contact> getByName(String name) throws DAOException {
+    public List<Contact> getByName(String name, int ownerId) throws DAOException {
         List<Contact> contactList = new ArrayList<>();
 
         try {
-            List<Contact> contacts = getAll();
+            List<Contact> contacts = getAll(1);
 
             for (Contact contact : contacts) {
                 if (contact.getFirstName().equalsIgnoreCase(name)) {

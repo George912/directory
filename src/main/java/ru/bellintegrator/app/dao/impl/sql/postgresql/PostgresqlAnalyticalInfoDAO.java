@@ -1,11 +1,17 @@
 package ru.bellintegrator.app.dao.impl.sql.postgresql;
 
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
 import ru.bellintegrator.app.dao.impl.sql.Connectable;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -30,17 +36,17 @@ public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectab
     }
 
     @Override
-    public List<AnalyticalInfo> getAll() throws DAOException {
+    public List<AnalyticalInfo> getAll(int ownerId) throws DAOException {
         throw new DAOException(new UnsupportedOperationException("GetAll operation not supported."));
     }
 
     @Override
-    public AnalyticalInfo getById(int id) throws DAOException {
+    public AnalyticalInfo getById(int id, int ownerId) throws DAOException {
         throw new DAOException(new UnsupportedOperationException("GetById operation not supported."));
     }
 
     @Override
-    public List<AnalyticalInfo> getByName(String name) throws DAOException {
+    public List<AnalyticalInfo> getByName(String name, int ownerId) throws DAOException {
         throw new DAOException(new UnsupportedOperationException("GetByName operation not supported."));
     }
 
@@ -48,54 +54,59 @@ public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectab
     public int getUserCount() throws DAOException {
         String query = "{call get_user_count()}";
         int userCount = -1;
+        QueryRunner runner = new QueryRunner();
 
-        try (CallableStatement statement = getConnection().prepareCall(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-                //todo: use row mapper
-                while (resultSet.next()) {
-                }
+        try (Connection connection = getConnection()) {
+            ResultSetHandler<Integer> handler = new ScalarHandler<>(1);
+            List<Integer> lists = runner.execute(connection, query, handler);
+            userCount = lists.get(0);
 
         } catch (SQLException e) {
-            throw new DAOException("Exception while getting user count:" + e);
+            throw new DAOException("Exception while creating group:" + e);
         }
 
         return userCount;
     }
 
     @Override
-    public Map<Integer, Integer> getEachUserContactCount() throws DAOException {
+    public Map<Integer, Long> getEachUserContactCount() throws DAOException {
         String query = "{call get_each_user_contact_count()}";
-        Map<Integer, Integer> info = new HashMap<>();
+        Map<Integer, Long> info = new HashMap<>();
 
-        try (CallableStatement statement = getConnection().prepareCall(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        QueryRunner runner = new QueryRunner();
 
-            //todo: use row mapper
-            while (resultSet.next()) {
+        try (Connection connection = getConnection()) {
+            ResultSetHandler<List<Map<String, Object>>> handler = new MapListHandler();
+            List<List<Map<String, Object>>> lists = runner.execute(connection, query, handler);
+
+            for(Map<String, Object> map: lists.get(0)){
+                info.put((Integer) map.get("user_id"), (Long) map.get("contact_count"));
             }
 
         } catch (SQLException e) {
-            throw new DAOException("Exception while getting each user contact count:" + e);
+            throw new DAOException("Exception while creating group:" + e);
         }
 
         return info;
     }
 
     @Override
-    public Map<Integer, Integer> getEachUserGroupCount() throws DAOException {
+    public Map<Integer, Long> getEachUserGroupCount() throws DAOException {
         String query = "{call get_each_user_group_count()}";
-        Map<Integer, Integer> info = new HashMap<>();
+        Map<Integer, Long> info = new HashMap<>();
 
-        try (CallableStatement statement = getConnection().prepareCall(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        QueryRunner runner = new QueryRunner();
 
-            //todo: use row mapper
-            while (resultSet.next()) {
+        try (Connection connection = getConnection()) {
+            ResultSetHandler<List<Map<String, Object>>> handler = new MapListHandler();
+            List<List<Map<String, Object>>> lists = runner.execute(connection, query, handler);
+
+            for(Map<String, Object> map: lists.get(0)){
+                info.put((Integer) map.get("user_id"), (Long) map.get("group_count"));
             }
 
         } catch (SQLException e) {
-            throw new DAOException("Exception while getting each user group count:" + e);
+            throw new DAOException("Exception while creating group:" + e);
         }
 
         return info;
@@ -104,36 +115,34 @@ public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectab
     @Override
     public double getAvgUserCountInGroup() throws DAOException {
         String query = "{call avg_user_count_in_groups()}";
-        double userCount = -1;
+        double avgUserCount = -1;
+        QueryRunner runner = new QueryRunner();
 
-        try (CallableStatement statement = getConnection().prepareCall(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            //todo: use row mapper
-            while (resultSet.next()) {
-            }
+        try (Connection connection = getConnection()) {
+            ResultSetHandler<BigDecimal> handler = new ScalarHandler<>(1);
+            List<BigDecimal> lists = runner.execute(connection, query, handler);
+            avgUserCount = lists.get(0).doubleValue();
 
         } catch (SQLException e) {
-            throw new DAOException("Exception while getting avg user count in group:" + e);
+            throw new DAOException("Exception while creating group:" + e);
         }
 
-        return userCount;
+        return avgUserCount;
     }
 
     @Override
     public int getInactiveUserCount() throws DAOException {
         String query = "{call get_inactive_user_count()}";
         int userCount = -1;
+        QueryRunner runner = new QueryRunner();
 
-        try (CallableStatement statement = getConnection().prepareCall(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            //todo: use row mapper
-            while (resultSet.next()) {
-            }
+        try (Connection connection = getConnection()) {
+            ResultSetHandler<Integer> handler = new ScalarHandler<>(1);
+            List<Integer> lists = runner.execute(connection, query, handler);
+            userCount = lists.get(0);
 
         } catch (SQLException e) {
-            throw new DAOException("Exception while getting inactive user count:" + e);
+            throw new DAOException("Exception while creating group:" + e);
         }
 
         return userCount;
@@ -142,20 +151,20 @@ public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectab
     @Override
     public double getAvgUserContactsCount() throws DAOException {
         String query = "{call avg_users_contact_count()}";
-        double userCount = -1;
+        double count = -1;
 
-        try (CallableStatement statement = getConnection().prepareCall(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        QueryRunner runner = new QueryRunner();
 
-            //todo: use row mapper
-            while (resultSet.next()) {
-            }
+        try (Connection connection = getConnection()) {
+            ResultSetHandler<BigDecimal> handler = new ScalarHandler<>(1);
+            List<BigDecimal> lists = runner.execute(connection, query, handler);
+            count = lists.get(0).doubleValue();
 
         } catch (SQLException e) {
-            throw new DAOException("Exception while getting avg user contacts count:" + e);
+            throw new DAOException("Exception while creating group:" + e);
         }
 
-        return userCount;
+        return count;
     }
 
 }

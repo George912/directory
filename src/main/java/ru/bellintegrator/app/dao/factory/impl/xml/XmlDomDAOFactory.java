@@ -19,18 +19,20 @@ public class XmlDomDAOFactory extends DAOFactory {
 
     ConfigLoader configLoader = ConfigLoader.getInstance();
 
+    //todo: int ownerId
     @Override
     public GenericDAO<Contact> getContactDAO() throws DAOException {
         DomContactDAO dao = new DomContactDAO(configLoader.getXmlContactsPath());
-        dao.setIdGenerator(new IdGenerator(dao.getAll()));
+//        dao.setIdGenerator(new IdGenerator(dao.getAll()));
 
         return dao;
     }
 
+    //todo: int ownerId
     @Override
     public GenericDAO<Group> getGroupDAO() throws DAOException {
         DomGroupDAO dao = new DomGroupDAO(configLoader.getXmlGroupsPath());
-        dao.setIdGenerator(new IdGenerator(dao.getAll()));
+//        dao.setIdGenerator(new IdGenerator(dao.getAll()));
 
         return dao;
     }

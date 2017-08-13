@@ -18,13 +18,17 @@
     <properties>
         <slf4j.version>1.7.12</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
+
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+
         <jdbc.url>jdbc:postgresql:directory</jdbc.url>
         <jdbc.driver>org.postgresql.Driver</jdbc.driver>
         <jdbc.driver.version>42.1.4</jdbc.driver.version>
         <jdbc.username>postgres</jdbc.username>
         <jdbc.password>root</jdbc.password>
+
+        <dbutils.version>1.7</dbutils.version>
     </properties>
 
     <build>
@@ -170,6 +174,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${jdbc.driver.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbutils</groupId>
+            <artifactId>commons-dbutils</artifactId>
+            <version>${dbutils.version}</version>
         </dependency>
 
     </dependencies>

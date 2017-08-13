@@ -23,6 +23,7 @@ public class Contact implements Serializable, Identifiable {
     private String email;
     private String notes;
     private List<Group> groupList = new ArrayList<>();
+    private int ownerId;
 
     public Contact() {
 
@@ -55,6 +56,11 @@ public class Contact implements Serializable, Identifiable {
         this.secondPhoneNumberType = secondPhoneNumberType;
         this.email = email;
         this.notes = notes;
+    }
+
+    public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType, String secondPhoneNumber, PhoneNumberType secondPhoneNumberType, String email, String notes, int ownerId) {
+        this(id, firstName, lastName, middleName, firstPhoneNumber, firstPhoneNumberType, secondPhoneNumber, secondPhoneNumberType, email, notes);
+        this.ownerId = ownerId;
     }
 
     @Override
@@ -142,6 +148,14 @@ public class Contact implements Serializable, Identifiable {
         return groupList;
     }
 
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
     @Override
     public String toString() {
         return "Contact{" +
@@ -156,6 +170,7 @@ public class Contact implements Serializable, Identifiable {
                 ", email='" + email + '\'' +
                 ", notes='" + notes + '\'' +
                 ", groupList=" + groupList +
+                ", ownerId=" + ownerId +
                 '}';
     }
 
