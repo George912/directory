@@ -10,15 +10,15 @@ import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
 
 import java.math.BigDecimal;
-import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectable {
+
+    private final static Object monitor = new Object();
 
     @Override
     public int create(AnalyticalInfo analyticalInfo) throws DAOException {
@@ -52,119 +52,131 @@ public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectab
 
     @Override
     public int getUserCount() throws DAOException {
-        String query = "{call get_user_count()}";
-        int userCount = -1;
-        QueryRunner runner = new QueryRunner();
+        synchronized (monitor) {
+            String query = "{call get_user_count()}";
+            int userCount = -1;
+            QueryRunner runner = new QueryRunner();
 
-        try (Connection connection = getConnection()) {
-            ResultSetHandler<Integer> handler = new ScalarHandler<>(1);
-            List<Integer> lists = runner.execute(connection, query, handler);
-            userCount = lists.get(0);
+            try (Connection connection = getConnection()) {
+                ResultSetHandler<Integer> handler = new ScalarHandler<>(1);
+                List<Integer> lists = runner.execute(connection, query, handler);
+                userCount = lists.get(0);
 
-        } catch (SQLException e) {
-            throw new DAOException("Exception while creating group:" + e);
+            } catch (SQLException e) {
+                throw new DAOException("Exception while creating group:" + e);
+            }
+
+            return userCount;
         }
-
-        return userCount;
     }
 
     @Override
     public Map<Integer, Long> getEachUserContactCount() throws DAOException {
-        String query = "{call get_each_user_contact_count()}";
-        Map<Integer, Long> info = new HashMap<>();
+        synchronized (monitor) {
+            String query = "{call get_each_user_contact_count()}";
+            Map<Integer, Long> info = new HashMap<>();
 
-        QueryRunner runner = new QueryRunner();
+            QueryRunner runner = new QueryRunner();
 
-        try (Connection connection = getConnection()) {
-            ResultSetHandler<List<Map<String, Object>>> handler = new MapListHandler();
-            List<List<Map<String, Object>>> lists = runner.execute(connection, query, handler);
+            try (Connection connection = getConnection()) {
+                ResultSetHandler<List<Map<String, Object>>> handler = new MapListHandler();
+                List<List<Map<String, Object>>> lists = runner.execute(connection, query, handler);
 
-            for(Map<String, Object> map: lists.get(0)){
-                info.put((Integer) map.get("user_id"), (Long) map.get("contact_count"));
+                for (Map<String, Object> map : lists.get(0)) {
+                    info.put((Integer) map.get("user_id"), (Long) map.get("contact_count"));
+                }
+
+            } catch (SQLException e) {
+                throw new DAOException("Exception while creating group:" + e);
             }
 
-        } catch (SQLException e) {
-            throw new DAOException("Exception while creating group:" + e);
+            return info;
         }
-
-        return info;
     }
 
     @Override
     public Map<Integer, Long> getEachUserGroupCount() throws DAOException {
-        String query = "{call get_each_user_group_count()}";
-        Map<Integer, Long> info = new HashMap<>();
+        synchronized (monitor) {
+            String query = "{call get_each_user_group_count()}";
+            Map<Integer, Long> info = new HashMap<>();
 
-        QueryRunner runner = new QueryRunner();
+            QueryRunner runner = new QueryRunner();
 
-        try (Connection connection = getConnection()) {
-            ResultSetHandler<List<Map<String, Object>>> handler = new MapListHandler();
-            List<List<Map<String, Object>>> lists = runner.execute(connection, query, handler);
+            try (Connection connection = getConnection()) {
+                ResultSetHandler<List<Map<String, Object>>> handler = new MapListHandler();
+                List<List<Map<String, Object>>> lists = runner.execute(connection, query, handler);
 
-            for(Map<String, Object> map: lists.get(0)){
-                info.put((Integer) map.get("user_id"), (Long) map.get("group_count"));
+                for (Map<String, Object> map : lists.get(0)) {
+                    info.put((Integer) map.get("user_id"), (Long) map.get("group_count"));
+                }
+
+            } catch (SQLException e) {
+                throw new DAOException("Exception while creating group:" + e);
             }
 
-        } catch (SQLException e) {
-            throw new DAOException("Exception while creating group:" + e);
+            return info;
         }
-
-        return info;
     }
 
     @Override
     public double getAvgUserCountInGroup() throws DAOException {
-        String query = "{call avg_user_count_in_groups()}";
-        double avgUserCount = -1;
-        QueryRunner runner = new QueryRunner();
+        synchronized (monitor) {
+            String query = "{call avg_user_count_in_groups()}";
+            double avgUserCount = -1;
+            QueryRunner runner = new QueryRunner();
 
-        try (Connection connection = getConnection()) {
-            ResultSetHandler<BigDecimal> handler = new ScalarHandler<>(1);
-            List<BigDecimal> lists = runner.execute(connection, query, handler);
-            avgUserCount = lists.get(0).doubleValue();
+            try (Connection connection = getConnection()) {
+                ResultSetHandler<BigDecimal> handler = new ScalarHandler<>(1);
+                List<BigDecimal> lists = runner.execute(connection, query, handler);
+                avgUserCount = lists.get(0).doubleValue();
 
-        } catch (SQLException e) {
-            throw new DAOException("Exception while creating group:" + e);
+            } catch (SQLException e) {
+                throw new DAOException("Exception while creating group:" + e);
+            }
+
+            return avgUserCount;
         }
-
-        return avgUserCount;
     }
 
     @Override
     public int getInactiveUserCount() throws DAOException {
-        String query = "{call get_inactive_user_count()}";
-        int userCount = -1;
-        QueryRunner runner = new QueryRunner();
+        synchronized (monitor) {
+            String query = "{call get_inactive_user_count()}";
+            int userCount = -1;
+            QueryRunner runner = new QueryRunner();
 
-        try (Connection connection = getConnection()) {
-            ResultSetHandler<Integer> handler = new ScalarHandler<>(1);
-            List<Integer> lists = runner.execute(connection, query, handler);
-            userCount = lists.get(0);
+            try (Connection connection = getConnection()) {
+                ResultSetHandler<Integer> handler = new ScalarHandler<>(1);
+                List<Integer> lists = runner.execute(connection, query, handler);
+                userCount = lists.get(0);
 
-        } catch (SQLException e) {
-            throw new DAOException("Exception while creating group:" + e);
+            } catch (SQLException e) {
+                throw new DAOException("Exception while creating group:" + e);
+            }
+
+            return userCount;
         }
-
-        return userCount;
     }
 
     @Override
     public double getAvgUserContactsCount() throws DAOException {
-        String query = "{call avg_users_contact_count()}";
-        double count = -1;
+        synchronized (monitor) {
+            String query = "{call avg_users_contact_count()}";
+            double count = -1;
 
-        QueryRunner runner = new QueryRunner();
+            QueryRunner runner = new QueryRunner();
 
-        try (Connection connection = getConnection()) {
-            ResultSetHandler<BigDecimal> handler = new ScalarHandler<>(1);
-            List<BigDecimal> lists = runner.execute(connection, query, handler);
-            count = lists.get(0).doubleValue();
+            try (Connection connection = getConnection()) {
+                ResultSetHandler<BigDecimal> handler = new ScalarHandler<>(1);
+                List<BigDecimal> lists = runner.execute(connection, query, handler);
+                count = lists.get(0).doubleValue();
 
-        } catch (SQLException e) {
-            throw new DAOException("Exception while creating group:" + e);
+            } catch (SQLException e) {
+                throw new DAOException("Exception while creating group:" + e);
+            }
+
+            return count;
         }
-
-        return count;
     }
 
 }
