@@ -3,7 +3,9 @@ package ru.bellintegrator.app.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.impl.sql.GroupManager;
 import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 
 import java.util.List;
@@ -69,6 +71,16 @@ public class GroupService {
         }
 
         return groupList;
+    }
+
+    public void addGroupToContact(Group group, Contact contact) throws DAOException {
+        GroupManager manager = (GroupManager) groupGenericDAO;
+        manager.addGroupToContact(group, contact);
+    }
+
+    public void deleteGroupFromContact(Group group, Contact contact) throws DAOException {
+        GroupManager manager = (GroupManager) groupGenericDAO;
+        manager.deleteGroupFromContact(group, contact);
     }
 
 }

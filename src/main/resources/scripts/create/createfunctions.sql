@@ -111,7 +111,7 @@ CREATE OR REPLACE FUNCTION get_contacts_by_name(c_firstname varchar(30), c_owner
 $$ LANGUAGE SQL;
 
 -- create analytic functions
-CREATE FUNCTION get_all_users() RETURNS int AS $$
+CREATE FUNCTION get_user_count() RETURNS int AS $$
   DECLARE
     user_count int;
   BEGIN

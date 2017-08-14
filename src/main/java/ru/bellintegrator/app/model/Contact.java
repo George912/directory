@@ -31,6 +31,11 @@ public class Contact implements Serializable, Identifiable {
 
     }
 
+    public Contact(int ownerId) {
+        this();
+        this.ownerId = ownerId;
+    }
+
     public Contact(int id, String firstName, String lastName, String middleName) {
         this.id = id;
         this.firstName = firstName;
@@ -177,7 +182,6 @@ public class Contact implements Serializable, Identifiable {
     public void setGroupList(List<Group> groupList) {
         this.groupList = groupList;
     }
-
 
     @Override
     public boolean equals(Object o) {

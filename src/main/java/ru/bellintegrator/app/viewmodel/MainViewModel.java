@@ -24,6 +24,7 @@ import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.model.User;
+import ru.bellintegrator.app.service.AnalyticalInfoService;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 import ru.bellintegrator.app.util.ConfigLoader;
@@ -42,6 +43,7 @@ public class MainViewModel extends AbstractViewModel {
     private GroupService groupService;
     private Mode mode;
     private ConfigLoader configLoader;
+    private AnalyticalInfoService infoService;
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -112,6 +114,11 @@ public class MainViewModel extends AbstractViewModel {
         this.user = user;
     }
 
+    public MainViewModel(ContactService contactService, GroupService groupService, Mode mode, User user, AnalyticalInfoService infoService) {
+        this(contactService, groupService, mode, user);
+        this.infoService = infoService;
+    }
+
     @FXML
     private void initialize() {
         initContactTableView();
@@ -125,7 +132,7 @@ public class MainViewModel extends AbstractViewModel {
     @FXML
     private void createContact() {
 
-        showContactEditor(new Contact(), EditorAction.CREATE);
+        showContactEditor(new Contact(user.getId()), EditorAction.CREATE);
 
         ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
 
@@ -145,6 +152,7 @@ public class MainViewModel extends AbstractViewModel {
         Contact contact = contactTableView.getSelectionModel().getSelectedItem();
 
         if (contact != null) {
+            contact.setOwnerId(user.getId());
             showContactEditor(contact, EditorAction.UPDATE);
             ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
             try {
@@ -170,6 +178,7 @@ public class MainViewModel extends AbstractViewModel {
         if (contact != null) {
             log.debug("deleteContact method. Contact = " + contact);
             try {
+                contact.setOwnerId(user.getId());
                 contactService.deleteContact(contact);
 
                 ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
@@ -189,7 +198,7 @@ public class MainViewModel extends AbstractViewModel {
     @FXML
     private void createGroup() {
 
-        showGroupEditor(new Group(), EditorAction.CREATE);
+        showGroupEditor(new Group(0, "", "", user.getId()), EditorAction.CREATE);
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
         try {
@@ -211,6 +220,7 @@ public class MainViewModel extends AbstractViewModel {
         Group group = groupTableView.getSelectionModel().getSelectedItem();
 
         if (group != null) {
+            group.setOwnerId(user.getId());
             showGroupEditor(group, EditorAction.UPDATE);
             ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
             try {
@@ -238,6 +248,7 @@ public class MainViewModel extends AbstractViewModel {
         if (group != null) {
             log.debug("deleteGroup method. Group = " + group);
             try {
+                group.setOwnerId(user.getId());
                 groupService.deleteGroup(group, user.getId());
                 ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
@@ -266,6 +277,29 @@ public class MainViewModel extends AbstractViewModel {
 
         } catch (DAOException e) {
             log.debug("Exception while contact searching: " + e);
+        }
+    }
+
+    @FXML
+    private void showInfo() throws DAOException {
+        AnalyticalInfoViewModel viewModel = new AnalyticalInfoViewModel(infoService.collectAnalyticalInfo());
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(viewModel);
+            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlAnalyticalInfoWindowPath()));
+            GridPane page = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            Scene scene = new Scene(page, 400, 350);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+
+            dialogStage.showAndWait();
+
+        } catch (IOException e) {
+            log.debug(e.getMessage());
         }
     }
 

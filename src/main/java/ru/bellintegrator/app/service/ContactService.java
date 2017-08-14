@@ -32,12 +32,25 @@ public class ContactService implements ContactListChangeObservable {
 
     public void addContact(Contact contact) throws DAOException {
         contactGenericDAO.create(contact);
+
+        if(!contact.getGroupList().isEmpty()){
+            for(Group group:contact.getGroupList()){
+                groupService.addGroupToContact(group, contact);
+            }
+        }
+
         notifyContactListChangeObserver();
     }
 
     public void updateContact(Contact contact) throws DAOException {
 
         contactGenericDAO.update(contact);
+
+        if(!contact.getGroupList().isEmpty()){
+            for(Group group:contact.getGroupList()){
+                groupService.addGroupToContact(group, contact);
+            }
+        }
 
         notifyContactListChangeObserver();
 
@@ -135,6 +148,7 @@ public class ContactService implements ContactListChangeObservable {
         List<Contact> contactList = contactGenericDAO.getAll(ownerId);
         for (Contact contact : contactList) {
             if (contact.getGroupList().remove(group)) {
+                groupService.deleteGroupFromContact(group, contact);
                 contactGenericDAO.update(contact);
             }
         }

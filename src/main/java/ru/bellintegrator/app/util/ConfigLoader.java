@@ -28,6 +28,7 @@ public class ConfigLoader {
     private String fxmlContactEditorWindowPath;
     private String fxmlGroupEditorWindowPath;
     private String fxmlAuthorizationWindowPath;
+    private String fxmlAnalyticalInfoWindowPath;
     private String jdbcDriver;
     private String jdbcUrl;
     private String jdbcUser;
@@ -54,6 +55,7 @@ public class ConfigLoader {
             fxmlContactEditorWindowPath = property.getProperty("fxml.contactEditorWindow");
             fxmlGroupEditorWindowPath = property.getProperty("fxml.groupEditorWindow");
             fxmlAuthorizationWindowPath = property.getProperty("fxml.authorizationWindow");
+            fxmlAnalyticalInfoWindowPath = property.getProperty("fxml.analyticalInfoWindow");
 
             jdbcDriver = property.getProperty("jdbc.driver");
             jdbcUrl = property.getProperty("jdbc.url");
@@ -129,34 +131,16 @@ public class ConfigLoader {
         return fxmlAuthorizationWindowPath;
     }
 
+    public String getFxmlAnalyticalInfoWindowPath() {
+        return fxmlAnalyticalInfoWindowPath;
+    }
+
     public static ConfigLoader getInstance() {
         if (instance == null) {
             instance = new ConfigLoader();
         }
 
         return instance;
-    }
-
-    @Override
-    public String toString() {
-        return "ConfigLoader{" +
-                "fileContactsPath='" + fileContactsPath + '\'' +
-                ", fileGroupsPath='" + fileGroupsPath + '\'' +
-                ", xmlContactsPath='" + xmlContactsPath + '\'' +
-                ", xmlGroupsPath='" + xmlGroupsPath + '\'' +
-                ", xsdContactsPath='" + xsdContactsPath + '\'' +
-                ", xsdGroupsPath='" + xsdGroupsPath + '\'' +
-                ", fxmlStartWindowPath='" + fxmlStartWindowPath + '\'' +
-                ", fxmlAdditionalWindowPath='" + fxmlAdditionalWindowPath + '\'' +
-                ", fxmlMainWindowPath='" + fxmlMainWindowPath + '\'' +
-                ", fxmlContactEditorWindowPath='" + fxmlContactEditorWindowPath + '\'' +
-                ", fxmlGroupEditorWindowPath='" + fxmlGroupEditorWindowPath + '\'' +
-                ", fxmlAuthorizationWindowPath='" + fxmlAuthorizationWindowPath + '\'' +
-                ", jdbcDriver='" + jdbcDriver + '\'' +
-                ", jdbcUrl='" + jdbcUrl + '\'' +
-                ", jdbcUser='" + jdbcUser + '\'' +
-                ", jdbcPassword='" + jdbcPassword + '\'' +
-                '}';
     }
 
 }

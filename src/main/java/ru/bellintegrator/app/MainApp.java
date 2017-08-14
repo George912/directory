@@ -66,7 +66,7 @@ public class MainApp extends Application implements Runnable {
         User user = showAuthorizationWindow(userService);
 
         if (user != null) {
-            showMainlWindow(stage, mode, contactService, groupService, user);
+            showMainlWindow(stage, mode, contactService, groupService, user, infoService);
         }
     }
 
@@ -145,8 +145,8 @@ public class MainApp extends Application implements Runnable {
         }
     }
 
-    private void showMainlWindow(Stage stage, Mode mode, ContactService contactService, GroupService groupService, User user) {
-        MainViewModel mainViewModel = new MainViewModel(contactService, groupService, mode, user);
+    private void showMainlWindow(Stage stage, Mode mode, ContactService contactService, GroupService groupService, User user, AnalyticalInfoService infoService) {
+        MainViewModel mainViewModel = new MainViewModel(contactService, groupService, mode, user, infoService);
         AdditionalViewModel additionalViewModel = new AdditionalViewModel(contactService, user);
 
         try {
