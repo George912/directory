@@ -83,19 +83,15 @@ public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implemen
     public List<User> getAll(int ownerId) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_all_users()}";
-            List<User> users;
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<List<User>> handler = new BeanListHandler<>(User.class);
-                List<List<User>> lists = runner.execute(connection, query, handler, ownerId);
-                users = lists.get(0);
+                return runner.execute(connection, query, handler, ownerId).get(0);
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return users;
         }
     }
 
@@ -103,19 +99,15 @@ public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implemen
     public User getById(int id, int ownerId) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_user_by_id(?)}";
-            User user;
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<User> handler = new BeanHandler<>(User.class);
-                List<User> lists = runner.execute(connection, query, handler, id, ownerId);
-                user = lists.get(0);
+                return runner.execute(connection, query, handler, id, ownerId).get(0);
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return user;
         }
     }
 
@@ -123,19 +115,15 @@ public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implemen
     public List<User> getByName(String name, int ownerId) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_user_by_name(?)}";
-            List<User> users;
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<List<User>> handler = new BeanListHandler<>(User.class);
-                List<List<User>> lists = runner.execute(connection, query, handler, name);
-                users = lists.get(0);
+                return runner.execute(connection, query, handler, name).get(0);
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return users;
         }
     }
 
@@ -143,19 +131,15 @@ public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implemen
     public User getUserByCredential(String login, String password) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_user_by_credential(?, ?)}";
-            User user;
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<User> handler = new BeanHandler<>(User.class);
-                List<User> lists = runner.execute(connection, query, handler, login, password);
-                user = lists.get(0);
+                return runner.execute(connection, query, handler, login, password).get(0);
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return user;
         }
     }
 
@@ -163,20 +147,15 @@ public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implemen
     public int getUserId(String login, String password) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_user_by_credential(?, ?)}";
-            User user;
-
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<User> handler = new BeanHandler<>(User.class);
-                List<User> lists = runner.execute(connection, query, handler, login, password);
-                user = lists.get(0);
+                return runner.execute(connection, query, handler, login, password).get(0).getId();
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return user.getId();
         }
     }
 

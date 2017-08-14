@@ -38,6 +38,10 @@ public class MainViewModel extends AbstractViewModel {
 
     private static final Logger log = LoggerFactory.getLogger(MainViewModel.class);
     private User user;
+    private ContactService contactService;
+    private GroupService groupService;
+    private Mode mode;
+    private ConfigLoader configLoader;
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -91,11 +95,6 @@ public class MainViewModel extends AbstractViewModel {
     private ImageView deleteGroupImageView;
     @FXML
     private TextField contactSearchField;
-
-    private ContactService contactService;
-    private GroupService groupService;
-    private Mode mode;
-    private ConfigLoader configLoader;
 
     public MainViewModel(ContactService contactService, GroupService groupService) {
         this.contactService = contactService;
@@ -239,7 +238,7 @@ public class MainViewModel extends AbstractViewModel {
         if (group != null) {
             log.debug("deleteGroup method. Group = " + group);
             try {
-                groupService.deleteGroup(group);
+                groupService.deleteGroup(group, user.getId());
                 ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
                 groupObservableList.addAll(groupService.getAllGroups(user.getId()));

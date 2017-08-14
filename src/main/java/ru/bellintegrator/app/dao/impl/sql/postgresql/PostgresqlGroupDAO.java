@@ -78,19 +78,15 @@ public class PostgresqlGroupDAO extends AbstractDAOWithIdGenerator<Group> implem
     public List<Group> getAll(int ownerId) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_all_groups(?)}";
-            List<Group> groups;
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<List<Group>> handler = new BeanListHandler<>(Group.class);
-                List<List<Group>> lists = runner.execute(connection, query, handler, ownerId);
-                groups = lists.get(0);
+                return runner.execute(connection, query, handler, ownerId).get(0);
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return groups;
         }
     }
 
@@ -98,19 +94,15 @@ public class PostgresqlGroupDAO extends AbstractDAOWithIdGenerator<Group> implem
     public Group getById(int id, int ownerId) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_group_by_id(?, ?)}";
-            Group group;
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<Group> handler = new BeanHandler<>(Group.class);
-                List<Group> lists = runner.execute(connection, query, handler, id, ownerId);
-                group = lists.get(0);
+                return runner.execute(connection, query, handler, id, ownerId).get(0);
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return group;
         }
     }
 
@@ -118,19 +110,15 @@ public class PostgresqlGroupDAO extends AbstractDAOWithIdGenerator<Group> implem
     public List<Group> getByName(String name, int ownerId) throws DAOException {
         synchronized (monitor) {
             String query = "{call get_groups_by_name(?, ?)}";
-            List<Group> groups;
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
                 ResultSetHandler<List<Group>> handler = new BeanListHandler<>(Group.class);
-                List<List<Group>> lists = runner.execute(connection, query, handler, name, ownerId);
-                groups = lists.get(0);
+                return runner.execute(connection, query, handler, name, ownerId).get(0);
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);
             }
-
-            return groups;
         }
     }
 

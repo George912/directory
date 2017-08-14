@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.model.User;
 
 import java.util.List;
 
@@ -17,18 +16,12 @@ public class GroupService {
     private static final Logger log = LoggerFactory.getLogger(GroupService.class);
     private GenericDAO<Group> groupGenericDAO;
     private ContactService contactService;
-    private User user;
 
     public GroupService(GenericDAO<Group> groupGenericDAO, ContactService contactService) {
 
         this.groupGenericDAO = groupGenericDAO;
         this.contactService = contactService;
 
-    }
-
-    public GroupService(GenericDAO<Group> groupGenericDAO, ContactService contactService, User user) {
-        this(groupGenericDAO, contactService);
-        this.user = user;
     }
 
     public void addGroup(Group group) throws DAOException {
@@ -43,11 +36,9 @@ public class GroupService {
 
     }
 
-    public void deleteGroup(Group group) throws DAOException {
-
+    public void deleteGroup(Group group, int ownerId) throws DAOException {
         groupGenericDAO.delete(group);
-        contactService.deleteGroupFromContacts(group, user.getId());
-
+        contactService.deleteGroupFromContacts(group, ownerId);
     }
 
     public List<Group> getAllGroups(int ownerId) throws DAOException {

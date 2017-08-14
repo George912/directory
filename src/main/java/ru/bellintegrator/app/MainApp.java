@@ -41,17 +41,9 @@ public class MainApp extends Application implements Runnable {
     private final ConfigLoader configLoader = ConfigLoader.getInstance();
 
     public static void main(String[] args) throws Exception {
-        Platform.runLater(new Runnable() {
-            public void run() {
-                try {
-                    new MainApp().start(new Stage());
-                    new MainApp().start(new Stage());
-                    new MainApp().start(new Stage());
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                }
-            }
-        });
+        runNewThread();
+        runNewThread();
+        runNewThread();
     }
 
     public void start(Stage stage) throws Exception {
@@ -213,6 +205,17 @@ public class MainApp extends Application implements Runnable {
     @Override
     public void run() {
         launch();
+    }
+
+    private static void runNewThread() {
+        Platform.runLater(() -> {
+            try {
+                new MainApp().start(new Stage());
+
+            } catch (Exception e) {
+                log.debug("Exception while running new thread:" + e);
+            }
+        });
     }
 
 }
