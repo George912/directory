@@ -97,7 +97,6 @@
                                 <srcFile>src/main/resources/scripts/create/createtables.sql</srcFile>
                                 <srcFile>src/main/resources/scripts/create/createindexes.sql</srcFile>
                                 <srcFile>src/main/resources/scripts/create/createfunctions.sql</srcFile>
-                                <srcFile>src/main/resources/scripts/create/createtriggers.sql</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>

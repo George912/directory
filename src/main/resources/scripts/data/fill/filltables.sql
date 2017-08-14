@@ -12,7 +12,7 @@ INSERT INTO users (id, login, password, firstname, middlename, lastname) VALUES
   (nextval('users_id_seq'), 'l10', 'p10', 'fn10', 'mn10', 'ln10');
 
 -- insert test data into table groups
-INSERT INTO groups (id, name, notes, ownerId) VALUES
+INSERT INTO groups (id, name, notes, owner) VALUES
   (nextval('groups_id_seq'), 'g1', 'g1', 1),
   (nextval('groups_id_seq'), 'g2', 'g2', 2),
   (nextval('groups_id_seq'), 'g3', 'g3', 3),
@@ -42,7 +42,7 @@ INSERT INTO groups (id, name, notes, ownerId) VALUES
 -- insert test data into table contacts
 INSERT INTO contacts (id, firstname, middlename, lastname, firstphonenumber,
                       firstphonenumbertype, secondphonenumber, secondphonenumbertype,
-                      email, notes, ownerId) VALUES
+                      email, notes, owner) VALUES
   (nextval('contacts_id_seq'), 'fn1', 'mn1', 'ln1', '1', 'MOBILE', '1', 'MOBILE', 'e1', 'n1', 1),
   (nextval('contacts_id_seq'), 'fn2', 'mn2', 'ln2', '2', 'MOBILE', '2', 'MOBILE', 'e2', 'n2', 2),
   (nextval('contacts_id_seq'), 'fn3', 'mn3', 'ln3', '3', 'MOBILE', '3', 'MOBILE', 'e3', 'n3', 3),
