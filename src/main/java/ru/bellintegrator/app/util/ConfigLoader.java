@@ -137,7 +137,11 @@ public class ConfigLoader {
 
     public static ConfigLoader getInstance() {
         if (instance == null) {
-            instance = new ConfigLoader();
+            synchronized (ConfigLoader.class) {
+                if (instance == null) {
+                    instance = new ConfigLoader();
+                }
+            }
         }
 
         return instance;

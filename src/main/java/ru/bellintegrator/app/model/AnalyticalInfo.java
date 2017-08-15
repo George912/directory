@@ -1,11 +1,9 @@
 package ru.bellintegrator.app.model;
 
-import ru.bellintegrator.app.validation.ContactEditorValidator;
-
 import java.io.Serializable;
 import java.util.Map;
 
-public class AnalyticalInfo implements Serializable{
+public class AnalyticalInfo implements Serializable {
 
     private static final long serialVersionUID = -9048196856895867642L;
     private int userCount;
@@ -20,13 +18,15 @@ public class AnalyticalInfo implements Serializable{
     }
 
     public static AnalyticalInfo getInstance() {
-
         if (instance == null) {
-            instance = new AnalyticalInfo();
+            synchronized (AnalyticalInfo.class) {
+                if (instance == null) {
+                    instance = new AnalyticalInfo();
+                }
+            }
         }
 
         return instance;
-
     }
 
     public int getUserCount() {

@@ -19,13 +19,15 @@ public class ContactEditorValidator {
     }
 
     public static ContactEditorValidator getInstance() {
-
         if (instance == null) {
-            instance = new ContactEditorValidator();
+            synchronized (ContactEditorValidator.class) {
+                if (instance == null) {
+                    instance = new ContactEditorValidator();
+                }
+            }
         }
 
         return instance;
-
     }
 
     public void validate(String lastName, String name, String middleName, String firstPhoneNumber, String secondPhoneNumber) throws PersonalDataNotSetException, PhoneNumberFormatException {
