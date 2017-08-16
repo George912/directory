@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.exception.DAOException;
@@ -53,8 +52,6 @@ public class ContactEditorViewModel extends AbstractViewModel {
     @FXML
     private ComboBox<String> secondPhoneNumberTypeComboBox;
     @FXML
-    private CheckListView<Group> groupCheckListView;
-    @FXML
     private Label errorLabel;
 
     Contact contact;
@@ -76,12 +73,6 @@ public class ContactEditorViewModel extends AbstractViewModel {
         secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
         emailTextField.setText(contact.getEmail());
         notesTextArea.setText(contact.getNotes());
-
-        for (Group group : contact.getGroupList()) {
-            groupCheckListView.getCheckModel().check(group);
-        }
-
-
     }
 
     public void setDialogStage(Stage dialogStage) {
@@ -113,7 +104,6 @@ public class ContactEditorViewModel extends AbstractViewModel {
         ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
         try {
             groupObservableList.addAll(groupService.getAllGroups(user.getId()));
-            groupCheckListView.setItems(groupObservableList);
 
         } catch (DAOException e) {
             showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
@@ -189,8 +179,6 @@ public class ContactEditorViewModel extends AbstractViewModel {
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
         contact.setSecondPhoneNumberType(PhoneNumberType.getTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
 
-        addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
-
         log.debug("createContact method: " + contact);
 
         try {
@@ -213,8 +201,6 @@ public class ContactEditorViewModel extends AbstractViewModel {
         contact.setMiddleName(middleNameTextField.getText());
         contact.setSecondPhoneNumber(secondPhoneNumberTextField.getText());
         contact.setSecondPhoneNumberType(PhoneNumberType.getTypeFromString(secondPhoneNumberTypeComboBox.getSelectionModel().getSelectedItem()));
-
-        addContactToGroup(contact, groupCheckListView.getCheckModel().getCheckedItems());
 
         log.debug("updateContact method: " + contact);
 

@@ -1,12 +1,7 @@
 package ru.bellintegrator.app.model;
 
-import ru.bellintegrator.app.util.Identifiable;
+public class User {
 
-import java.io.Serializable;
-
-public class User implements Serializable, Identifiable {
-
-    private static final long serialVersionUID = 6869414085774571874L;
     private int id;
     private String login;
     private String password;

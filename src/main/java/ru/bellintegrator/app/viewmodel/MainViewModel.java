@@ -14,11 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.controlsfx.control.CheckListView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.MainApp;
-import ru.bellintegrator.app.Mode;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -27,7 +24,6 @@ import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.AnalyticalInfoService;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
-import ru.bellintegrator.app.util.ConfigLoader;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,8 +37,6 @@ public class MainViewModel extends AbstractViewModel {
     private User user;
     private ContactService contactService;
     private GroupService groupService;
-    private Mode mode;
-    private ConfigLoader configLoader;
     private AnalyticalInfoService infoService;
 
     @FXML
@@ -57,8 +51,6 @@ public class MainViewModel extends AbstractViewModel {
     private TableColumn<Contact, String> contactTableViewMiddleNameColumn;
     @FXML
     private TableColumn<Group, String> groupTableViewGroupNameTableColumn;
-    @FXML
-    private CheckListView<Group> checkListView;
     @FXML
     private TextField lastNameTextField;
     @FXML
@@ -82,8 +74,6 @@ public class MainViewModel extends AbstractViewModel {
     @FXML
     private ComboBox<String> secondPhoneNumberTypeComboBox;
     @FXML
-    private CheckListView<Group> groupCheckListView;
-    @FXML
     private ImageView addContactImageView;
     @FXML
     private ImageView editContactImageView;
@@ -101,21 +91,15 @@ public class MainViewModel extends AbstractViewModel {
     public MainViewModel(ContactService contactService, GroupService groupService) {
         this.contactService = contactService;
         this.groupService = groupService;
-        configLoader = ConfigLoader.getInstance();
     }
 
-    public MainViewModel(ContactService contactService, GroupService groupService, Mode mode) {
+    public MainViewModel(ContactService contactService, GroupService groupService, User user) {
         this(contactService, groupService);
-        this.mode = mode;
-    }
-
-    public MainViewModel(ContactService contactService, GroupService groupService, Mode mode, User user) {
-        this(contactService, groupService, mode);
         this.user = user;
     }
 
-    public MainViewModel(ContactService contactService, GroupService groupService, Mode mode, User user, AnalyticalInfoService infoService) {
-        this(contactService, groupService, mode, user);
+    public MainViewModel(ContactService contactService, GroupService groupService, User user, AnalyticalInfoService infoService) {
+        this(contactService, groupService, user);
         this.infoService = infoService;
     }
 
@@ -126,7 +110,6 @@ public class MainViewModel extends AbstractViewModel {
         initCheckListView();
         initPhoneNumberTypeComboBoxes();
         initGroupCheckListView();
-        changeAppMode(mode);
     }
 
     @FXML
@@ -205,8 +188,6 @@ public class MainViewModel extends AbstractViewModel {
             groupObservableList.addAll(groupService.getAllGroups(user.getId()));
 
             groupTableView.setItems(groupObservableList);
-            checkListView.setItems(groupObservableList);
-            groupCheckListView.setItems(groupObservableList);
 
         } catch (DAOException e) {
             showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
@@ -227,8 +208,6 @@ public class MainViewModel extends AbstractViewModel {
                 groupObservableList.addAll(groupService.getAllGroups(user.getId()));
                 groupTableView.getItems().clear();
                 groupTableView.setItems(groupObservableList);
-                checkListView.setItems(groupObservableList);
-                groupCheckListView.setItems(groupObservableList);
 
             } catch (DAOException e) {
                 showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
@@ -254,8 +233,6 @@ public class MainViewModel extends AbstractViewModel {
 
                 groupObservableList.addAll(groupService.getAllGroups(user.getId()));
                 groupTableView.setItems(groupObservableList);
-                checkListView.setItems(groupObservableList);
-                groupCheckListView.setItems(groupObservableList);
 
             } catch (DAOException e) {
                 showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
@@ -287,7 +264,7 @@ public class MainViewModel extends AbstractViewModel {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setController(viewModel);
-            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlAnalyticalInfoWindowPath()));
+//            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlAnalyticalInfoWindowPath()));
             GridPane page = loader.load();
 
             Stage dialogStage = new Stage();
@@ -311,7 +288,7 @@ public class MainViewModel extends AbstractViewModel {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setController(contactEditorController);
-            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlContactEditorWindowPath()));
+//            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlContactEditorWindowPath()));
             GridPane page = loader.load();
 
             Stage dialogStage = new Stage();
@@ -341,7 +318,7 @@ public class MainViewModel extends AbstractViewModel {
 
             FXMLLoader loader = new FXMLLoader();
             loader.setController(groupEditorController);
-            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlGroupEditorWindowPath()));
+//            loader.setLocation(MainApp.class.getResource(configLoader.getFxmlGroupEditorWindowPath()));
 
             Stage dialogStage = new Stage();
             dialogStage.initModality(Modality.WINDOW_MODAL);
@@ -403,8 +380,6 @@ public class MainViewModel extends AbstractViewModel {
 
         try {
             groupObservableList.addAll(groupService.getAllGroups(user.getId()));
-            groupCheckListView.setItems(groupObservableList);
-            groupCheckListView.getCheckModel().clearChecks();
 
         } catch (DAOException e) {
             showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
@@ -442,12 +417,6 @@ public class MainViewModel extends AbstractViewModel {
                         secondPhoneNumberTextField.setText(contact.getSecondPhoneNumber());
                         emailTextField.setText(contact.getEmail());
                         notesTextArea.setText(contact.getNotes());
-
-                        for (Group group : contact.getGroupList()) {
-                            groupCheckListView.getCheckModel().check(group);
-                        }
-
-                        groupCheckListView.refresh();
                     }
 
                 }
@@ -498,18 +467,6 @@ public class MainViewModel extends AbstractViewModel {
 
             log.debug("initCheckListView method. Items = " + groupObservableList);
 
-            checkListView.setItems(groupObservableList);
-
-            checkListView.getCheckModel().getCheckedItems().addListener((ListChangeListener<Group>) c -> {
-                contactTableView.getItems().clear();
-                try {
-                    findContactByGroup(checkListView.getCheckModel().getCheckedItems(), contactService.getAllContacts(user.getId()));
-
-                } catch (DAOException e) {
-                    showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
-                }
-            });
-
         } catch (DAOException e) {
             showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
@@ -542,24 +499,10 @@ public class MainViewModel extends AbstractViewModel {
             groupObservableList.addAll(groupService.getAllGroups(user.getId()));
             log.debug("initGroupCheckListView method. Items = " + groupObservableList);
 
-            groupCheckListView.setItems(groupObservableList);
-
         } catch (DAOException e) {
             showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
         }
 
-    }
-
-    private void changeAppMode(Mode mode) {
-        switch (mode) {
-            case READ_ONLY:
-                turnOnReadOnlyMode(true);
-                break;
-
-            case READ_WRITE:
-                turnOnReadOnlyMode(false);
-                break;
-        }
     }
 
     private void turnOnReadOnlyMode(boolean b) {

@@ -1,11 +1,9 @@
 package ru.bellintegrator.app.model;
 
-import java.io.Serializable;
 import java.util.Map;
 
-public class AnalyticalInfo implements Serializable {
+public class AnalyticalInfo {
 
-    private static final long serialVersionUID = -9048196856895867642L;
     private int userCount;
     private Map<Integer, Long> eachUserContactCount;
     private Map<Integer, Long> eachUserGroupCount;

@@ -1,15 +1,12 @@
 package ru.bellintegrator.app.model;
 
-import ru.bellintegrator.app.util.Identifiable;
-
 import java.io.Serializable;
 
 /**
  * Created by neste_000 on 11.07.2017.
  */
-public class Group implements Serializable, Identifiable {
+public class Group {
 
-    private static final long serialVersionUID = 8751089525686641L;
     private int id;
     private String name;
     private String notes;
@@ -62,7 +59,6 @@ public class Group implements Serializable, Identifiable {
         this.ownerId = ownerId;
     }
 
-    @Override
     public int getId() {
         return id;
     }

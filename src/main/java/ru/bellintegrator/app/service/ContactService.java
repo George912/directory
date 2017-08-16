@@ -2,8 +2,6 @@ package ru.bellintegrator.app.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.ContactListChangeObservable;
-import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
@@ -15,11 +13,10 @@ import java.util.List;
 /**
  * Created by neste_000 on 21.07.2017.
  */
-public class ContactService implements ContactListChangeObservable {
+public class ContactService{
 
     private static final Logger log = LoggerFactory.getLogger(ContactService.class);
     private GenericDAO<Contact> contactGenericDAO;
-    private List<ContactListChangeObserver> contactListChangeObserverList = new ArrayList<>();
     private GroupService groupService;
 
     public ContactService(GenericDAO<Contact> contactGenericDAO) {
@@ -38,8 +35,6 @@ public class ContactService implements ContactListChangeObservable {
                 groupService.addGroupToContact(group, contact);
             }
         }
-
-        notifyContactListChangeObserver();
     }
 
     public void updateContact(Contact contact) throws DAOException {
@@ -51,17 +46,10 @@ public class ContactService implements ContactListChangeObservable {
                 groupService.addGroupToContact(group, contact);
             }
         }
-
-        notifyContactListChangeObserver();
-
     }
 
     public void deleteContact(Contact contact) throws DAOException {
-
         contactGenericDAO.delete(contact);
-
-        notifyContactListChangeObserver();
-
     }
 
     public List<Contact> getAllContacts(int ownerId) throws DAOException {
@@ -119,29 +107,6 @@ public class ContactService implements ContactListChangeObservable {
         }
 
         return contactList;
-    }
-
-    @Override
-    public void addContactListChangeObserver(ContactListChangeObserver contactListChangeObserver) {
-
-        if (!contactListChangeObserverList.contains(contactListChangeObserver)) {
-            contactListChangeObserverList.add(contactListChangeObserver);
-        }
-
-    }
-
-    @Override
-    public void removeContactListChangeObserver(ContactListChangeObserver contactListChangeObserver) {
-
-        contactListChangeObserverList.remove(contactListChangeObserver);
-
-    }
-
-    @Override
-    public void notifyContactListChangeObserver() {
-        for (ContactListChangeObserver observer : contactListChangeObserverList) {
-            observer.listChanged();
-        }
     }
 
     public void deleteGroupFromContacts(Group group, int ownerId) throws DAOException {

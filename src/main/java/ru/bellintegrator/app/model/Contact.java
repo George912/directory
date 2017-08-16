@@ -1,17 +1,13 @@
 package ru.bellintegrator.app.model;
 
-import ru.bellintegrator.app.util.Identifiable;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by neste_000 on 11.07.2017.
  */
-public class Contact implements Serializable, Identifiable {
+public class Contact {
 
-    private static final long serialVersionUID = -8767408797539567340L;
     private int id;
     private String firstName;
     private String lastName;
@@ -68,7 +64,6 @@ public class Contact implements Serializable, Identifiable {
         this.ownerId = ownerId;
     }
 
-    @Override
     public int getId() {
         return id;
     }

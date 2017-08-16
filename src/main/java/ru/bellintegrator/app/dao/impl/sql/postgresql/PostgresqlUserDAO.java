@@ -4,7 +4,7 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
-import ru.bellintegrator.app.dao.impl.AbstractDAOWithIdGenerator;
+import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.impl.sql.Connectable;
 import ru.bellintegrator.app.dao.impl.sql.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
@@ -15,7 +15,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostgresqlUserDAO extends AbstractDAOWithIdGenerator<User> implements UserDAO, Connectable {
+public class PostgresqlUserDAO implements GenericDAO<User>, UserDAO, Connectable {
 
     private final static Object monitor = new Object();
 

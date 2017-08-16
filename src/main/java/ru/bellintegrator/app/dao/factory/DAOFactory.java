@@ -1,14 +1,9 @@
 package ru.bellintegrator.app.dao.factory;
 
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.factory.impl.file.MemoryDAOFactory;
 import ru.bellintegrator.app.dao.factory.impl.sql.SqlPostgresqlDAOFactory;
-import ru.bellintegrator.app.dao.factory.impl.xml.XmlDomDAOFactory;
-import ru.bellintegrator.app.dao.factory.impl.xml.XmlJacksonDAOFactory;
-import ru.bellintegrator.app.dao.factory.impl.xml.XmlSaxDAOFactory;
 import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
 import ru.bellintegrator.app.exception.DAOException;
-import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
@@ -31,13 +26,13 @@ public abstract class DAOFactory {
         switch (daoFactoryType) {
 
             case XML_DOM:
-                return new XmlDomDAOFactory();
+                throw new UnsupportedOperationException("Unable to create XML_DOM dao factory. Define SQL_ORACLE dao factory class!");
 
             case XML_JACKSON:
-                return new XmlJacksonDAOFactory();
+                throw new UnsupportedOperationException("Unable to create XML_JACKSON dao factory. Define SQL_ORACLE dao factory class!");
 
             case XML_SAX:
-                return new XmlSaxDAOFactory();
+                throw new UnsupportedOperationException("Unable to create XML_SAX dao factory. Define SQL_ORACLE dao factory class!");
 
             case SQL_ORACLE:
                 throw new UnsupportedOperationException("Unable to create ORACLE dao factory. Define SQL_ORACLE dao factory class!");
@@ -52,7 +47,7 @@ public abstract class DAOFactory {
                 return new SqlPostgresqlDAOFactory();
 
             case FILE:
-                return new MemoryDAOFactory();
+                throw new UnsupportedOperationException("Unable to create FILE dao factory. Define SQL_MSSQL dao factory class!");
 
             default:
                 throw new UnsupportedOperationException("Unable to create dao factory for target type. Type " + daoFactoryType + " is unknown!");

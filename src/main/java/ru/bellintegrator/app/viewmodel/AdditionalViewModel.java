@@ -8,7 +8,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.ContactListChangeObserver;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.User;
@@ -17,7 +16,7 @@ import ru.bellintegrator.app.service.ContactService;
 /**
  * Created by neste_000 on 21.07.2017.
  */
-public class AdditionalViewModel extends AbstractViewModel implements ContactListChangeObserver {
+public class AdditionalViewModel extends AbstractViewModel{
 
     @FXML
     private TableView<Contact> contactTableView;
@@ -58,25 +57,6 @@ public class AdditionalViewModel extends AbstractViewModel implements ContactLis
     private void initialize() {
 
         initializeContactTableView();
-
-    }
-
-    @Override
-    public void listChanged() {
-
-        ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
-
-        try {
-            contactObservableList.addAll(contactService.getAllContacts(user.getId()));
-
-            log.debug("listChanged method. Items = " + contactObservableList);
-
-            contactTableView.getItems().clear();
-            contactTableView.setItems(contactObservableList);
-
-        } catch (DAOException e) {
-            showAlert("Ошибка", "Во время выполнения программы возникла ошибка.", e);
-        }
 
     }
 

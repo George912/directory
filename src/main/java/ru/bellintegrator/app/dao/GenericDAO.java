@@ -18,7 +18,7 @@ import java.util.List;
  * <ol/>
  * Created by neste_000 on 21.07.2017.
  */
-public interface GenericDAO<T extends Serializable> {
+public interface GenericDAO<T> {
 
     /**
      * Создаёт данные в хранилище из объекта, переданного в метод.
