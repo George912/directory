@@ -35,76 +35,76 @@
         <finalName>directory</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>sql-maven-plugin</artifactId>-->
+                <!--<version>1.5</version>-->
 
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${jdbc.driver.version}</version>
-                    </dependency>
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>org.postgresql</groupId>-->
+                        <!--<artifactId>postgresql</artifactId>-->
+                        <!--<version>${jdbc.driver.version}</version>-->
+                    <!--</dependency>-->
 
-                </dependencies>
+                <!--</dependencies>-->
 
-                <configuration>
-                    <driver>${jdbc.driver}</driver>
-                    <url>${jdbc.url}</url>
-                    <username>${jdbc.username}</username>
-                    <password>${jdbc.password}</password>
-                    <settingsKey>sensibleKey</settingsKey>
-                    <delimiterType>row</delimiterType>
-                </configuration>
+                <!--<configuration>-->
+                    <!--<driver>${jdbc.driver}</driver>-->
+                    <!--<url>${jdbc.url}</url>-->
+                    <!--<username>${jdbc.username}</username>-->
+                    <!--<password>${jdbc.password}</password>-->
+                    <!--<settingsKey>sensibleKey</settingsKey>-->
+                    <!--<delimiterType>row</delimiterType>-->
+                <!--</configuration>-->
 
-                <executions>
-                    <execution>
-                        <id>create-db</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <url>jdbc:postgresql:postgres</url>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/scripts/create/createdb.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-                    </execution>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>create-db</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>execute</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<url>jdbc:postgresql:postgres</url>-->
+                            <!--<autocommit>true</autocommit>-->
+                            <!--<srcFiles>-->
+                                <!--<srcFile>src/main/resources/scripts/create/createdb.sql</srcFile>-->
+                            <!--</srcFiles>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
 
-                    <execution>
-                        <id>create-schema</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/scripts/create/createtables.sql</srcFile>
-                                <srcFile>src/main/resources/scripts/create/createindexes.sql</srcFile>
-                                <srcFile>src/main/resources/scripts/create/createfunctions.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-                    </execution>
+                    <!--<execution>-->
+                        <!--<id>create-schema</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>execute</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<autocommit>true</autocommit>-->
+                            <!--<srcFiles>-->
+                                <!--<srcFile>src/main/resources/scripts/create/createtables.sql</srcFile>-->
+                                <!--<srcFile>src/main/resources/scripts/create/createindexes.sql</srcFile>-->
+                                <!--<srcFile>src/main/resources/scripts/create/createfunctions.sql</srcFile>-->
+                            <!--</srcFiles>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
 
-                    <execution>
-                        <id>create-data</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/scripts/data/fill/filltables.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+                    <!--<execution>-->
+                        <!--<id>create-data</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>execute</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<autocommit>true</autocommit>-->
+                            <!--<srcFiles>-->
+                                <!--<srcFile>src/main/resources/scripts/data/fill/filltables.sql</srcFile>-->
+                            <!--</srcFiles>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -122,6 +122,25 @@
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <id>tomcat-run</id>
+                        <goals>
+                            <goal>run-war</goal>
+                        </goals>
+                        <phase>install</phase>
+                        <configuration>
+                            <port>8081</port>
+                            <path>/directory</path>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

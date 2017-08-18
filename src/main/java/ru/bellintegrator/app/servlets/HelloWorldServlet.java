@@ -13,7 +13,7 @@ public class HelloWorldServlet extends HttpServlet {
         resp.setContentType("text/html;charset=utf-8");
 
         PrintWriter pw = resp.getWriter();
-        pw.println("<H1>Hello, world! или Привет мир</H1>");
+        pw.println("<H1>Hello, task#6! This робит</H1>");
 
     }
 
