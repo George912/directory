@@ -6,11 +6,12 @@
     <display-name>Archetype Created Web Application</display-name>
 
     <servlet>
-        <servlet-name>hello</servlet-name>
-        <servlet-class>ru.bellintegrator.app.servlets.HelloWorldServlet</servlet-class>
+        <servlet-name>login</servlet-name>
+        <servlet-class>ru.bellintegrator.app.servlets.LoginServlet</servlet-class>
     </servlet>
+
     <servlet-mapping>
-        <servlet-name>hello</servlet-name>
-        <url-pattern>/hello</url-pattern>
+        <servlet-name>login</servlet-name>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 </web-app>
