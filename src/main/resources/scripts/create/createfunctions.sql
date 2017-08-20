@@ -144,7 +144,7 @@ CREATE OR REPLACE FUNCTION avg_user_count_in_groups() RETURNS TABLE(avg_count nu
        GROUP BY group_name) s
 $$ LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION get_inactive_user_count() RETURNS TABLE(user_id int, contact_count bigint) AS $$
+CREATE OR REPLACE FUNCTION get_inactive_users() RETURNS TABLE(user_id int, contact_count bigint) AS $$
   SELECT u.id as user_id, count(c.id) as contact_count
   FROM users u
     INNER JOIN contacts c ON u.id = c."owner"

@@ -139,22 +139,25 @@ public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectab
     }
 
     @Override
-    public int getInactiveUserCount() throws DAOException {
+    public Map<Integer, Long> getInactiveUserCount() throws DAOException {
         synchronized (monitor) {
-            String query = "{call get_inactive_user_count()}";
-            int userCount = -1;
+            String query = "{call get_inactive_users()}";
+            Map<Integer, Long> info = new HashMap<>();
             QueryRunner runner = new QueryRunner();
 
             try (Connection connection = getConnection()) {
-                ResultSetHandler<Integer> handler = new ScalarHandler<>(1);
-                List<Integer> lists = runner.execute(connection, query, handler);
-                userCount = lists.get(0);
+                ResultSetHandler<List<Map<String, Object>>> handler = new MapListHandler();
+                List<List<Map<String, Object>>> lists = runner.execute(connection, query, handler);
+
+                for (Map<String, Object> map : lists.get(0)) {
+                    info.put((Integer) map.get("user_id"), (Long) map.get("contact_count"));
+                }
 
             } catch (SQLException e) {
-                throw new DAOException("Exception while creating group:" + e);
+                throw new DAOException("Exception while getting inactive users:" + e);
             }
 
-            return userCount;
+            return info;
         }
     }
 

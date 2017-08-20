@@ -8,7 +8,7 @@ public class AnalyticalInfo {
     private Map<Integer, Long> eachUserContactCount;
     private Map<Integer, Long> eachUserGroupCount;
     private double avgUserCountInGroups;
-    private int inactiveUserCount;
+    private Map<Integer, Long> inactiveUserCount;
     private double avgUsersContactCount;
     private static AnalyticalInfo instance;
 
@@ -59,11 +59,11 @@ public class AnalyticalInfo {
         this.avgUserCountInGroups = avgUserCountInGroups;
     }
 
-    public int getInactiveUserCount() {
+    public Map<Integer, Long> getInactiveUserCount() {
         return inactiveUserCount;
     }
 
-    public void setInactiveUserCount(int inactiveUserCount) {
+    public void setInactiveUserCount(Map<Integer, Long> inactiveUserCount) {
         this.inactiveUserCount = inactiveUserCount;
     }
 

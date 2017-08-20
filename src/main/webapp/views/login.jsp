@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Вход</title>
@@ -10,6 +9,8 @@
     <br/>
     Пароль <input type="password" name="password"/>
     <input type="submit" value="Войти"/>
+    <br/>
+    <input type="reset" value="Отмена"/>
 </form>
 </body>
 </html>

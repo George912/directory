@@ -5,5 +5,6 @@ package ru.bellintegrator.app.viewmodel;
  */
 public enum EditorAction {
     CREATE,
-    UPDATE
+    UPDATE,
+    UNKNOWN
 }
