@@ -1,5 +1,7 @@
 package ru.bellintegrator.app.servlets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
 import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
@@ -16,10 +18,11 @@ import java.io.IOException;
 
 public class AdminServlet extends HttpServlet {
 
-   private DAOFactoryType daoFactoryType;
-   private DAOFactory daoFactory;
-   private AnalyticalInfoDAO dao;
-   private AnalyticalInfoService service;
+    private DAOFactoryType daoFactoryType;
+    private DAOFactory daoFactory;
+    private AnalyticalInfoDAO dao;
+    private AnalyticalInfoService service;
+    private static final Logger log = LoggerFactory.getLogger(AdminServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -31,9 +34,8 @@ public class AdminServlet extends HttpServlet {
             service = new AnalyticalInfoService(dao);
 
         } catch (DAOException e) {
-            e.printStackTrace();
+            log.debug("Exception while init AdminServlet: " + e);
         }
-
     }
 
     @Override
@@ -46,7 +48,7 @@ public class AdminServlet extends HttpServlet {
             dispatcher.include(req, res);
 
         } catch (DAOException e) {
-            e.printStackTrace();
+            log.debug("Exception in method service: " + e);
         }
     }
 

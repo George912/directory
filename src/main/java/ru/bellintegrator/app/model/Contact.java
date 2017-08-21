@@ -19,17 +19,15 @@ public class Contact {
     private String email;
     private String notes;
     private List<Group> groupList = new ArrayList<>();
-    private int ownerId;
+    private int owner;
 
     public Contact() {
-
-        this(0, "", "", "");
-
+        this(0, "", "", "", "", PhoneNumberType.UNKNOWN, "", PhoneNumberType.UNKNOWN, "", "");
     }
 
-    public Contact(int ownerId) {
+    public Contact(int owner) {
         this();
-        this.ownerId = ownerId;
+        this.owner = owner;
     }
 
     public Contact(int id, String firstName, String lastName, String middleName) {
@@ -59,9 +57,9 @@ public class Contact {
         this.notes = notes;
     }
 
-    public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType, String secondPhoneNumber, PhoneNumberType secondPhoneNumberType, String email, String notes, int ownerId) {
+    public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType, String secondPhoneNumber, PhoneNumberType secondPhoneNumberType, String email, String notes, int owner) {
         this(id, firstName, lastName, middleName, firstPhoneNumber, firstPhoneNumberType, secondPhoneNumber, secondPhoneNumberType, email, notes);
-        this.ownerId = ownerId;
+        this.owner = owner;
     }
 
     public int getId() {
@@ -148,12 +146,12 @@ public class Contact {
         return groupList;
     }
 
-    public int getOwnerId() {
-        return ownerId;
+    public int getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(int ownerId) {
+        this.owner = ownerId;
     }
 
     @Override
@@ -170,7 +168,7 @@ public class Contact {
                 ", email='" + email + '\'' +
                 ", notes='" + notes + '\'' +
                 ", groupList=" + groupList +
-                ", ownerId=" + ownerId +
+                ", owner=" + owner +
                 '}';
     }
 

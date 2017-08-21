@@ -1,22 +1,23 @@
 package ru.bellintegrator.app.servlets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.model.PhoneNumberType;
-import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
 
-import javax.servlet.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainServlet extends HttpServlet {
@@ -27,6 +28,7 @@ public class MainServlet extends HttpServlet {
     private GenericDAO<Group> groupGenericDAO;
     private ContactService contactService;
     private GroupService groupService;
+    private static final Logger log = LoggerFactory.getLogger(MainServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -41,31 +43,43 @@ public class MainServlet extends HttpServlet {
             contactService.setGroupService(groupService);
 
         } catch (DAOException e) {
-            e.printStackTrace();
+            log.debug("Exception while init MainServlet: " + e);
         }
     }
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ServletContext context = this.getServletContext();
-        RequestDispatcher dispatcher;
-
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/views/main.jsp");
         int userId = (int) req.getSession().getAttribute("userId");
+        String act = req.getParameter("find");
 
         List<Group> groups = null;
         List<Contact> contacts = null;
 
         try {
-            groups = groupService.getAllGroups(userId);
-            contacts = contactService.getAllContacts(userId);
+            if("contacts".equals(act)){
+                groups = groupService.getAllGroups(userId);
+                String name = req.getParameter("contact_name");
+                contacts = contactService.getContactsByName(name, userId);
+
+            }else if("groups".equals(act)){
+                contacts = contactService.getAllContacts(userId);
+                String name = req.getParameter("group_name");
+                groups = groupService.getGroupsByName(name, userId);
+
+            }else{
+                groups = groupService.getAllGroups(userId);
+                contacts = contactService.getAllContacts(userId);
+            }
+
             req.setAttribute("contactList", contacts);
             req.setAttribute("groupList", groups);
 
-            dispatcher = context.getRequestDispatcher("/views/main.jsp");
             dispatcher.include(req, resp);
 
         } catch (DAOException e) {
-            e.printStackTrace();
+            log.debug("Exception in MainServlet:" + e);
         }
     }
+
 }

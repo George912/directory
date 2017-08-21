@@ -8,23 +8,22 @@
 <body>
 <%
     Group group = (Group) request.getAttribute("group");
-    request.setAttribute("group", group);
     EditorAction action = EditorAction.getActionFromString(request.getParameter("action"));
 
-    if (action == EditorAction.UPDATE) {
-        request.setAttribute("action", EditorAction.UPDATED);
+    if (action == EditorAction.UPDATE) {%>
+<form action="/directory/editor/group?action=<%=EditorAction.UPDATED%>" method="POST">
+    <%}%>
 
-    } else if (action == EditorAction.CREATE) {
-        request.setAttribute("action", EditorAction.CREATED);
-    }
-%>
+    <% if (action == EditorAction.CREATE) {%>
+    <form action="/directory/editor/group?action=<%=EditorAction.CREATED%>" method="POST">
+        <%}%>
 
-<form action="/directory/editor/group" method="POST">
-    Имя <input type="text" name="name" value=<%=group.getName()%>><br/>
-    Заметки <textarea name="notes"><%=group.getNotes()%></textarea><br/>
-    <input type="submit" value="Сохранить"/>
-    <input type="button" value="Отмена"/>
-</form>
+        Имя <input type="text" name="name" value=<%=group.getName()%>/><br/>
+        Заметки <textarea name="notes"><%=group.getNotes()%></textarea><br/>
+        <input type="hidden" name="group_id" value=<%=group.getId()%> />
+        <input type="submit" value="Сохранить"/>
+        <input type="button" value="Отмена"/>
+    </form>
 </form>
 </body>
 </html>

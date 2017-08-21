@@ -135,7 +135,7 @@ public class MainViewModel extends AbstractViewModel {
         Contact contact = contactTableView.getSelectionModel().getSelectedItem();
 
         if (contact != null) {
-            contact.setOwnerId(user.getId());
+            contact.setOwner(user.getId());
             showContactEditor(contact, EditorAction.UPDATE);
             ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();
             try {
@@ -161,7 +161,7 @@ public class MainViewModel extends AbstractViewModel {
         if (contact != null) {
             log.debug("deleteContact method. Contact = " + contact);
             try {
-                contact.setOwnerId(user.getId());
+                contact.setOwner(user.getId());
                 contactService.deleteContact(contact);
 
                 ObservableList<Contact> contactObservableList = FXCollections.observableArrayList();

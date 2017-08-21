@@ -8,6 +8,7 @@ public enum EditorAction {
     CREATED,
     UPDATE,
     UPDATED,
+    DELETE,
     UNKNOWN;
 
     public static EditorAction getActionFromString(String act){

@@ -33,7 +33,7 @@ public class PostgresqlContactDAO implements GenericDAO<Contact>, Connectable {
                 statement.setString(7, contact.getSecondPhoneNumberType().name());
                 statement.setString(8, contact.getEmail());
                 statement.setString(9, contact.getNotes());
-                statement.setInt(10, contact.getOwnerId());
+                statement.setInt(10, contact.getOwner());
 
                 statement.execute();
 
@@ -52,7 +52,7 @@ public class PostgresqlContactDAO implements GenericDAO<Contact>, Connectable {
 
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setInt(1, contact.getId());
-                statement.setInt(2, contact.getOwnerId());
+                statement.setInt(2, contact.getOwner());
 
                 statement.execute();
 
@@ -78,7 +78,7 @@ public class PostgresqlContactDAO implements GenericDAO<Contact>, Connectable {
                 statement.setString(8, contact.getSecondPhoneNumberType().name());
                 statement.setString(9, contact.getEmail());
                 statement.setString(10, contact.getNotes());
-                statement.setInt(11, contact.getOwnerId());
+                statement.setInt(11, contact.getOwner());
 
                 statement.execute();
 

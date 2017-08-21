@@ -13,8 +13,8 @@
 <table border="5" width="600" height="800">
     <tr>
         <td colspan="2">
-            <form action="main" method="POST">
-                <input type="text" name="find_by_name">
+            <form action="<%=request.getContextPath()%>/userdata?find=contacts" method="POST">
+                <input type="text" name="contact_name">
                 <input type="submit" value="Найти"/>
             </form>
         </td>
@@ -61,8 +61,8 @@
                                     <%=contact.getGroupList().toString()%>
                                 </textarea>
                             </td>
-                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=contact.getOwnerId()%>">Редактировать</a></td>
-                            <td><a href="userdata?contact_id=<%=contact.getId()%>&owner_id=<%=contact.getOwnerId()%>">Удалить</a></td>
+                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=contact.getOwner()%>">Редактировать</a></td>
+                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=contact.getOwner()%>">Удалить</a></td>
                             <td></td>
                         </tr>
                 <%}%>
@@ -81,8 +81,8 @@
 <table border="5">
     <tr>
         <td colspan="2">
-            <form action="main.jsp" method="POST">
-                <input type="text" name="find_by_name">
+            <form action="<%=request.getContextPath()%>/userdata?find=groups" method="POST">
+                <input type="text" name="group_name">
                 <input type="submit" value="Найти"/>
             </form>
         </td>
@@ -110,7 +110,7 @@
                         </textarea>
                     </td>
                     <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=group.getOwner()%>">Редактировать</a></td>
-                    <td><a href="userdata?group_id=<%=group.getId()%>&owner_id=<%=group.getOwner()%>">Удалить</a></td>
+                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=group.getOwner()%>">Удалить</a></td>
                 </tr>
                 <%}%>
                 </tbody>
