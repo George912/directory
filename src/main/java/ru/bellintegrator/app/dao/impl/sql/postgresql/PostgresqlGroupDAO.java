@@ -28,7 +28,7 @@ public class PostgresqlGroupDAO implements GenericDAO<Group>, Connectable, Group
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setString(1, group.getName());
                 statement.setString(2, group.getNotes());
-                statement.setInt(3, group.getOwnerId());
+                statement.setInt(3, group.getOwner());
 
                 statement.execute();
 
@@ -47,7 +47,7 @@ public class PostgresqlGroupDAO implements GenericDAO<Group>, Connectable, Group
 
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setInt(1, group.getId());
-                statement.setInt(2, group.getOwnerId());
+                statement.setInt(2, group.getOwner());
 
                 statement.execute();
 
@@ -66,7 +66,7 @@ public class PostgresqlGroupDAO implements GenericDAO<Group>, Connectable, Group
                 statement.setInt(1, group.getId());
                 statement.setString(2, group.getName());
                 statement.setString(3, group.getNotes());
-                statement.setInt(4, group.getOwnerId());
+                statement.setInt(4, group.getOwner());
 
                 statement.execute();
 

@@ -13,7 +13,7 @@
 <table border="5" width="600" height="800">
     <tr>
         <td colspan="2">
-            <form action="main.jsp" method="POST">
+            <form action="main" method="POST">
                 <input type="text" name="find_by_name">
                 <input type="submit" value="Найти"/>
             </form>
@@ -40,7 +40,6 @@
                 </thead>
                 <tbody>
                 <%
-                    //todo
                     List<Contact> contacts = (List<Contact>) request.getAttribute("contactList");
                     for (Contact contact: contacts){%>
                         <tr>
@@ -62,8 +61,8 @@
                                     <%=contact.getGroupList().toString()%>
                                 </textarea>
                             </td>
-                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>">Редактировать</a></td>
-                            <td><a href="userdata?contact_id=<%=contact.getId()%>">Удалить</a></td>
+                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=contact.getOwnerId()%>">Редактировать</a></td>
+                            <td><a href="userdata?contact_id=<%=contact.getId()%>&owner_id=<%=contact.getOwnerId()%>">Удалить</a></td>
                             <td></td>
                         </tr>
                 <%}%>
@@ -71,7 +70,7 @@
             </table>
         </td>
         <td>
-            <input type="button" value="Создать"/>
+            <a href="editor/contact?action=<%=EditorAction.CREATE%>&owner_id=<%=request.getSession().getAttribute("userId")%>">Создать</a>
         </td>
     </tr>
 </table>
@@ -101,7 +100,6 @@
                 </thead>
                 <tbody>
                 <%
-                    //todo
                     List<Group> groups = (List<Group>) request.getAttribute("groupList");
                     for (Group group: groups){%>
                 <tr>
@@ -111,17 +109,20 @@
                                 <%=group.getNotes()%>
                         </textarea>
                     </td>
-                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.UPDATE%>">Редактировать</a></td>
-                    <td><a href="userdata?group_id=<%=group.getId()%>">Удалить</a></td>
+                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=group.getOwner()%>">Редактировать</a></td>
+                    <td><a href="userdata?group_id=<%=group.getId()%>&owner_id=<%=group.getOwner()%>">Удалить</a></td>
                 </tr>
                 <%}%>
                 </tbody>
             </table>
         </td>
         <td>
-            <input type="button" value="Создать"/>
+            <a href="editor/group?action=<%=EditorAction.CREATE%>&owner_id=<%=request.getSession().getAttribute("userId")%>">Создать</a>
         </td>
     </tr>
 </table>
+<br/>
+<br/>
+<a href="statistic">Статистика</a>
 </body>
 </html>

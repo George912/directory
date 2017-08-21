@@ -1,12 +1,9 @@
 <%@ page import="ru.bellintegrator.app.model.AnalyticalInfo" %>
-<%@ page import="ru.bellintegrator.app.servlets.MainServlet" %>
 <%@ page import="java.util.Map" %>
 <html>
-<body>
-<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Контакты</title>
+<meta charset="UTF-8">
+<title>Контакты</title>
 </head>
 <body>
 <%AnalyticalInfo info = (AnalyticalInfo) request.getAttribute("info");%>
@@ -18,12 +15,14 @@
             Общее количество пользователей <input type="text" name="common_user_count" value=<%=info.getUserCount()%>>
         </td>
         <td>
-            Среднее количество пользователей в группах <input type="text" name="avg_user_count_in_groups" value=<%=info.getAvgUserCountInGroups()%>>
+            Среднее количество пользователей в группах <input type="text" name="avg_user_count_in_groups"
+                                                              value=<%=info.getAvgUserCountInGroups()%>>
         </td>
     </tr>
     <tr>
         <td colspan="2">
-            Среднее количество контактов у пользователей <input type="text" name="avg_user_contact_count" value=<%=info.getAvgUsersContactCount()%>>
+            Среднее количество контактов у пользователей <input type="text" name="avg_user_contact_count"
+                                                                value=<%=info.getAvgUsersContactCount()%>>
         </td>
     </tr>
     <tr>
@@ -38,13 +37,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <%
-                        for(Map.Entry<Integer, Long> entry: info.getEachUserContactCount().entrySet()){%>
+                <%
+                    for (Map.Entry<Integer, Long> entry : info.getEachUserContactCount().entrySet()) {%>
                         <tr>
-                            <td><%=entry.getKey()%></td>
-                            <td><%=entry.getValue()%></td>
+                            <td><%=entry.getKey()%>
+                            </td>
+                            <td><%=entry.getValue()%>
+                            </td>
                         </tr>
-                    <%{%>
+                <%}%>
                 </tbody>
             </table>
         </td>
@@ -61,13 +62,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <%
-                        for(Map.Entry<Integer, Long> entry1: info.getEachUserGroupCount().entrySet()){%>
+                <%
+                    for (Map.Entry<Integer, Long> entry1 : info.getEachUserGroupCount().entrySet()) {%>
                         <tr>
-                            <td><%=entry1.getKey()%></td>
-                            <td><%=entry1.getValue()%></td>
+                            <td><%=entry1.getKey()%>
+                            </td>
+                            <td><%=entry1.getValue()%>
+                            </td>
                         </tr>
-                    <%{%>
+                <%}%>
                 </tbody>
             </table>
         </td>
@@ -84,20 +87,19 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <%
-                        for(Map.Entry<Integer, Long> entry2: info.getInactiveUserCount().entrySet()){%>
+                <%
+                    for (Map.Entry<Integer, Long> entry2 : info.getInactiveUserCount().entrySet()){%>
                         <tr>
-                            <td><%=entry2.getKey()%></td>
-                            <td><%=entry2.getValue()%></td>
+                            <td><%=entry2.getKey()%>
+                            </td>
+                            <td><%=entry2.getValue()%>
+                            </td>
                         </tr>
-                    <%{%>
+                <%}%>
                 </tbody>
             </table>
         </td>
     </tr>
 </table>
-</body>
-</html>
-
 </body>
 </html>

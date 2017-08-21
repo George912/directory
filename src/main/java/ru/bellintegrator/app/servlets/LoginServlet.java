@@ -1,38 +1,68 @@
 package ru.bellintegrator.app.servlets;
 
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.PhoneNumberType;
+import ru.bellintegrator.app.model.User;
+import ru.bellintegrator.app.service.ContactService;
+import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.service.UserService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LoginServlet extends HttpServlet {
 
+   private DAOFactoryType daoFactoryType;
+   private DAOFactory daoFactory;
+   private GenericDAO<User> userGenericDAO;
+   private UserService userService;
+
     @Override
-    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+    public void init() throws ServletException {
+        daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
+        daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
+
+        try {
+            userGenericDAO = daoFactory.getUserDAO();
+            userService = new UserService(userGenericDAO);
+
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServletContext context = this.getServletContext();
-        //todo is exist user in db, get contacts and groups
+        RequestDispatcher dispatcher;
 
-        RequestDispatcher dispatcher = context.getRequestDispatcher("/views/main.jsp");
-        Group group = new Group(0, "g1", "g1", 0);
-        Contact contact = new Contact(0, "c1", "c1", "c1", "1", PhoneNumberType.HOME, "2", PhoneNumberType.HOME, "", "");
-        List<Group> groups = new ArrayList<>();
-        groups.add(group);
-        contact.setGroupList(groups);
-        List<Contact> contacts = new ArrayList<>();
-        contacts.add(contact);
-        Contact contact1 = new Contact(1, "c1", "c1", "c1", "1", PhoneNumberType.HOME, "2", PhoneNumberType.HOME, "", "");
-        contacts.add(contact1);
+        try {
+            System.out.println(req.getParameter("login") + "|" + req.getParameter("password"));
+            User user = userService.getUserByCredential(req.getParameter("login"), req.getParameter("password"));
 
-        req.setAttribute("contactList", contacts);
-        req.setAttribute("groupList", groups);
+            if (user != null) {
+                req.getSession().setAttribute("userId", user.getId());
+                dispatcher = context.getRequestDispatcher("/userdata");
+//                req.setAttribute("user", user);
+                dispatcher.include(req, resp);
 
-        dispatcher.include(req, res);
+            }else{
+                dispatcher = context.getRequestDispatcher("/views/login.jsp");
+                dispatcher.include(req, resp);
+            }
 
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
     }
 }

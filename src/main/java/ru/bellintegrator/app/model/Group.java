@@ -10,7 +10,7 @@ public class Group {
     private int id;
     private String name;
     private String notes;
-    private int ownerId;
+    private int owner;
 
     public Group() {
         this(0, "");
@@ -30,9 +30,9 @@ public class Group {
         this.notes = notes;
     }
 
-    public Group(int id, String name, String notes, int ownerId) {
+    public Group(int id, String name, String notes, int owner) {
         this(id, name, notes);
-        this.ownerId = ownerId;
+        this.owner = owner;
     }
 
     public String getName() {
@@ -51,12 +51,12 @@ public class Group {
         this.notes = notes;
     }
 
-    public int getOwnerId() {
-        return ownerId;
+    public int getOwner() {
+        return owner;
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
+    public void setOwner(int owner) {
+        this.owner = owner;
     }
 
     public int getId() {
@@ -75,7 +75,7 @@ public class Group {
         Group group = (Group) o;
 
         if (id != group.id) return false;
-        if (ownerId != group.ownerId) return false;
+        if (owner != group.owner) return false;
         if (name != null ? !name.equals(group.name) : group.name != null) return false;
         return notes != null ? notes.equals(group.notes) : group.notes == null;
     }
@@ -85,7 +85,7 @@ public class Group {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
-        result = 31 * result + ownerId;
+        result = 31 * result + owner;
         return result;
     }
 
@@ -95,7 +95,7 @@ public class Group {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", notes='" + notes + '\'' +
-                ", ownerId=" + ownerId +
+                ", owner=" + owner +
                 '}';
     }
 

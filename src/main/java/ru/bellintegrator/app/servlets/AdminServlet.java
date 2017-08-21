@@ -16,24 +16,38 @@ import java.io.IOException;
 
 public class AdminServlet extends HttpServlet {
 
+   private DAOFactoryType daoFactoryType;
+   private DAOFactory daoFactory;
+   private AnalyticalInfoDAO dao;
+   private AnalyticalInfoService service;
+
     @Override
-    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        //todo get info data from db
-        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/views/admin.jsp");
-        DAOFactoryType daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
-        DAOFactory daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
+    public void init() throws ServletException {
+        daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
+        daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
 
         try {
-            AnalyticalInfoDAO dao = daoFactory.getAnalyticalInfoDAO();
-            AnalyticalInfoService service = new AnalyticalInfoService(dao);
-            AnalyticalInfo info = service.collectAnalyticalInfo();
-            req.setAttribute("info", info);
+            dao = daoFactory.getAnalyticalInfoDAO();
+            service = new AnalyticalInfoService(dao);
 
         } catch (DAOException e) {
             e.printStackTrace();
         }
 
-        dispatcher.include(req, res);
+    }
+
+    @Override
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/views/admin.jsp");
+
+        try {
+            AnalyticalInfo info = service.collectAnalyticalInfo();
+            req.setAttribute("info", info);
+            dispatcher.include(req, res);
+
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

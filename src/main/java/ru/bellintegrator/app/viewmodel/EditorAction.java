@@ -5,6 +5,19 @@ package ru.bellintegrator.app.viewmodel;
  */
 public enum EditorAction {
     CREATE,
+    CREATED,
     UPDATE,
-    UNKNOWN
+    UPDATED,
+    UNKNOWN;
+
+    public static EditorAction getActionFromString(String act){
+        for (EditorAction action : values()) {
+            if (action.name().equalsIgnoreCase(act)) {
+                return action;
+            }
+        }
+
+        return UNKNOWN;
+    }
+
 }

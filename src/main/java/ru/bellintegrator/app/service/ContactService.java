@@ -64,7 +64,7 @@ public class ContactService{
     private void fillGroupData(Group group) throws DAOException {
         Group groupWithData = null;
         try {
-            groupWithData = groupService.getGroupById(group.getId(), group.getOwnerId());
+            groupWithData = groupService.getGroupById(group.getId(), group.getOwner());
             group.setName(groupWithData.getName());
             group.setNotes(groupWithData.getNotes());
 

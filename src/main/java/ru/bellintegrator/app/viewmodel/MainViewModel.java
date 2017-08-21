@@ -201,7 +201,7 @@ public class MainViewModel extends AbstractViewModel {
         Group group = groupTableView.getSelectionModel().getSelectedItem();
 
         if (group != null) {
-            group.setOwnerId(user.getId());
+            group.setOwner(user.getId());
             showGroupEditor(group, EditorAction.UPDATE);
             ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
             try {
@@ -227,7 +227,7 @@ public class MainViewModel extends AbstractViewModel {
         if (group != null) {
             log.debug("deleteGroup method. Group = " + group);
             try {
-                group.setOwnerId(user.getId());
+                group.setOwner(user.getId());
                 groupService.deleteGroup(group, user.getId());
                 ObservableList<Group> groupObservableList = FXCollections.observableArrayList();
 
