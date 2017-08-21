@@ -4,7 +4,7 @@ import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 
-public interface GroupManager {
+public interface ContactLinkGroupDao {
 
     void addGroupToContact(Group group, Contact contact) throws DAOException;
 

@@ -3,7 +3,7 @@ package ru.bellintegrator.app.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.impl.sql.GroupManager;
+import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -18,12 +18,12 @@ public class GroupService {
     private static final Logger log = LoggerFactory.getLogger(GroupService.class);
     private GenericDAO<Group> groupGenericDAO;
     private ContactService contactService;
+    private ContactLinkGroupDao linkGroupDao;
 
-    public GroupService(GenericDAO<Group> groupGenericDAO, ContactService contactService) {
-
+    public GroupService(GenericDAO<Group> groupGenericDAO, ContactService contactService, ContactLinkGroupDao linkGroupDao) {
         this.groupGenericDAO = groupGenericDAO;
         this.contactService = contactService;
-
+        this.linkGroupDao = linkGroupDao;
     }
 
     public void addGroup(Group group) throws DAOException {
@@ -74,13 +74,11 @@ public class GroupService {
     }
 
     public void addGroupToContact(Group group, Contact contact) throws DAOException {
-        GroupManager manager = (GroupManager) groupGenericDAO;
-        manager.addGroupToContact(group, contact);
+        linkGroupDao.addGroupToContact(group, contact);
     }
 
     public void deleteGroupFromContact(Group group, Contact contact) throws DAOException {
-        GroupManager manager = (GroupManager) groupGenericDAO;
-        manager.deleteGroupFromContact(group, contact);
+        linkGroupDao.deleteGroupFromContact(group, contact);
     }
 
 }

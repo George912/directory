@@ -1,7 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="ru.bellintegrator.app.model.Contact" %>
 <%@ page import="ru.bellintegrator.app.model.Group" %>
-<%@ page import="ru.bellintegrator.app.viewmodel.EditorAction" %>
+<%@ page import="ru.bellintegrator.app.EditorAction" %>
 <html>
 <head>
     <meta charset="UTF-8">

@@ -9,14 +9,14 @@ import ru.bellintegrator.app.dao.impl.sql.Connectable;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.dao.impl.sql.GroupManager;
+import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostgresqlGroupDAO implements GenericDAO<Group>, Connectable, GroupManager {
+public class PostgresqlGroupDAO implements GenericDAO<Group>, Connectable {
 
     private final static Object monitor = new Object();
 
@@ -117,40 +117,6 @@ public class PostgresqlGroupDAO implements GenericDAO<Group>, Connectable, Group
             try (Connection connection = getConnection()) {
                 ResultSetHandler<List<Group>> handler = new BeanListHandler<>(Group.class);
                 return runner.execute(connection, query, handler, name, ownerId).get(0);
-
-            } catch (SQLException e) {
-                throw new DAOException("Exception while creating group:" + e);
-            }
-        }
-    }
-
-    @Override
-    public void addGroupToContact(Group group, Contact contact) throws DAOException {
-        synchronized (monitor) {
-            String query = "{call add_group_to_contact(?, ?)}";
-
-            try (CallableStatement statement = getConnection().prepareCall(query)) {
-                statement.setInt(1, contact.getId());
-                statement.setInt(2, group.getId());
-
-                statement.execute();
-
-            } catch (SQLException e) {
-                throw new DAOException("Exception while creating group:" + e);
-            }
-        }
-    }
-
-    @Override
-    public void deleteGroupFromContact(Group group, Contact contact) throws DAOException {
-        synchronized (monitor) {
-            String query = "{call delete_group_from_contact(?, ?)}";
-
-            try (CallableStatement statement = getConnection().prepareCall(query)) {
-                statement.setInt(1, contact.getId());
-                statement.setInt(2, group.getId());
-
-                statement.execute();
 
             } catch (SQLException e) {
                 throw new DAOException("Exception while creating group:" + e);

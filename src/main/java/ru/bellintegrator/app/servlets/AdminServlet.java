@@ -18,7 +18,6 @@ import java.io.IOException;
 
 public class AdminServlet extends HttpServlet {
 
-    private DAOFactoryType daoFactoryType;
     private DAOFactory daoFactory;
     private AnalyticalInfoDAO dao;
     private AnalyticalInfoService service;
@@ -26,8 +25,7 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
-        daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
+        daoFactory = DAOFactory.getDAOFactory();
 
         try {
             dao = daoFactory.getAnalyticalInfoDAO();

@@ -3,6 +3,7 @@ package ru.bellintegrator.app.dao.factory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.sql.SqlPostgresqlDAOFactory;
 import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
+import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -12,6 +13,7 @@ import ru.bellintegrator.app.model.User;
  * Created by neste_000 on 19.07.2017.
  */
 public abstract class DAOFactory {
+    private static final DAOFactoryType daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
 
     public abstract GenericDAO<Contact> getContactDAO() throws DAOException;
 
@@ -20,6 +22,12 @@ public abstract class DAOFactory {
     public abstract GenericDAO<User> getUserDAO() throws DAOException;
 
     public abstract AnalyticalInfoDAO getAnalyticalInfoDAO() throws DAOException;
+
+    public abstract ContactLinkGroupDao getContactLinkGroupDao() throws DAOException;
+
+    public static DAOFactory getDAOFactory(){
+        return DAOFactory.getDAOFactory(daoFactoryType);
+    }
 
     public static DAOFactory getDAOFactory(DAOFactoryType daoFactoryType) {
 

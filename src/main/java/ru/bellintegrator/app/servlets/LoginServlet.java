@@ -19,7 +19,6 @@ import java.io.IOException;
 
 public class LoginServlet extends HttpServlet {
 
-    private DAOFactoryType daoFactoryType;
     private DAOFactory daoFactory;
     private GenericDAO<User> userGenericDAO;
     private UserService userService;
@@ -28,8 +27,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
-        daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
+        daoFactory = DAOFactory.getDAOFactory();
 
         try {
             userGenericDAO = daoFactory.getUserDAO();

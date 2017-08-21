@@ -3,10 +3,8 @@ package ru.bellintegrator.app.dao.factory.impl.sql;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
-import ru.bellintegrator.app.dao.impl.sql.postgresql.PostgresqlAnalyticalInfoDAO;
-import ru.bellintegrator.app.dao.impl.sql.postgresql.PostgresqlContactDAO;
-import ru.bellintegrator.app.dao.impl.sql.postgresql.PostgresqlGroupDAO;
-import ru.bellintegrator.app.dao.impl.sql.postgresql.PostgresqlUserDAO;
+import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
+import ru.bellintegrator.app.dao.impl.sql.postgresql.*;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -32,6 +30,11 @@ public class SqlPostgresqlDAOFactory extends DAOFactory {
     @Override
     public AnalyticalInfoDAO getAnalyticalInfoDAO() {
         return new PostgresqlAnalyticalInfoDAO();
+    }
+
+    @Override
+    public ContactLinkGroupDao getContactLinkGroupDao() throws DAOException {
+        return new PostgresqlContactLinkGroupDAO();
     }
 
 }

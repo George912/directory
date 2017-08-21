@@ -5,12 +5,13 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.factory.DAOFactoryType;
+import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.service.ContactService;
 import ru.bellintegrator.app.service.GroupService;
-import ru.bellintegrator.app.viewmodel.EditorAction;
+import ru.bellintegrator.app.EditorAction;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,24 +22,24 @@ import java.io.IOException;
 
 public class GroupEditorServlet extends HttpServlet {
 
-    private DAOFactoryType daoFactoryType;
     private DAOFactory daoFactory;
     private GenericDAO<Contact> contactGenericDAO;
     private GenericDAO<Group> groupGenericDAO;
     private ContactService contactService;
+    private ContactLinkGroupDao linkGroupDao;
     private GroupService groupService;
     private static final Logger log = LoggerFactory.getLogger(GroupEditorServlet.class);
 
     @Override
     public void init() throws ServletException {
-        daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
-        daoFactory = DAOFactory.getDAOFactory(daoFactoryType);
+        daoFactory = DAOFactory.getDAOFactory();
 
         try {
             contactGenericDAO = daoFactory.getContactDAO();
             groupGenericDAO = daoFactory.getGroupDAO();
             contactService = new ContactService(contactGenericDAO);
-            groupService = new GroupService(groupGenericDAO, contactService);
+            linkGroupDao = daoFactory.getContactLinkGroupDao();
+            groupService = new GroupService(groupGenericDAO, contactService, linkGroupDao);
             contactService.setGroupService(groupService);
 
         } catch (DAOException e) {
