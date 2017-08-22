@@ -13,7 +13,7 @@ import ru.bellintegrator.app.model.User;
  * Created by neste_000 on 19.07.2017.
  */
 public abstract class DAOFactory {
-    private static final DAOFactoryType daoFactoryType = DAOFactoryType.SQL_POSTGRESQL;
+    private static final DAOFactoryType DEFAULT_DAO_FACTORY_TYPE = DAOFactoryType.SQL_POSTGRESQL;
 
     public abstract GenericDAO<Contact> getContactDAO() throws DAOException;
 
@@ -26,7 +26,7 @@ public abstract class DAOFactory {
     public abstract ContactLinkGroupDao getContactLinkGroupDao() throws DAOException;
 
     public static DAOFactory getDAOFactory(){
-        return DAOFactory.getDAOFactory(daoFactoryType);
+        return DAOFactory.getDAOFactory(DEFAULT_DAO_FACTORY_TYPE);
     }
 
     public static DAOFactory getDAOFactory(DAOFactoryType daoFactoryType) {
