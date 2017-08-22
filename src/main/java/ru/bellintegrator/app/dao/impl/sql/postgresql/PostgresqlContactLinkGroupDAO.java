@@ -1,6 +1,6 @@
 package ru.bellintegrator.app.dao.impl.sql.postgresql;
 
-import ru.bellintegrator.app.dao.impl.sql.Connectable;
+import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
 import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
@@ -9,7 +9,7 @@ import ru.bellintegrator.app.model.Group;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 
-public class PostgresqlContactLinkGroupDAO implements ContactLinkGroupDao, Connectable {
+public class PostgresqlContactLinkGroupDAO extends AbstractConnectable implements ContactLinkGroupDao {
 
     private final static Object monitor = new Object();
 

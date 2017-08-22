@@ -5,7 +5,7 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.impl.sql.Connectable;
+import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 
@@ -14,7 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostgresqlContactDAO implements GenericDAO<Contact>, Connectable {
+public class PostgresqlContactDAO extends AbstractConnectable implements GenericDAO<Contact> {
 
     private final static Object monitor = new Object();
 

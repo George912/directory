@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.exception.PersonalDataNotSetException;
 import ru.bellintegrator.app.exception.PhoneNumberFormatException;
 
-import java.util.List;
-
 /**
  * Created by neste_000 on 22.07.2017.
  */

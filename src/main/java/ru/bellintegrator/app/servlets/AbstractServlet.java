@@ -12,7 +12,6 @@ import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 public abstract class AbstractServlet extends HttpServlet {

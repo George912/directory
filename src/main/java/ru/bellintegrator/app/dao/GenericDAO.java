@@ -2,7 +2,6 @@ package ru.bellintegrator.app.dao;
 
 import ru.bellintegrator.app.exception.DAOException;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

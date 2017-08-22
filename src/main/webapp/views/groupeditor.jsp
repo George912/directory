@@ -1,5 +1,5 @@
-<%@ page import="ru.bellintegrator.app.model.Group" %>
 <%@ page import="ru.bellintegrator.app.EditorAction" %>
+<%@ page import="ru.bellintegrator.app.model.Group" %>
 <html>
 <head>
     <meta charset="UTF-8">

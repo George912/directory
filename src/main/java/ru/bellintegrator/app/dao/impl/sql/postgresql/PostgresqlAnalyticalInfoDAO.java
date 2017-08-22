@@ -4,8 +4,8 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
+import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
 import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
-import ru.bellintegrator.app.dao.impl.sql.Connectable;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
 
@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PostgresqlAnalyticalInfoDAO implements AnalyticalInfoDAO, Connectable {
+public class PostgresqlAnalyticalInfoDAO extends AbstractConnectable implements AnalyticalInfoDAO {
 
     private final static Object monitor = new Object();
 

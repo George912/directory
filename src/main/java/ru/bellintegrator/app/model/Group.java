@@ -1,7 +1,5 @@
 package ru.bellintegrator.app.model;
 
-import java.io.Serializable;
-
 /**
  * Created by neste_000 on 11.07.2017.
  */

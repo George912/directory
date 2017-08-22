@@ -5,18 +5,16 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.impl.sql.Connectable;
+import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
 import ru.bellintegrator.app.exception.DAOException;
-import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostgresqlGroupDAO implements GenericDAO<Group>, Connectable {
+public class PostgresqlGroupDAO extends AbstractConnectable implements GenericDAO<Group> {
 
     private final static Object monitor = new Object();
 
