@@ -37,58 +37,58 @@
         <finalName>directory</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>sql-maven-plugin</artifactId>-->
+                <!--<version>1.5</version>-->
 
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${jdbc.driver.version}</version>
-                    </dependency>
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>org.postgresql</groupId>-->
+                        <!--<artifactId>postgresql</artifactId>-->
+                        <!--<version>${jdbc.driver.version}</version>-->
+                    <!--</dependency>-->
 
-                </dependencies>
+                <!--</dependencies>-->
 
-                <configuration>
-                    <driver>${jdbc.driver}</driver>
-                    <url>${jdbc.url}</url>
-                    <username>${jdbc.username}</username>
-                    <password>${jdbc.password}</password>
-                    <settingsKey>sensibleKey</settingsKey>
-                    <delimiterType>row</delimiterType>
-                </configuration>
+                <!--<configuration>-->
+                    <!--<driver>${jdbc.driver}</driver>-->
+                    <!--<url>${jdbc.url}</url>-->
+                    <!--<username>${jdbc.username}</username>-->
+                    <!--<password>${jdbc.password}</password>-->
+                    <!--<settingsKey>sensibleKey</settingsKey>-->
+                    <!--<delimiterType>row</delimiterType>-->
+                <!--</configuration>-->
 
-                <executions>
-                    <execution>
-                        <id>drop-db</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <url>jdbc:postgresql:postgres</url>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/scripts/drop/dropdb.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-db</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <url>jdbc:postgresql:postgres</url>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/main/resources/scripts/create/createdb.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-                    </execution>
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>drop-db</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>execute</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<url>jdbc:postgresql:postgres</url>-->
+                            <!--<autocommit>true</autocommit>-->
+                            <!--<srcFiles>-->
+                                <!--<srcFile>src/main/resources/scripts/drop/dropdb.sql</srcFile>-->
+                            <!--</srcFiles>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>create-db</id>-->
+                        <!--<phase>process-resources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>execute</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<url>jdbc:postgresql:postgres</url>-->
+                            <!--<autocommit>true</autocommit>-->
+                            <!--<srcFiles>-->
+                                <!--<srcFile>src/main/resources/scripts/create/createdb.sql</srcFile>-->
+                            <!--</srcFiles>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
 
                     <!--<execution>-->
                         <!--<id>create-schema</id>-->
@@ -119,8 +119,8 @@
                             <!--</srcFiles>-->
                         <!--</configuration>-->
                     <!--</execution>-->
-                </executions>
-            </plugin>
+                <!--</executions>-->
+            <!--</plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

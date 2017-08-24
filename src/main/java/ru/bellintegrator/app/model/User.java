@@ -14,7 +14,12 @@ public class User {
     private String lastName;
 
     public User() {
-        this(0);
+        this.id = id;
+        this.login = "";
+        this.password = "";
+        this.firstName = "";
+        this.middleName = "";
+        this.lastName = "";
     }
 
     public User(int id) {
@@ -40,7 +45,8 @@ public class User {
     }
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     public int getId() {
         return id;
     }

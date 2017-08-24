@@ -12,6 +12,7 @@ public enum DAOFactoryType {
     SQL_MYSQL,
     SQL_MSSQL,
     SQL_POSTGRESQL,
+    HIBERNATE,
     FILE,
     UNKNOWN;
 

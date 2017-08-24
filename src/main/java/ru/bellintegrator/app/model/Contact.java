@@ -1,11 +1,14 @@
 package ru.bellintegrator.app.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by neste_000 on 11.07.2017.
  */
+@Entity
+@Table(name = "contacts")
 public class Contact {
 
     private int id;
@@ -22,7 +25,15 @@ public class Contact {
     private int owner;
 
     public Contact() {
-        this(0, "", "", "", "", PhoneNumberType.UNKNOWN, "", PhoneNumberType.UNKNOWN, "", "");
+        this.firstName = "";
+        this.middleName = "";
+        this.lastName = "";
+        this.firstPhoneNumber = "";
+        this.firstPhoneNumberType = PhoneNumberType.MOBILE;
+        this.secondPhoneNumber = "";
+        this.secondPhoneNumberType = PhoneNumberType.MOBILE;
+        this.email = "";
+        this.notes = "";
     }
 
     public Contact(int owner) {
@@ -62,6 +73,9 @@ public class Contact {
         this.owner = owner;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     public int getId() {
         return id;
     }
@@ -70,6 +84,7 @@ public class Contact {
         this.id = id;
     }
 
+    @Column(name="firstphonenumber", nullable=false, length=11)
     public String getFirstPhoneNumber() {
         return firstPhoneNumber;
     }
@@ -78,6 +93,7 @@ public class Contact {
         this.firstPhoneNumber = firstPhoneNumber;
     }
 
+    @Column(name="firstphonenumbertype", nullable=false, length=10)
     public PhoneNumberType getFirstPhoneNumberType() {
         return firstPhoneNumberType;
     }
@@ -86,6 +102,7 @@ public class Contact {
         this.firstPhoneNumberType = firstPhoneNumberType;
     }
 
+    @Column(name="secondphonenumber", nullable=false, length=11)
     public String getSecondPhoneNumber() {
         return secondPhoneNumber;
     }
@@ -94,6 +111,7 @@ public class Contact {
         this.secondPhoneNumber = secondPhoneNumber;
     }
 
+    @Column(name="secondphonenumbertype", nullable=false, length=10)
     public PhoneNumberType getSecondPhoneNumberType() {
         return secondPhoneNumberType;
     }
@@ -102,6 +120,7 @@ public class Contact {
         this.secondPhoneNumberType = secondPhoneNumberType;
     }
 
+    @Column(name="email", nullable=false, length=30)
     public String getEmail() {
         return email;
     }
@@ -110,6 +129,7 @@ public class Contact {
         this.email = email;
     }
 
+    @Column(name="notes", nullable=false, length=300)
     public String getNotes() {
         return notes;
     }
@@ -118,6 +138,7 @@ public class Contact {
         this.notes = notes;
     }
 
+    @Column(name="firstname", nullable=false, length=30)
     public String getFirstName() {
         return firstName;
     }
@@ -126,6 +147,7 @@ public class Contact {
         this.firstName = firstName;
     }
 
+    @Column(name="lastname", nullable=false, length=50)
     public String getLastName() {
         return lastName;
     }
@@ -134,6 +156,7 @@ public class Contact {
         this.lastName = lastName;
     }
 
+    @Column(name="middlename", nullable=false, length=30)
     public String getMiddleName() {
         return middleName;
     }
@@ -142,10 +165,12 @@ public class Contact {
         this.middleName = middleName;
     }
 
+    @Transient
     public List<Group> getGroupList() {
         return groupList;
     }
 
+    @Column(name="owner", nullable=false)
     public int getOwner() {
         return owner;
     }

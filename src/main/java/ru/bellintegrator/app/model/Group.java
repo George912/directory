@@ -15,7 +15,8 @@ public class Group {
     private int owner;
 
     public Group() {
-        this(0, "");
+        this.name = "";
+        this.notes = "";
     }
 
     public Group(int id) {
@@ -64,7 +65,9 @@ public class Group {
         this.owner = owner;
     }
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     public int getId() {
         return id;
     }
