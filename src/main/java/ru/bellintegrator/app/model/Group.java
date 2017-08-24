@@ -1,8 +1,12 @@
 package ru.bellintegrator.app.model;
 
+import javax.persistence.*;
+
 /**
  * Created by neste_000 on 11.07.2017.
  */
+@Entity
+@Table(name = "groups")
 public class Group {
 
     private int id;
@@ -33,6 +37,7 @@ public class Group {
         this.owner = owner;
     }
 
+    @Column(name="name", nullable=false, length=30)
     public String getName() {
         return name;
     }
@@ -41,6 +46,7 @@ public class Group {
         this.name = name;
     }
 
+    @Column(name="notes", nullable=false, length=300)
     public String getNotes() {
         return notes;
     }
@@ -49,6 +55,7 @@ public class Group {
         this.notes = notes;
     }
 
+    @Column(name="owner", nullable=false)
     public int getOwner() {
         return owner;
     }
@@ -57,6 +64,7 @@ public class Group {
         this.owner = owner;
     }
 
+    @Id @GeneratedValue
     public int getId() {
         return id;
     }

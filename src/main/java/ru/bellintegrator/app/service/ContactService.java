@@ -31,7 +31,7 @@ public class ContactService{
         contactGenericDAO.create(contact);
 
         if(!contact.getGroupList().isEmpty()){
-            for(Group group:contact.getGroupList()){
+            for(Group group : contact.getGroupList()){
                 groupService.addGroupToContact(group, contact);
             }
         }
@@ -42,7 +42,7 @@ public class ContactService{
         contactGenericDAO.update(contact);
 
         if(!contact.getGroupList().isEmpty()){
-            for(Group group:contact.getGroupList()){
+            for(Group group : contact.getGroupList()){
                 groupService.addGroupToContact(group, contact);
             }
         }

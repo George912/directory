@@ -41,7 +41,7 @@
                 <tbody>
                 <%
                     List<Contact> contacts = (List<Contact>) request.getAttribute("contactList");
-                    for (Contact contact: contacts){%>
+                    for (Contact contact : contacts){%>
                         <tr>
                             <td><%=contact.getFirstName()%></td>
                             <td><%=contact.getMiddleName()%></td>
@@ -101,7 +101,7 @@
                 <tbody>
                 <%
                     List<Group> groups = (List<Group>) request.getAttribute("groupList");
-                    for (Group group: groups){%>
+                    for (Group group : groups){%>
                 <tr>
                     <td><%=group.getName()%></td>
                     <td>

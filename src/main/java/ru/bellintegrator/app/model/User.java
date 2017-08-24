@@ -1,5 +1,9 @@
 package ru.bellintegrator.app.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
 
     private int id;
@@ -35,6 +39,8 @@ public class User {
         this.lastName = lastName;
     }
 
+    @Id
+    @GeneratedValue
     public int getId() {
         return id;
     }
@@ -43,6 +49,7 @@ public class User {
         this.id = id;
     }
 
+    @Column(name="login", nullable=false, length=20, unique = true)
     public String getLogin() {
         return login;
     }
@@ -51,6 +58,7 @@ public class User {
         this.login = login;
     }
 
+    @Column(name="password", nullable=false, length=20)
     public String getPassword() {
         return password;
     }
@@ -59,6 +67,7 @@ public class User {
         this.password = password;
     }
 
+    @Column(name="firstname", nullable=false, length=30)
     public String getFirstName() {
         return firstName;
     }
@@ -67,6 +76,7 @@ public class User {
         this.firstName = firstName;
     }
 
+    @Column(name="lastname", nullable=false, length=50)
     public String getLastName() {
         return lastName;
     }
@@ -75,6 +85,7 @@ public class User {
         this.lastName = lastName;
     }
 
+    @Column(name="middlename", nullable=false, length=30)
     public String getMiddleName() {
         return middleName;
     }
