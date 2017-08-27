@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.dao.factory.impl.sql;
+package ru.bellintegrator.app.dao.factory.impl.hibernate;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;

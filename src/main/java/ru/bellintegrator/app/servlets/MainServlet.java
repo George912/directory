@@ -24,7 +24,7 @@ public class MainServlet extends AbstractServlet {
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/main.jsp");
         contactService = new ContactService(contactGenericDAO);
-        groupService = new GroupService(groupGenericDAO, contactService, linkGroupDao);
+        groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
     }
 

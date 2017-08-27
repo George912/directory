@@ -1,7 +1,7 @@
 package ru.bellintegrator.app.dao.factory;
 
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.factory.impl.sql.HibernateDAOFactory;
+import ru.bellintegrator.app.dao.factory.impl.hibernate.HibernateDAOFactory;
 import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;

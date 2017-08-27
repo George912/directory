@@ -31,15 +31,18 @@ public class LoginServlet extends AbstractServlet {
         ServletContext context = this.getServletContext();
 
         try {
-            User user = new User(1);
+            User user = userService.getUserByCredential(req.getParameter("login"), req.getParameter("password"));
 
-            DAOFactory factory = DAOFactory.getDAOFactory();
-            GenericDAO<User> userDAO = factory.getUserDAO();
-            GenericDAO<Group> groupDAO = factory.getGroupDAO();
-            GenericDAO<Contact> contactDao = factory.getContactDAO();
-            AnalyticalInfoDAO infoDAO = factory.getAnalyticalInfoDAO();
+//            DAOFactory factory = DAOFactory.getDAOFactory();
+//            GenericDAO<User> userDAO = factory.getUserDAO();
+//            GenericDAO<Group> groupDAO = factory.getGroupDAO();
+//            GenericDAO<Contact> contactDao = factory.getContactDAO();
+//            AnalyticalInfoDAO infoDAO = factory.getAnalyticalInfoDAO();
+//
+//            System.out.println("groups"+groupDAO.getAll(1));
+//            System.out.println("contacts"+contactDao.getAll(1));
 
-            if (user == null) {
+            if (user != null) {
                 req.getSession().setAttribute("userId", user.getId());
                 dispatcher = context.getRequestDispatcher("/userdata");
                 dispatcher.include(req, resp);

@@ -29,23 +29,10 @@ public class ContactService{
 
     public void addContact(Contact contact) throws DAOException {
         contactGenericDAO.create(contact);
-
-        if(!contact.getGroupList().isEmpty()){
-            for(Group group : contact.getGroupList()){
-                groupService.addGroupToContact(group, contact);
-            }
-        }
     }
 
     public void updateContact(Contact contact) throws DAOException {
-
         contactGenericDAO.update(contact);
-
-        if(!contact.getGroupList().isEmpty()){
-            for(Group group : contact.getGroupList()){
-                groupService.addGroupToContact(group, contact);
-            }
-        }
     }
 
     public void deleteContact(Contact contact) throws DAOException {
@@ -63,8 +50,9 @@ public class ContactService{
 
     private void fillGroupData(Group group) throws DAOException {
         Group groupWithData = null;
+
         try {
-//            groupWithData = groupService.getGroupById(group.getId(), group.getOwner());
+            groupWithData = groupService.getGroupById(group.getId(), group.getOwner().getId());
             group.setName(groupWithData.getName());
             group.setNotes(groupWithData.getNotes());
 
@@ -114,7 +102,7 @@ public class ContactService{
         List<Contact> contactList = contactGenericDAO.getAll(ownerId);
         for (Contact contact : contactList) {
             if (contact.getGroupList().remove(group)) {
-                groupService.deleteGroupFromContact(group, contact);
+//                groupService.deleteGroupFromContact(group, contact);
                 contactGenericDAO.update(contact);
             }
         }

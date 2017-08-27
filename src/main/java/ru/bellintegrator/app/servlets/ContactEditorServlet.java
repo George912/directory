@@ -26,7 +26,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
     @Override
     public void init() throws ServletException {
         contactService = new ContactService(contactGenericDAO);
-        groupService = new GroupService(groupGenericDAO, contactService, linkGroupDao);
+        groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
         dispatcher = this.getServletContext().getRequestDispatcher("/views/contacteditor.jsp");
     }
@@ -84,7 +84,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
                 if (groups != null) {
                     for (String id : groups) {
                         Group group = groupService.getGroupById(Integer.parseInt(id), userId);
-                        groupService.addGroupToContact(group, contact);
+//                        groupService.addGroupToContact(group, contact);
                     }
                 }
 

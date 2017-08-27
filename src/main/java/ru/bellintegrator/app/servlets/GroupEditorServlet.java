@@ -24,7 +24,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/groupeditor.jsp");
         contactService = new ContactService(contactGenericDAO);
-        groupService = new GroupService(groupGenericDAO, contactService, linkGroupDao);
+        groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
     }
 

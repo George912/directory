@@ -166,7 +166,7 @@ public class Contact implements Serializable{
         this.middleName = middleName;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "contacts_groups",
             joinColumns = @JoinColumn(name = "contact_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id")
@@ -175,7 +175,7 @@ public class Contact implements Serializable{
         return groupList;
     }
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner", nullable = false, referencedColumnName = "id")
     public User getOwner() {
         return owner;

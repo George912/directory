@@ -47,9 +47,9 @@
                             <td><%=contact.getMiddleName()%></td>
                             <td><%=contact.getLastName()%></td>
                             <td><%=contact.getFirstPhoneNumber()%></td>
-                            <td><%=contact.getFirstPhoneNumberType().name()%></td>
+                            <td><%=contact.getFirstPhoneNumberType()%></td>
                             <td><%=contact.getSecondPhoneNumber()%></td>
-                            <td><%=contact.getSecondPhoneNumberType().name()%></td>
+                            <td><%=contact.getSecondPhoneNumberType()%></td>
                             <td><%=contact.getEmail()%></td>
                             <td>
                                 <textarea>
@@ -61,8 +61,8 @@
                                     <%=contact.getGroupList().toString()%>
                                 </textarea>
                             </td>
-                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=contact.getOwner()%>">Редактировать</a></td>
-                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=contact.getOwner()%>">Удалить</a></td>
+                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=contact.getOwner().getId()%>">Редактировать</a></td>
+                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=contact.getOwner().getId()%>">Удалить</a></td>
                             <td></td>
                         </tr>
                 <%}%>
@@ -109,8 +109,8 @@
                                 <%=group.getNotes()%>
                         </textarea>
                     </td>
-                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=group.getOwner()%>">Редактировать</a></td>
-                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=group.getOwner()%>">Удалить</a></td>
+                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=group.getOwner().getId()%>">Редактировать</a></td>
+                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=group.getOwner().getId()%>">Удалить</a></td>
                 </tr>
                 <%}%>
                 </tbody>
