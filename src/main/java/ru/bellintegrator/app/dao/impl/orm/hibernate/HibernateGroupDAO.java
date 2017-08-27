@@ -1,9 +1,10 @@
 package ru.bellintegrator.app.dao.impl.orm.hibernate;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import org.hibernate.criterion.Restrictions;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
 import ru.bellintegrator.app.exception.DAOException;
@@ -87,20 +88,13 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
     @Override
     public List<Group> getAll(int ownerId) throws DAOException {
         List<Group> groups;
-        Transaction transaction = null;
 
         try (Session session = getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            groups = session.createQuery("FROM Group").list();
-
-            transaction.commit();
+            Criteria criteria = session.createCriteria(Group.class);
+            criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
+            groups = criteria.list();
 
         } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-
             throw new DAOException("Exception while retrieving group list: " + e);
         }
 
@@ -108,56 +102,38 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
     }
 
     @Override
-    //todo
     public Group getById(int id, int ownerId) throws DAOException {
-        Group group;
-        Transaction transaction = null;
+        Group group = null;
 
         try (Session session = getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            String hql = "FROM Group WHERE Group.id = :id";
+            Criteria criteria = session.createCriteria(Group.class);
+            criteria.add(Restrictions.eq(("id"), id));
+            criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
+            List result = criteria.list();
 
-            Query query = session.createQuery(hql);
-            query.setParameter("id", id);
-            group = (Group) query.list().get(0);
-
-            transaction.commit();
-
-        } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
+            if (!result.isEmpty()) {
+                group = (Group) result.get(0);
             }
 
-            throw new DAOException("Exception while retrieving group list: " + e);
+        } catch (HibernateException e) {
+            throw new DAOException("Exception while retrieving group by id: " + e);
         }
 
         return group;
     }
 
     @Override
-    //todo
     public List<Group> getByName(String name, int ownerId) throws DAOException {
         List<Group> groups;
-        Transaction transaction = null;
-        String hql = "FROM Group WHERE Group.name = :name AND Group.owner = :owner";
 
         try (Session session = getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            Query query = session.createQuery(hql);
-            query.setParameter("name", name);
-            query.setParameter("owner", ownerId);
-
-            groups = query.list();
-
-            transaction.commit();
+            Criteria criteria = session.createCriteria(Group.class);
+            criteria.add(Restrictions.eq(("name"), name));
+            criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
+            groups = criteria.list();
 
         } catch (HibernateException e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-
-            throw new DAOException("Exception while retrieving group list: " + e);
+            throw new DAOException("Exception while retrieving group list by name: " + e);
         }
 
         return groups;

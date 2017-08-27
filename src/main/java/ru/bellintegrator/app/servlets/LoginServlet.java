@@ -37,14 +37,11 @@ public class LoginServlet extends AbstractServlet {
             GenericDAO<Group> groupDAO = factory.getGroupDAO();
             GenericDAO<Contact> contactDao = factory.getContactDAO();
 
-//            System.out.println("getAll:" + groupDAO.getAll(1));
-//            System.out.println("getById:" + groupDAO.getById(1, 1));
-//            System.out.println("getByName:" + groupDAO.getByName("g1", 1));
+            System.out.println("getAll:" + groupDAO.getAll(1));
+            System.out.println("getById:" + groupDAO.getById(1, 1));
+            System.out.println("getByName:" + groupDAO.getByName("g1", 1));
 
 //            System.out.println("contactDao.getAll:" + contactDao.getAll(1));
-            userDAO.getByName("fn7", 1);
-
-//            groupDAO.delete(group);
 
             if (user == null) {
                 req.getSession().setAttribute("userId", user.getId());
