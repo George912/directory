@@ -1,12 +1,10 @@
-package ru.bellintegrator.app.dao.impl.sql;
+package ru.bellintegrator.app.dao.impl;
 
-import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
-import ru.bellintegrator.app.model.AnalyticalInfo;
 
 import java.util.Map;
 
-public interface AnalyticalInfoDAO extends GenericDAO<AnalyticalInfo>{
+public interface AnalyticalInfoDAO{
 
     int getUserCount() throws DAOException;
 

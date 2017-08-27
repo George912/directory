@@ -3,8 +3,8 @@ package ru.bellintegrator.app.dao.impl.orm.hibernate;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
-import ru.bellintegrator.app.dao.impl.sql.UserDAO;
+import ru.bellintegrator.app.dao.impl.AbstractConnectable;
+import ru.bellintegrator.app.dao.impl.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.User;
 

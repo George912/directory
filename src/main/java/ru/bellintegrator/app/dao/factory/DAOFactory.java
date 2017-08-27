@@ -2,9 +2,7 @@ package ru.bellintegrator.app.dao.factory;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.sql.HibernateDAOFactory;
-import ru.bellintegrator.app.dao.factory.impl.sql.SqlPostgresqlDAOFactory;
-import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
-import ru.bellintegrator.app.dao.impl.sql.ContactLinkGroupDao;
+import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -23,8 +21,6 @@ public abstract class DAOFactory {
     public abstract GenericDAO<User> getUserDAO() throws DAOException;
 
     public abstract AnalyticalInfoDAO getAnalyticalInfoDAO() throws DAOException;
-
-    public abstract ContactLinkGroupDao getContactLinkGroupDao() throws DAOException;
 
     public static DAOFactory getDAOFactory() {
         return DAOFactory.getDAOFactory(DEFAULT_DAO_FACTORY_TYPE);
@@ -53,7 +49,7 @@ public abstract class DAOFactory {
                 throw new UnsupportedOperationException("Unable to create SQL_MSSQL dao factory. Define SQL_MSSQL dao factory class!");
 
             case SQL_POSTGRESQL:
-                return new SqlPostgresqlDAOFactory();
+            throw new UnsupportedOperationException("Unable to create SQL_POSTGRESQL dao factory. Define SQL_POSTGRESQL dao factory class!");
 
             case HIBERNATE:
                 return new HibernateDAOFactory();

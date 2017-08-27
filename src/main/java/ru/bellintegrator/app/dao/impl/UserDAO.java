@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.dao.impl.sql;
+package ru.bellintegrator.app.dao.impl;
 
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.User;

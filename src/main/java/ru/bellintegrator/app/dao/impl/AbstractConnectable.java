@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.dao.impl.sql;
+package ru.bellintegrator.app.dao.impl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

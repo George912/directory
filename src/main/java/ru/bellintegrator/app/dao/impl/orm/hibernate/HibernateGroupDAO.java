@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
+import ru.bellintegrator.app.dao.impl.AbstractConnectable;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;

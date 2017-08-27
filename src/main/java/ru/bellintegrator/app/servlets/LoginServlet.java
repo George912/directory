@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
+import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.UserService;
 
@@ -37,21 +37,7 @@ public class LoginServlet extends AbstractServlet {
             GenericDAO<User> userDAO = factory.getUserDAO();
             GenericDAO<Group> groupDAO = factory.getGroupDAO();
             GenericDAO<Contact> contactDao = factory.getContactDAO();
-
-            Contact contact = new Contact();
-            contact.setFirstName("new");
-            contact.setSecondPhoneNumber("new");
-            contact.setNotes("new");
-            contact.setMiddleName("new");
-            contact.setLastName("new");
-            contact.setFirstPhoneNumber("new");
-            contact.setEmail("new");
-            contact.setGroupList(null);
-            contact.setFirstPhoneNumberType(PhoneNumberType.HOME.name());
-            contact.setSecondPhoneNumberType(PhoneNumberType.HOME.name());
-            contact.setOwner(new User(1));
-
-            contactDao.create(contact);
+            AnalyticalInfoDAO infoDAO = factory.getAnalyticalInfoDAO();
 
             if (user == null) {
                 req.getSession().setAttribute("userId", user.getId());

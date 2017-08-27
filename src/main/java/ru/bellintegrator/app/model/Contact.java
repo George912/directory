@@ -166,11 +166,10 @@ public class Contact implements Serializable{
         this.middleName = middleName;
     }
 
-    @Transient
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "contacts_groups",
-            joinColumns = @JoinColumn(name = "contact_id", referencedColumnName = "contact_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id")
+            joinColumns = @JoinColumn(name = "contact_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id")
     )
     public List<Group> getGroupList() {
         return groupList;

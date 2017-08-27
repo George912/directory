@@ -1,12 +1,12 @@
 package ru.bellintegrator.app.service;
 
-import ru.bellintegrator.app.dao.impl.sql.AnalyticalInfoDAO;
+import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
 
 public class AnalyticalInfoService {
 
-    AnalyticalInfoDAO dao;
+    private AnalyticalInfoDAO dao;
 
     public AnalyticalInfoService(AnalyticalInfoDAO dao) {
         this.dao = dao;
