@@ -102,7 +102,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
     protected void delete(HttpServletRequest request, HttpServletResponse response, int userId) {
         try {
             Contact contact = new Contact(Integer.parseInt(request.getParameter("contact_id")), "", "", "");
-            contact.setOwner(userId);
+//            contact.setOwner(userId);
             contactService.deleteContact(contact);
 
             response.sendRedirect(request.getContextPath() + "/userdata");

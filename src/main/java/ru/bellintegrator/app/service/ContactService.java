@@ -64,11 +64,12 @@ public class ContactService{
     private void fillGroupData(Group group) throws DAOException {
         Group groupWithData = null;
         try {
-            groupWithData = groupService.getGroupById(group.getId(), group.getOwner());
+//            groupWithData = groupService.getGroupById(group.getId(), group.getOwner());
             group.setName(groupWithData.getName());
             group.setNotes(groupWithData.getNotes());
 
-        } catch (DAOException e) {
+//        } catch (DAOException e) {
+        } catch (Exception e) {
             throw new DAOException("Exception while setting group data: " + e);
         }
     }
@@ -80,7 +81,7 @@ public class ContactService{
     }
 
     public Contact getContactById(int id, int ownerId) throws DAOException {
-        Contact contact = null;
+        Contact contact;
 
         try {
             contact = contactGenericDAO.getById(id, ownerId);
@@ -96,7 +97,7 @@ public class ContactService{
     }
 
     public List<Contact> getContactsByName(String name, int ownerId) throws DAOException {
-        List<Contact> contactList = null;
+        List<Contact> contactList;
 
         try {
             contactList = contactGenericDAO.getByName(name, ownerId);

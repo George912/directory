@@ -1,5 +1,7 @@
 package ru.bellintegrator.app.dao.impl.sql;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,10 +14,12 @@ import java.sql.SQLException;
 
 public abstract class AbstractConnectable{
 
-    Context initCtx = null;
-    DataSource ds = null;
+    private Context initCtx = null;
+    private DataSource ds = null;
     private static final String APP_DB = "java:/comp/env/jdbc/AppDB";
     private static final Logger log = LoggerFactory.getLogger(AbstractConnectable.class);
+    //todo: где закрывать
+    private final SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
     {
         try {
@@ -27,7 +31,7 @@ public abstract class AbstractConnectable{
         }
     }
 
-    public Connection getConnection() {
+    protected Connection getConnection() {
         Connection connection = null;
 
         try {
@@ -38,6 +42,10 @@ public abstract class AbstractConnectable{
         }
 
         return connection;
+    }
+
+    protected SessionFactory getSessionFactory(){
+        return factory;
     }
 
 }

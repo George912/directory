@@ -26,7 +26,7 @@ public class PostgresqlGroupDAO extends AbstractConnectable implements GenericDA
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setString(1, group.getName());
                 statement.setString(2, group.getNotes());
-                statement.setInt(3, group.getOwner());
+//                statement.setInt(3, group.getOwner());
 
                 statement.execute();
 
@@ -45,7 +45,7 @@ public class PostgresqlGroupDAO extends AbstractConnectable implements GenericDA
 
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setInt(1, group.getId());
-                statement.setInt(2, group.getOwner());
+//                statement.setInt(2, group.getOwner());
 
                 statement.execute();
 
@@ -64,7 +64,7 @@ public class PostgresqlGroupDAO extends AbstractConnectable implements GenericDA
                 statement.setInt(1, group.getId());
                 statement.setString(2, group.getName());
                 statement.setString(3, group.getNotes());
-                statement.setInt(4, group.getOwner());
+//                statement.setInt(4, group.getOwner());
 
                 statement.execute();
 

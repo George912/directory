@@ -1,13 +1,17 @@
 package ru.bellintegrator.app.dao.impl.orm.hibernate;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.impl.sql.AbstractConnectable;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 
 import java.util.List;
 
 //todo: синхронизация
-public class HibernateContactDAO implements GenericDAO<Contact> {
+public class HibernateContactDAO extends AbstractConnectable implements GenericDAO<Contact> {
 
     @Override
     public int create(Contact contact) throws DAOException {
@@ -26,7 +30,25 @@ public class HibernateContactDAO implements GenericDAO<Contact> {
 
     @Override
     public List<Contact> getAll(int ownerId) throws DAOException {
-        return null;
+        List<Contact> contacts;
+        Transaction transaction = null;
+
+        try (Session session = getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            contacts = session.createQuery("FROM Contact ").list();
+
+            transaction.commit();
+
+        } catch (HibernateException e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+
+            throw new DAOException("Exception while retrieving contact list: " + e);
+        }
+
+        return contacts;
     }
 
     @Override

@@ -56,7 +56,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
         Group group = new Group(0);
         group.setName(request.getParameter("name"));
         group.setNotes(request.getParameter("notes"));
-        group.setOwner(userId);
+//        group.setOwner(userId);
 
         try {
             if (action == EditorAction.CREATED) {
@@ -76,7 +76,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
     protected void delete(HttpServletRequest request, HttpServletResponse response, int userId) {
         try {
             Group group = new Group(Integer.parseInt(request.getParameter("group_id")));
-            group.setOwner(userId);
+//            group.setOwner(userId);
             groupService.deleteGroup(group, userId);
 
             response.sendRedirect(request.getContextPath() + "/userdata");

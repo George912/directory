@@ -1,12 +1,9 @@
 package ru.bellintegrator.app.servlets;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.bellintegrator.app.dao.GenericDAO;
+import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
@@ -33,44 +30,23 @@ public class LoginServlet extends AbstractServlet {
         ServletContext context = this.getServletContext();
 
         try {
-//            User user = userService.getUserByCredential(req.getParameter("login"), req.getParameter("password"));
-            User user = new User();
-            user.setLogin("l3333333");
+            User user = new User(1);
 
-            Group group = new Group();
-            group.setName("g1");
-            group.setOwner(1);
+            DAOFactory factory = DAOFactory.getDAOFactory();
+            GenericDAO<User> userDAO = factory.getUserDAO();
+            GenericDAO<Group> groupDAO = factory.getGroupDAO();
+            GenericDAO<Contact> contactDao = factory.getContactDAO();
 
-            Contact contact = new Contact();
-            contact.setOwner(1);
-            contact.setFirstName("newContact");
+//            System.out.println("getAll:" + groupDAO.getAll(1));
+//            System.out.println("getById:" + groupDAO.getById(1, 1));
+//            System.out.println("getByName:" + groupDAO.getByName("g1", 1));
 
-            SessionFactory sessionFactory = new Configuration()
-                    .configure("hibernate.cfg.xml")
-                    .addAnnotatedClass(Group.class)
-                    .addAnnotatedClass(User.class)
-                    .buildSessionFactory();
+//            System.out.println("contactDao.getAll:" + contactDao.getAll(1));
+            userDAO.getByName("fn7", 1);
 
-            Session session = sessionFactory.openSession();
-            Transaction tx = null;
+//            groupDAO.delete(group);
 
-            try {
-                tx = session.beginTransaction();
-
-                System.out.println("User id:"+session.save(user));
-                System.out.println("Group id:"+session.save(group));
-                System.out.println("Contact id:"+session.save(contact));
-                tx.commit();
-
-            } catch (HibernateException e) {
-                if (tx != null) tx.rollback();
-                e.printStackTrace();
-
-            } finally {
-                session.close();
-            }
-
-            if (user != null) {
+            if (user == null) {
                 req.getSession().setAttribute("userId", user.getId());
                 dispatcher = context.getRequestDispatcher("/userdata");
                 dispatcher.include(req, resp);
@@ -82,6 +58,7 @@ public class LoginServlet extends AbstractServlet {
 
         } catch (Exception e) {
             log.debug("Exception while authenticate user:" + e);
+            e.printStackTrace();
         }
     }
 

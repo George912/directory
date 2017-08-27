@@ -1,6 +1,7 @@
 package ru.bellintegrator.app.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "contacts")
-public class Contact {
+public class Contact implements Serializable{
 
     private int id;
     private String firstName;
@@ -21,8 +22,8 @@ public class Contact {
     private PhoneNumberType secondPhoneNumberType;
     private String email;
     private String notes;
-    private List<Group> groupList = new ArrayList<>();
-    private int owner;
+    private List<Group> groupList;
+    private User owner;
 
     public Contact() {
         this.firstName = "";
@@ -38,7 +39,7 @@ public class Contact {
 
     public Contact(int owner) {
         this();
-        this.owner = owner;
+//        this.owner = owner;
     }
 
     public Contact(int id, String firstName, String lastName, String middleName) {
@@ -70,7 +71,7 @@ public class Contact {
 
     public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType, String secondPhoneNumber, PhoneNumberType secondPhoneNumberType, String email, String notes, int owner) {
         this(id, firstName, lastName, middleName, firstPhoneNumber, firstPhoneNumberType, secondPhoneNumber, secondPhoneNumberType, email, notes);
-        this.owner = owner;
+//        this.owner = owner;
     }
 
     @Id
@@ -166,17 +167,23 @@ public class Contact {
     }
 
     @Transient
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "contacts_groups",
+            joinColumns = @JoinColumn(name = "contact_id", referencedColumnName = "contact_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "group_id")
+    )
     public List<Group> getGroupList() {
         return groupList;
     }
 
-    @Column(name="owner", nullable=false)
-    public int getOwner() {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "owner", nullable = false, referencedColumnName = "id")
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(int ownerId) {
-        this.owner = ownerId;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     @Override
@@ -223,4 +230,5 @@ public class Contact {
         result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
         return result;
     }
+
 }

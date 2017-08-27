@@ -1,18 +1,19 @@
 package ru.bellintegrator.app.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by neste_000 on 11.07.2017.
  */
 @Entity
 @Table(name = "groups")
-public class Group {
+public class Group implements Serializable {
 
     private int id;
     private String name;
     private String notes;
-    private int owner;
+    private User owner;
 
     public Group() {
         this.name = "";
@@ -35,7 +36,7 @@ public class Group {
 
     public Group(int id, String name, String notes, int owner) {
         this(id, name, notes);
-        this.owner = owner;
+//        this.owner = owner;
     }
 
     @Column(name="name", nullable=false, length=30)
@@ -56,15 +57,6 @@ public class Group {
         this.notes = notes;
     }
 
-    @Column(name="owner", nullable=false)
-    public int getOwner() {
-        return owner;
-    }
-
-    public void setOwner(int owner) {
-        this.owner = owner;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
@@ -76,6 +68,16 @@ public class Group {
         this.id = id;
     }
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "owner", nullable = false, referencedColumnName = "id")
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User user) {
+        this.owner = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -84,7 +86,7 @@ public class Group {
         Group group = (Group) o;
 
         if (id != group.id) return false;
-        if (owner != group.owner) return false;
+//        if (owner != group.owner) return false;
         if (name != null ? !name.equals(group.name) : group.name != null) return false;
         return notes != null ? notes.equals(group.notes) : group.notes == null;
     }
@@ -94,7 +96,7 @@ public class Group {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
-        result = 31 * result + owner;
+//        result = 31 * result + owner;
         return result;
     }
 

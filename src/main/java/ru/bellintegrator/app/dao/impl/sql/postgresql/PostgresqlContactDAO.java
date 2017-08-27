@@ -33,7 +33,7 @@ public class PostgresqlContactDAO extends AbstractConnectable implements Generic
                 statement.setString(7, contact.getSecondPhoneNumberType().name());
                 statement.setString(8, contact.getEmail());
                 statement.setString(9, contact.getNotes());
-                statement.setInt(10, contact.getOwner());
+//                statement.setInt(10, contact.getOwner());
 
                 statement.execute();
 
@@ -52,7 +52,7 @@ public class PostgresqlContactDAO extends AbstractConnectable implements Generic
 
             try (CallableStatement statement = getConnection().prepareCall(query)) {
                 statement.setInt(1, contact.getId());
-                statement.setInt(2, contact.getOwner());
+//                statement.setInt(2, contact.getOwner());
 
                 statement.execute();
 
@@ -78,7 +78,7 @@ public class PostgresqlContactDAO extends AbstractConnectable implements Generic
                 statement.setString(8, contact.getSecondPhoneNumberType().name());
                 statement.setString(9, contact.getEmail());
                 statement.setString(10, contact.getNotes());
-                statement.setInt(11, contact.getOwner());
+//                statement.setInt(11, contact.getOwner());
 
                 statement.execute();
 

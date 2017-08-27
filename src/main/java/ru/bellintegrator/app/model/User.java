@@ -1,10 +1,11 @@
 package ru.bellintegrator.app.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 
     private int id;
     private String login;
@@ -14,7 +15,6 @@ public class User {
     private String lastName;
 
     public User() {
-        this.id = id;
         this.login = "";
         this.password = "";
         this.firstName = "";
