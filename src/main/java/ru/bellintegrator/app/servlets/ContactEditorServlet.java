@@ -63,12 +63,12 @@ public class ContactEditorServlet extends AbstractEditorServlet {
         contact.setEmail(request.getParameter("email"));
         contact.setFirstName(request.getParameter("name"));
         contact.setFirstPhoneNumber(request.getParameter("phone1"));
-        contact.setFirstPhoneNumberType(PhoneNumberType.getTypeFromString(request.getParameter("phone1_type")));
+        contact.setFirstPhoneNumberType(request.getParameter("phone1_type"));
         contact.setLastName(request.getParameter("last_name"));
         contact.setMiddleName(request.getParameter("middle_name"));
         contact.setNotes(request.getParameter("notes"));
         contact.setSecondPhoneNumber(request.getParameter("phone2"));
-        contact.setSecondPhoneNumberType(PhoneNumberType.getTypeFromString(request.getParameter("phone2_type")));
+        contact.setSecondPhoneNumberType(request.getParameter("phone2_type"));
 
         try {
             if (action == EditorAction.CREATED) {

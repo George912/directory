@@ -6,6 +6,7 @@ import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.model.PhoneNumberType;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.UserService;
 
@@ -37,11 +38,20 @@ public class LoginServlet extends AbstractServlet {
             GenericDAO<Group> groupDAO = factory.getGroupDAO();
             GenericDAO<Contact> contactDao = factory.getContactDAO();
 
-            System.out.println("getAll:" + groupDAO.getAll(1));
-            System.out.println("getById:" + groupDAO.getById(1, 1));
-            System.out.println("getByName:" + groupDAO.getByName("g1", 1));
+            Contact contact = new Contact();
+            contact.setFirstName("new");
+            contact.setSecondPhoneNumber("new");
+            contact.setNotes("new");
+            contact.setMiddleName("new");
+            contact.setLastName("new");
+            contact.setFirstPhoneNumber("new");
+            contact.setEmail("new");
+            contact.setGroupList(null);
+            contact.setFirstPhoneNumberType(PhoneNumberType.HOME.name());
+            contact.setSecondPhoneNumberType(PhoneNumberType.HOME.name());
+            contact.setOwner(new User(1));
 
-//            System.out.println("contactDao.getAll:" + contactDao.getAll(1));
+            contactDao.create(contact);
 
             if (user == null) {
                 req.getSession().setAttribute("userId", user.getId());

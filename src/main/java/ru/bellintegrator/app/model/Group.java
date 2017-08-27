@@ -86,9 +86,9 @@ public class Group implements Serializable {
         Group group = (Group) o;
 
         if (id != group.id) return false;
-//        if (owner != group.owner) return false;
         if (name != null ? !name.equals(group.name) : group.name != null) return false;
-        return notes != null ? notes.equals(group.notes) : group.notes == null;
+        if (notes != null ? !notes.equals(group.notes) : group.notes != null) return false;
+        return owner != null ? owner.equals(group.owner) : group.owner == null;
     }
 
     @Override
@@ -96,7 +96,7 @@ public class Group implements Serializable {
         int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
-//        result = 31 * result + owner;
+        result = 31 * result + (owner != null ? owner.hashCode() : 0);
         return result;
     }
 

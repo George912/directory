@@ -95,12 +95,12 @@ public class Contact implements Serializable{
     }
 
     @Column(name="firstphonenumbertype", nullable=false, length=10)
-    public PhoneNumberType getFirstPhoneNumberType() {
-        return firstPhoneNumberType;
+    public String getFirstPhoneNumberType() {
+        return firstPhoneNumberType.name();
     }
 
-    public void setFirstPhoneNumberType(PhoneNumberType firstPhoneNumberType) {
-        this.firstPhoneNumberType = firstPhoneNumberType;
+    public void setFirstPhoneNumberType(String firstPhoneNumberType) {
+        this.firstPhoneNumberType = PhoneNumberType.getTypeByName(firstPhoneNumberType);
     }
 
     @Column(name="secondphonenumber", nullable=false, length=11)
@@ -113,12 +113,12 @@ public class Contact implements Serializable{
     }
 
     @Column(name="secondphonenumbertype", nullable=false, length=10)
-    public PhoneNumberType getSecondPhoneNumberType() {
-        return secondPhoneNumberType;
+    public String getSecondPhoneNumberType() {
+        return secondPhoneNumberType.name();
     }
 
-    public void setSecondPhoneNumberType(PhoneNumberType secondPhoneNumberType) {
-        this.secondPhoneNumberType = secondPhoneNumberType;
+    public void setSecondPhoneNumberType(String secondPhoneNumberType) {
+        this.secondPhoneNumberType = PhoneNumberType.getTypeByName(secondPhoneNumberType);
     }
 
     @Column(name="email", nullable=false, length=30)

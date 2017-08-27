@@ -19,7 +19,7 @@ public abstract class AbstractConnectable{
     private static final String APP_DB = "java:/comp/env/jdbc/AppDB";
     private static final Logger log = LoggerFactory.getLogger(AbstractConnectable.class);
     //todo: где закрывать
-    private final SessionFactory factory = new Configuration().configure().buildSessionFactory();
+    private static final SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
     {
         try {
