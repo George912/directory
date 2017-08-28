@@ -5,13 +5,11 @@ import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by neste_000 on 21.07.2017.
  */
-//todo: методы для работы с группами контактов?
 public class ContactService {
 
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ContactService.class);
@@ -46,29 +44,7 @@ public class ContactService {
 
     public List<Contact> getAllContacts(int ownerId) throws DAOException {
         log.debug("Call getAllContacts method: ownerId = " + ownerId);
-        List<Contact> contactList = contactGenericDAO.getAll(ownerId);
-
-        //todo: нужен?
-        updateContactGroups(contactList);
-
-        return contactList;
-
-    }
-
-    private void fillGroupData(Group group) throws DAOException {
-        Group groupWithData = null;
-
-        log.debug("Call fillGroupData method: group = " + group);
-
-        try {
-            groupWithData = groupService.getGroupById(group.getId(), group.getOwner().getId());
-            group.setName(groupWithData.getName());
-            group.setNotes(groupWithData.getNotes());
-
-        } catch (DAOException e) {
-            log.error("Exception while setting group data: " + e);
-            throw new DAOException("Exception while setting group data: " + e);
-        }
+        return contactGenericDAO.getAll(ownerId);
     }
 
     @Deprecated
@@ -85,9 +61,6 @@ public class ContactService {
 
         try {
             contact = contactGenericDAO.getById(id, ownerId);
-            List<Contact> contactList = new ArrayList<>();
-            contactList.add(contact);
-            updateContactGroups(contactList);
 
         } catch (DAOException e) {
             log.error("Exception while retrieving contact by id: " + e);
@@ -104,7 +77,7 @@ public class ContactService {
 
         try {
             contactList = contactGenericDAO.getByName(name, ownerId);
-            updateContactGroups(contactList);
+//            updateContactGroups(contactList);
 
         } catch (DAOException e) {
             log.error("Exception while retrieving contact list by name: " + e);
@@ -121,25 +94,6 @@ public class ContactService {
             if (contact.getGroupList().remove(group)) {
 //                groupService.deleteGroupFromContact(group, contact);
                 contactGenericDAO.update(contact);
-            }
-        }
-    }
-
-    private void updateContactGroups(List<Contact> contactList) throws DAOException {
-        for (int i = 0; i < contactList.size(); i++) {
-            Contact contact = contactList.get(i);
-
-            List<Group> groupList = contact.getGroupList();
-
-            for (int i1 = 0; i1 < groupList.size(); i1++) {
-                Group group = groupList.get(i1);
-
-                try {
-                    fillGroupData(group);
-
-                } catch (DAOException e) {
-                    throw new DAOException("Exception while updating contact groups: " + e);
-                }
             }
         }
     }

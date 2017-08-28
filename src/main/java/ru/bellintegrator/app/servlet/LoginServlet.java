@@ -30,9 +30,6 @@ public class LoginServlet extends AbstractServlet {
 
             log.debug("LoginServlet.service: User credentials:" + user);
 
-            System.out.println("groups" + groupGenericDAO.getAll(1));
-            System.out.println("contacts" + contactGenericDAO.getAll(1));
-
             if (user != null) {
                 log.debug("Request set attribute userId = " + user.getId());
                 req.getSession().setAttribute("userId", user.getId());

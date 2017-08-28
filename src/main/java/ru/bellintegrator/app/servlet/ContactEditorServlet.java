@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactEditorServlet extends AbstractEditorServlet {
@@ -82,8 +83,6 @@ public class ContactEditorServlet extends AbstractEditorServlet {
 
         try {
             if (action == EditorAction.CREATED) {
-                contactService.addContact(contact);
-
                 //получение идентификатора добаленного контакта
                 List<Contact> contactList = contactService.getAllContacts(userId);
                 int contactId = contactList.get(contactList.size() - 1).getId();
@@ -91,17 +90,23 @@ public class ContactEditorServlet extends AbstractEditorServlet {
 
                 //получение групп и добавление их в контакт
                 String groups[] = request.getParameterValues("group");
+                List<Group> groupList = new ArrayList<>();
                 if (groups != null) {
                     for (String id : groups) {
                         Group group = groupService.getGroupById(Integer.parseInt(id), userId);
-                        groupService.addGroupToContact(group, contact);
+                        groupList.add(group);
                     }
                 }
+
+                contact.setGroupList(groupList);
+                contact.setOwner(new User(userId));
+                contactService.addContact(contact);
 
                 log.debug("ContactEditorServlet.insert: action = " + action + ", contact=" + contact);
 
             } else if (action == EditorAction.UPDATED) {
                 contact.setId(Integer.parseInt(request.getParameter("contact_id")));
+                contact.setOwner(new User(userId));
                 contactService.updateContact(contact);
                 log.debug("ContactEditorServlet.insert: action = " + action + ", contact=" + contact);
             }

@@ -2,7 +2,6 @@ package ru.bellintegrator.app.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -166,7 +165,7 @@ public class Contact implements Serializable{
         this.middleName = middleName;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany()
     @JoinTable(name = "contacts_groups",
             joinColumns = @JoinColumn(name = "contact_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id")
