@@ -1,7 +1,5 @@
 package ru.bellintegrator.app.servlets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.service.AnalyticalInfoService;
@@ -13,14 +11,15 @@ import java.io.IOException;
 
 public class AdminServlet extends AbstractServlet {
 
-
     private AnalyticalInfoService service;
-    private static final Logger log = LoggerFactory.getLogger(AdminServlet.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AdminServlet.class);
 
     @Override
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/admin.jsp");
         service = new AnalyticalInfoService(infoDAO);
+        log.debug("Initialize AdminServlet");
+        log.info("AdminServlet instance created");
     }
 
     @Override
@@ -28,11 +27,13 @@ public class AdminServlet extends AbstractServlet {
 
         try {
             AnalyticalInfo info = service.collectAnalyticalInfo();
+            log.debug("Request set attribute info = " + info);
             req.setAttribute("info", info);
+            log.debug("Go to /views/admin.jsp");
             dispatcher.include(req, res);
 
         } catch (DAOException e) {
-            log.debug("Exception in method service: " + e);
+            log.error("Exception in method service: " + e);
         }
     }
 

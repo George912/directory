@@ -10,11 +10,15 @@ import java.io.IOException;
 
 public abstract class AbstractEditorServlet extends AbstractServlet {
 
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AbstractServlet.class);
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int userId = (int) req.getSession().getAttribute("userId");
         String act = req.getParameter("action") == null ? (String) req.getAttribute("action") : req.getParameter("action");
         EditorAction action = EditorAction.getActionFromString(act);
+
+        log.debug("AbstractEditorServlet.service: request params [" + "userId=" + userId + ", act=" + act + "]");
 
         switch (action) {
             case CREATE:

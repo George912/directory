@@ -2,8 +2,6 @@ package ru.bellintegrator.app.dao.impl;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -12,13 +10,12 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public abstract class AbstractConnectable{
+public abstract class AbstractConnectable {
 
     private Context initCtx = null;
     private DataSource ds = null;
     private static final String APP_DB = "java:/comp/env/jdbc/AppDB";
-    private static final Logger log = LoggerFactory.getLogger(AbstractConnectable.class);
-    //todo: где закрывать
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AbstractConnectable.class);
     private static final SessionFactory factory = new Configuration().configure().buildSessionFactory();
 
     {
@@ -27,7 +24,7 @@ public abstract class AbstractConnectable{
             ds = (DataSource) initCtx.lookup(APP_DB);
 
         } catch (NamingException e) {
-            e.printStackTrace();
+            log.fatal("Exception while lookup JNDI data source");
         }
     }
 
@@ -38,13 +35,13 @@ public abstract class AbstractConnectable{
             connection = ds.getConnection();
 
         } catch (SQLException e) {
-            log.debug("Exception while getting connection:" + e);
+            log.fatal("Exception while retrieving connection:" + e);
         }
 
         return connection;
     }
 
-    protected SessionFactory getSessionFactory(){
+    protected SessionFactory getSessionFactory() {
         return factory;
     }
 

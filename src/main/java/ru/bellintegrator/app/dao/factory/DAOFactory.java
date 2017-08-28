@@ -12,7 +12,9 @@ import ru.bellintegrator.app.model.User;
  * Created by neste_000 on 19.07.2017.
  */
 public abstract class DAOFactory {
+
     private static final DAOFactoryType DEFAULT_DAO_FACTORY_TYPE = DAOFactoryType.HIBERNATE;
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(DAOFactory.class);
 
     public abstract GenericDAO<Contact> getContactDAO() throws DAOException;
 
@@ -23,13 +25,14 @@ public abstract class DAOFactory {
     public abstract AnalyticalInfoDAO getAnalyticalInfoDAO() throws DAOException;
 
     public static DAOFactory getDAOFactory() {
+        log.debug("Retrieving default dao factory. Default factory type is " + DEFAULT_DAO_FACTORY_TYPE);
         return DAOFactory.getDAOFactory(DEFAULT_DAO_FACTORY_TYPE);
     }
 
     public static DAOFactory getDAOFactory(DAOFactoryType daoFactoryType) {
+        log.debug("Retrieving dao factory with type " + DEFAULT_DAO_FACTORY_TYPE);
 
         switch (daoFactoryType) {
-
             case XML_DOM:
                 throw new UnsupportedOperationException("Unable to create XML_DOM dao factory. Define SQL_ORACLE dao factory class!");
 
@@ -49,7 +52,7 @@ public abstract class DAOFactory {
                 throw new UnsupportedOperationException("Unable to create SQL_MSSQL dao factory. Define SQL_MSSQL dao factory class!");
 
             case SQL_POSTGRESQL:
-            throw new UnsupportedOperationException("Unable to create SQL_POSTGRESQL dao factory. Define SQL_POSTGRESQL dao factory class!");
+                throw new UnsupportedOperationException("Unable to create SQL_POSTGRESQL dao factory. Define SQL_POSTGRESQL dao factory class!");
 
             case HIBERNATE:
                 return new HibernateDAOFactory();

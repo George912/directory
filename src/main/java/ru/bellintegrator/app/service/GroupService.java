@@ -1,7 +1,5 @@
 package ru.bellintegrator.app.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Group;
@@ -13,7 +11,7 @@ import java.util.List;
  */
 public class GroupService {
 
-    private static final Logger log = LoggerFactory.getLogger(GroupService.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupService.class);
     private GenericDAO<Group> groupGenericDAO;
     private ContactService contactService;
 

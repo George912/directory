@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ContactService{
 
-    private static final Logger log = LoggerFactory.getLogger(ContactService.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ContactService.class);
     private GenericDAO<Contact> contactGenericDAO;
     private GroupService groupService;
 

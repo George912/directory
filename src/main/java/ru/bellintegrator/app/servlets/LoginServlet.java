@@ -2,11 +2,6 @@ package ru.bellintegrator.app.servlets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.bellintegrator.app.dao.GenericDAO;
-import ru.bellintegrator.app.dao.factory.DAOFactory;
-import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
-import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.UserService;
 
@@ -19,11 +14,13 @@ import java.io.IOException;
 public class LoginServlet extends AbstractServlet {
 
     private UserService userService;
-    private static final Logger log = LoggerFactory.getLogger(LoginServlet.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LoginServlet.class);
 
     @Override
     public void init() throws ServletException {
         userService = new UserService(userGenericDAO);
+        log.debug("Initialize LoginServlet");
+        log.info("LoginServlet instance created");
     }
 
     @Override
@@ -33,28 +30,26 @@ public class LoginServlet extends AbstractServlet {
         try {
             User user = userService.getUserByCredential(req.getParameter("login"), req.getParameter("password"));
 
-//            DAOFactory factory = DAOFactory.getDAOFactory();
-//            GenericDAO<User> userDAO = factory.getUserDAO();
-//            GenericDAO<Group> groupDAO = factory.getGroupDAO();
-//            GenericDAO<Contact> contactDao = factory.getContactDAO();
-//            AnalyticalInfoDAO infoDAO = factory.getAnalyticalInfoDAO();
-//
-//            System.out.println("groups"+groupDAO.getAll(1));
-//            System.out.println("contacts"+contactDao.getAll(1));
+            log.debug("LoginServlet.service: User credentials:" + user);
+
+            System.out.println("groups" + groupGenericDAO.getAll(1));
+            System.out.println("contacts" + contactGenericDAO.getAll(1));
 
             if (user != null) {
+                log.debug("Request set attribute userId = " + user.getId());
                 req.getSession().setAttribute("userId", user.getId());
                 dispatcher = context.getRequestDispatcher("/userdata");
+                log.debug("Go to /userdata");
                 dispatcher.include(req, resp);
 
             } else {
                 dispatcher = context.getRequestDispatcher("/views/login.jsp");
+                log.debug("Go to views/login.jsp");
                 dispatcher.include(req, resp);
             }
 
         } catch (Exception e) {
-            log.debug("Exception while authenticate user:" + e);
-            e.printStackTrace();
+            log.error("Exception while authenticate user:" + e);
         }
     }
 

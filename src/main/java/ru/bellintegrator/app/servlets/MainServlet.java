@@ -18,7 +18,7 @@ public class MainServlet extends AbstractServlet {
 
     private ContactService contactService;
     private GroupService groupService;
-    private static final Logger log = LoggerFactory.getLogger(MainServlet.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MainServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -26,6 +26,8 @@ public class MainServlet extends AbstractServlet {
         contactService = new ContactService(contactGenericDAO);
         groupService = new GroupService(groupGenericDAO, contactService);
         contactService.setGroupService(groupService);
+        log.debug("Initialize MainServlet");
+        log.info("MainServlet instance created");
     }
 
     @Override
@@ -34,6 +36,8 @@ public class MainServlet extends AbstractServlet {
         String act = req.getParameter("find");
         List<Group> groups = null;
         List<Contact> contacts = null;
+
+        log.debug("MainServlet.service: request params [" + "userId=" + userId + ", act=" + act + "]");
 
         try {
             if ("contacts".equals(act)) {
@@ -51,13 +55,17 @@ public class MainServlet extends AbstractServlet {
                 contacts = contactService.getAllContacts(userId);
             }
 
+            log.debug("Request set attribute contactList = " + contacts);
             req.setAttribute("contactList", contacts);
+            log.debug("Request set attribute groupList = " + groups);
             req.setAttribute("groupList", groups);
+
+            log.debug("Go to /views/main.jsp");
 
             dispatcher.include(req, resp);
 
         } catch (DAOException e) {
-            log.debug("Exception in MainServlet:" + e);
+            log.error("Exception in MainServlet:" + e);
         }
     }
 
