@@ -16,9 +16,11 @@ import java.util.List;
 public class HibernateContactDAO extends AbstractConnectable implements GenericDAO<Contact> {
 
     private final static Object monitor = new Object();
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateContactDAO.class);
 
     @Override
     public int create(Contact contact) throws DAOException {
+        log.debug("Call create method: contact = " + contact);
         synchronized (monitor) {
             Transaction transaction = null;
             int contactId;
@@ -35,6 +37,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                     transaction.rollback();
                 }
 
+                log.error("Exception while creating contact: " + e);
                 throw new DAOException("Exception while creating contact: " + e);
             }
 
@@ -44,6 +47,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
 
     @Override
     public void delete(Contact contact) throws DAOException {
+        log.debug("Call delete method: contact = " + contact);
         synchronized (monitor) {
             Transaction transaction = null;
 
@@ -61,6 +65,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                     transaction.rollback();
                 }
 
+                log.error("Exception while removing contact: " + e);
                 throw new DAOException("Exception while removing contact: " + e);
             }
         }
@@ -68,6 +73,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
 
     @Override
     public void update(Contact contact) throws DAOException {
+        log.debug("Call update method: contact = " + contact);
         synchronized (monitor) {
             Transaction transaction = null;
 
@@ -95,6 +101,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                     transaction.rollback();
                 }
 
+                log.error("Exception while updating contact: " + e);
                 throw new DAOException("Exception while updating contact: " + e);
             }
         }
@@ -102,6 +109,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
 
     @Override
     public List<Contact> getAll(int ownerId) throws DAOException {
+        log.debug("Call getAll method: ownerId = " + ownerId);
         synchronized (monitor) {
             List<Contact> contacts;
 
@@ -111,6 +119,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                 contacts = criteria.list();
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving contact list: " + e);
                 throw new DAOException("Exception while retrieving contact list: " + e);
             }
 
@@ -120,6 +129,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
 
     @Override
     public Contact getById(int id, int ownerId) throws DAOException {
+        log.debug("Call getById method: id = " + id + ", ownerId = " + ownerId);
         synchronized (monitor) {
             Contact contact = null;
 
@@ -134,6 +144,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving contact by id: " + e);
                 throw new DAOException("Exception while retrieving contact by id: " + e);
             }
 
@@ -143,6 +154,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
 
     @Override
     public List<Contact> getByName(String name, int ownerId) throws DAOException {
+        log.debug("Call getByName method: name = " + name + ", ownerId = " + ownerId);
         synchronized (monitor) {
             List<Contact> contacts;
 
@@ -153,6 +165,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                 contacts = criteria.list();
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving contact list by name: " + e);
                 throw new DAOException("Exception while retrieving contact list by name: " + e);
             }
 

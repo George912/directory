@@ -16,9 +16,11 @@ import java.util.Map;
 public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements AnalyticalInfoDAO {
 
     private final static Object monitor = new Object();
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateAnalyticalInfoDAO.class);
 
     @Override
     public int getUserCount() throws DAOException {
+        log.debug("Call getUserCount method");
         synchronized (monitor) {
             int count = 0;
 
@@ -30,6 +32,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving user count");
                 throw new DAOException("Exception while retrieving user count: " + e);
             }
 
@@ -39,6 +42,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
 
     @Override
     public Map<Integer, Long> getEachUserContactCount() throws DAOException {
+        log.debug("Call getEachUserContactCount method");
         synchronized (monitor) {
             Map<Integer, Long> map = new HashMap<>();
 
@@ -50,6 +54,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving each user contact count");
                 throw new DAOException("Exception while retrieving each user contact count: " + e);
             }
 
@@ -59,6 +64,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
 
     @Override
     public Map<Integer, Long> getEachUserGroupCount() throws DAOException {
+        log.debug("Call getEachUserGroupCount method");
         synchronized (monitor) {
             Map<Integer, Long> map = new HashMap<>();
 
@@ -70,6 +76,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving each user group count");
                 throw new DAOException("Exception while retrieving each user group count: " + e);
             }
 
@@ -79,6 +86,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
 
     @Override
     public double getAvgUserCountInGroup() throws DAOException {
+        log.debug("Call getAvgUserCountInGroup method");
         synchronized (monitor) {
             double count = 0;
 
@@ -90,6 +98,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving average user count in groups");
                 throw new DAOException("Exception while retrieving average user count in groups: " + e);
             }
 
@@ -99,6 +108,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
 
     @Override
     public Map<Integer, Long> getInactiveUserCount() throws DAOException {
+        log.debug("Call getInactiveUserCount method");
         synchronized (monitor) {
             Map<Integer, Long> map = new HashMap<>();
 
@@ -110,6 +120,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving inactive user count");
                 throw new DAOException("Exception while retrieving inactive user count: " + e);
             }
 
@@ -119,6 +130,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
 
     @Override
     public double getAvgUserContactsCount() throws DAOException {
+        log.debug("Call getInactiveUserCount method");
         synchronized (monitor) {
             double count = 0;
 
@@ -130,6 +142,7 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving average user contact count");
                 throw new DAOException("Exception while retrieving average user contact count: " + e);
             }
 
@@ -139,11 +152,14 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
 
     private Map<Integer, Long> convertResultListToMap(List list) {
         Map<Integer, Long> map = new HashMap<>();
+        log.debug("Call convertResultListToMap method: list to convert = " + list);
 
         for (Object o : list) {
             Object[] row = (Object[]) o;
             map.put((int) row[0], ((BigInteger) row[1]).longValue());
         }
+
+        log.debug("Call convertResultListToMap method: converted map = " + map);
 
         return map;
     }

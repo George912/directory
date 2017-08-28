@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.servlets;
+package ru.bellintegrator.app.servlet;
 
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;

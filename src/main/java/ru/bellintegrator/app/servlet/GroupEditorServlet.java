@@ -1,4 +1,4 @@
-package ru.bellintegrator.app.servlets;
+package ru.bellintegrator.app.servlet;
 
 import ru.bellintegrator.app.EditorAction;
 import ru.bellintegrator.app.exception.DAOException;

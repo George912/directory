@@ -7,9 +7,12 @@ import ru.bellintegrator.app.model.AnalyticalInfo;
 public class AnalyticalInfoService {
 
     private AnalyticalInfoDAO dao;
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AnalyticalInfoService.class);
 
     public AnalyticalInfoService(AnalyticalInfoDAO dao) {
         this.dao = dao;
+        log.debug("Initialize AnalyticalInfoService");
+        log.info("AnalyticalInfoService instance created");
     }
 
     public AnalyticalInfo collectAnalyticalInfo() throws DAOException {
@@ -21,6 +24,8 @@ public class AnalyticalInfoService {
         info.setEachUserGroupCount(dao.getEachUserGroupCount());
         info.setInactiveUserCount(dao.getInactiveUserCount());
         info.setUserCount(dao.getUserCount());
+
+        log.debug("Call collectAnalyticalInfo method: info object is " + info);
 
         return info;
     }

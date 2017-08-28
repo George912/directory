@@ -16,9 +16,11 @@ import java.util.List;
 public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO<Group> {
 
     private final static Object monitor = new Object();
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateGroupDAO.class);
 
     @Override
     public int create(Group group) throws DAOException {
+        log.debug("Call create method: group = " + group);
         synchronized (monitor) {
             Transaction transaction = null;
             int groupId;
@@ -35,6 +37,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                     transaction.rollback();
                 }
 
+                log.error("Exception while creating group: " + e);
                 throw new DAOException("Exception while creating group: " + e);
             }
 
@@ -44,6 +47,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
 
     @Override
     public void delete(Group group) throws DAOException {
+        log.debug("Call delete method: group = " + group);
         synchronized (monitor) {
             Transaction transaction = null;
 
@@ -61,6 +65,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                     transaction.rollback();
                 }
 
+                log.error("Exception while removing group: " + e);
                 throw new DAOException("Exception while removing group: " + e);
             }
         }
@@ -68,6 +73,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
 
     @Override
     public void update(Group group) throws DAOException {
+        log.debug("Call update method: group = " + group);
         synchronized (monitor) {
             Transaction transaction = null;
 
@@ -87,6 +93,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                     transaction.rollback();
                 }
 
+                log.error("Exception while updating group: " + e);
                 throw new DAOException("Exception while updating group: " + e);
             }
         }
@@ -94,6 +101,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
 
     @Override
     public List<Group> getAll(int ownerId) throws DAOException {
+        log.debug("Call getAll method: ownerId = " + ownerId);
         synchronized (monitor) {
             List<Group> groups;
 
@@ -103,6 +111,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                 groups = criteria.list();
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving group list: " + e);
                 throw new DAOException("Exception while retrieving group list: " + e);
             }
 
@@ -112,6 +121,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
 
     @Override
     public Group getById(int id, int ownerId) throws DAOException {
+        log.debug("Call getById method: id = " + id + ", ownerId = " + ownerId);
         synchronized (monitor) {
             Group group = null;
 
@@ -126,6 +136,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving group by id: " + e);
                 throw new DAOException("Exception while retrieving group by id: " + e);
             }
 
@@ -135,6 +146,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
 
     @Override
     public List<Group> getByName(String name, int ownerId) throws DAOException {
+        log.debug("Call getByName method: name = " + name + ", ownerId = " + ownerId);
         synchronized (monitor) {
             List<Group> groups;
 
@@ -145,6 +157,7 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                 groups = criteria.list();
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving group list by name: " + e);
                 throw new DAOException("Exception while retrieving group list by name: " + e);
             }
 

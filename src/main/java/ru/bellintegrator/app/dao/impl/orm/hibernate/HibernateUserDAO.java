@@ -13,9 +13,11 @@ import java.util.List;
 public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<User>, UserDAO {
 
     private final static Object monitor = new Object();
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateContactDAO.class);
 
     @Override
     public int create(User user) throws DAOException {
+        log.debug("Call create method: user = " + user);
         synchronized (monitor) {
             Transaction transaction = null;
             int userId;
@@ -32,6 +34,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
+                log.error("Exception while creating user: " + e);
                 throw new DAOException("Exception while creating user: " + e);
             }
 
@@ -41,6 +44,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
 
     @Override
     public void delete(User user) throws DAOException {
+        log.debug("Call delete method: user = " + user);
         synchronized (monitor) {
             Transaction transaction = null;
 
@@ -58,6 +62,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
+                log.error("Exception while removing user: " + e);
                 throw new DAOException("Exception while removing user: " + e);
             }
         }
@@ -65,6 +70,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
 
     @Override
     public void update(User user) throws DAOException {
+        log.debug("Call update method: user = " + user);
         synchronized (monitor) {
             Transaction transaction = null;
 
@@ -87,6 +93,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
+                log.error("Exception while updating user: " + e);
                 throw new DAOException("Exception while updating user: " + e);
             }
         }
@@ -94,6 +101,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
 
     @Override
     public List<User> getAll(int ownerId) throws DAOException {
+        log.debug("Call getAll method: ownerId = " + ownerId);
         synchronized (monitor) {
             List<User> users;
             Transaction transaction = null;
@@ -110,6 +118,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
+                log.error("Exception while retrieving user list: " + e);
                 throw new DAOException("Exception while getting user list: " + e);
             }
 
@@ -119,6 +128,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
 
     @Override
     public User getById(int id, int ownerId) throws DAOException {
+        log.debug("Call getById method: id = " + id + ", ownerId = " + ownerId);
         synchronized (monitor) {
             User user;
 
@@ -127,6 +137,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                 user = userIdentifierLoadAccess.load(id);
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving user by id: " + e);
                 throw new DAOException("Exception while retrieving user by id: " + e);
             }
 
@@ -136,6 +147,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
 
     @Override
     public List<User> getByName(String name, int ownerId) throws DAOException {
+        log.debug("Call getByName method: name = " + name + ", ownerId = " + ownerId);
         synchronized (monitor) {
             List<User> users;
 
@@ -144,6 +156,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                 users = criteria.add(Restrictions.eq(("firstName"), name)).list();
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving user list by name: " + e);
                 throw new DAOException("Exception while retrieving user list by name: " + e);
             }
 
@@ -153,6 +166,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
 
     @Override
     public User getUserByCredential(String login, String password) throws DAOException {
+        log.debug("Call getUserByCredential method: login = " + login + ", password = " + password);
         synchronized (monitor) {
             User user = null;
 
@@ -167,6 +181,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving user by credential: " + e);
                 throw new DAOException("Exception while retrieving user by credential: " + e);
             }
 
@@ -176,6 +191,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
 
     @Override
     public int getUserId(String login, String password) throws DAOException {
+        log.debug("Call getUserId method: login = " + login + ", password = " + password);
         synchronized (monitor) {
             int userId = -1;
 
@@ -190,6 +206,7 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                 }
 
             } catch (HibernateException e) {
+                log.error("Exception while retrieving user id: " + e);
                 throw new DAOException("Exception while retrieving user id: " + e);
             }
 

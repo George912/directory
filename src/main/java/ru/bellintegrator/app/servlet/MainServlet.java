@@ -1,7 +1,5 @@
-package ru.bellintegrator.app.servlets;
+package ru.bellintegrator.app.servlet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;

@@ -8,23 +8,23 @@
     <!--Servlets-->
     <servlet>
         <servlet-name>login</servlet-name>
-        <servlet-class>ru.bellintegrator.app.servlets.LoginServlet</servlet-class>
+        <servlet-class>ru.bellintegrator.app.servlet.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>main</servlet-name>
-        <servlet-class>ru.bellintegrator.app.servlets.MainServlet</servlet-class>
+        <servlet-class>ru.bellintegrator.app.servlet.MainServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>admin</servlet-name>
-        <servlet-class>ru.bellintegrator.app.servlets.AdminServlet</servlet-class>
+        <servlet-class>ru.bellintegrator.app.servlet.AdminServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>contacteditor</servlet-name>
-        <servlet-class>ru.bellintegrator.app.servlets.ContactEditorServlet</servlet-class>
+        <servlet-class>ru.bellintegrator.app.servlet.ContactEditorServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>groupeditor</servlet-name>
-        <servlet-class>ru.bellintegrator.app.servlets.GroupEditorServlet</servlet-class>
+        <servlet-class>ru.bellintegrator.app.servlet.GroupEditorServlet</servlet-class>
     </servlet>
 
     <!--Servlet mapping-->
