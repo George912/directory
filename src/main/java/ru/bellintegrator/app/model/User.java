@@ -55,7 +55,7 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    @Column(name="login", nullable=false, length=20, unique = true)
+    @Column(name = "login", nullable = false, length = 20, unique = true)
     public String getLogin() {
         return login;
     }
@@ -64,7 +64,7 @@ public class User implements Serializable {
         this.login = login;
     }
 
-    @Column(name="password", nullable=false, length=20)
+    @Column(name = "password", nullable = false, length = 20)
     public String getPassword() {
         return password;
     }
@@ -73,7 +73,7 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @Column(name="firstname", nullable=false, length=30)
+    @Column(name = "firstname", nullable = false, length = 30)
     public String getFirstName() {
         return firstName;
     }
@@ -82,7 +82,7 @@ public class User implements Serializable {
         this.firstName = firstName;
     }
 
-    @Column(name="lastname", nullable=false, length=50)
+    @Column(name = "lastname", nullable = false, length = 50)
     public String getLastName() {
         return lastName;
     }
@@ -91,7 +91,7 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
-    @Column(name="middlename", nullable=false, length=30)
+    @Column(name = "middlename", nullable = false, length = 30)
     public String getMiddleName() {
         return middleName;
     }

@@ -7,6 +7,7 @@ public interface UserDAO {
 
     /**
      * Получает пользователя по логину и паролю.
+     *
      * @param login
      * @param password
      * @return
@@ -15,6 +16,7 @@ public interface UserDAO {
 
     /**
      * Получает id пользователя в базе данных.
+     *
      * @param login
      * @param password
      * @return

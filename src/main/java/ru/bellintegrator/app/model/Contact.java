@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "contacts")
-public class Contact implements Serializable{
+public class Contact implements Serializable {
 
     private int id;
     private String firstName;
@@ -84,7 +84,7 @@ public class Contact implements Serializable{
         this.id = id;
     }
 
-    @Column(name="firstphonenumber", nullable=false, length=11)
+    @Column(name = "firstphonenumber", nullable = false, length = 11)
     public String getFirstPhoneNumber() {
         return firstPhoneNumber;
     }
@@ -93,7 +93,7 @@ public class Contact implements Serializable{
         this.firstPhoneNumber = firstPhoneNumber;
     }
 
-    @Column(name="firstphonenumbertype", nullable=false, length=10)
+    @Column(name = "firstphonenumbertype", nullable = false, length = 10)
     public String getFirstPhoneNumberType() {
         return firstPhoneNumberType.name();
     }
@@ -102,7 +102,7 @@ public class Contact implements Serializable{
         this.firstPhoneNumberType = PhoneNumberType.getTypeByName(firstPhoneNumberType);
     }
 
-    @Column(name="secondphonenumber", nullable=false, length=11)
+    @Column(name = "secondphonenumber", nullable = false, length = 11)
     public String getSecondPhoneNumber() {
         return secondPhoneNumber;
     }
@@ -111,7 +111,7 @@ public class Contact implements Serializable{
         this.secondPhoneNumber = secondPhoneNumber;
     }
 
-    @Column(name="secondphonenumbertype", nullable=false, length=10)
+    @Column(name = "secondphonenumbertype", nullable = false, length = 10)
     public String getSecondPhoneNumberType() {
         return secondPhoneNumberType.name();
     }
@@ -120,7 +120,7 @@ public class Contact implements Serializable{
         this.secondPhoneNumberType = PhoneNumberType.getTypeByName(secondPhoneNumberType);
     }
 
-    @Column(name="email", nullable=false, length=30)
+    @Column(name = "email", nullable = false, length = 30)
     public String getEmail() {
         return email;
     }
@@ -129,7 +129,7 @@ public class Contact implements Serializable{
         this.email = email;
     }
 
-    @Column(name="notes", nullable=false, length=300)
+    @Column(name = "notes", nullable = false, length = 300)
     public String getNotes() {
         return notes;
     }
@@ -138,7 +138,7 @@ public class Contact implements Serializable{
         this.notes = notes;
     }
 
-    @Column(name="firstname", nullable=false, length=30)
+    @Column(name = "firstname", nullable = false, length = 30)
     public String getFirstName() {
         return firstName;
     }
@@ -147,7 +147,7 @@ public class Contact implements Serializable{
         this.firstName = firstName;
     }
 
-    @Column(name="lastname", nullable=false, length=50)
+    @Column(name = "lastname", nullable = false, length = 50)
     public String getLastName() {
         return lastName;
     }
@@ -156,7 +156,7 @@ public class Contact implements Serializable{
         this.lastName = lastName;
     }
 
-    @Column(name="middlename", nullable=false, length=30)
+    @Column(name = "middlename", nullable = false, length = 30)
     public String getMiddleName() {
         return middleName;
     }

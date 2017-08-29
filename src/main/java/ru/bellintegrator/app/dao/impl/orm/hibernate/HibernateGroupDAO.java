@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.dao.impl.orm.hibernate;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -16,7 +17,7 @@ import java.util.List;
 public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO<Group> {
 
     private final static Object monitor = new Object();
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateGroupDAO.class);
+    private static final Logger log = Logger.getLogger(HibernateGroupDAO.class);
 
     @Override
     public int create(Group group) throws DAOException {
@@ -37,8 +38,8 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                     transaction.rollback();
                 }
 
-                log.error("Exception while creating group: " + e);
-                throw new DAOException("Exception while creating group: " + e);
+                log.error("Exception while creating group: ", e);
+                throw new DAOException("Exception while creating group: ", e);
             }
 
             return groupId;
@@ -65,8 +66,8 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                     transaction.rollback();
                 }
 
-                log.error("Exception while removing group: " + e);
-                throw new DAOException("Exception while removing group: " + e);
+                log.error("Exception while removing group: ", e);
+                throw new DAOException("Exception while removing group: ", e);
             }
         }
     }
@@ -93,8 +94,8 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                     transaction.rollback();
                 }
 
-                log.error("Exception while updating group: " + e);
-                throw new DAOException("Exception while updating group: " + e);
+                log.error("Exception while updating group: ", e);
+                throw new DAOException("Exception while updating group: ", e);
             }
         }
     }
@@ -103,19 +104,15 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
     public List<Group> getAll(int ownerId) throws DAOException {
         log.debug("Call getAll method: ownerId = " + ownerId);
         synchronized (monitor) {
-            List<Group> groups;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(Group.class);
                 criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
-                groups = criteria.list();
+                return criteria.list();
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving group list: " + e);
-                throw new DAOException("Exception while retrieving group list: " + e);
+                log.error("Exception while retrieving group list: ", e);
+                throw new DAOException("Exception while retrieving group list: ", e);
             }
-
-            return groups;
         }
     }
 
@@ -123,8 +120,6 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
     public Group getById(int id, int ownerId) throws DAOException {
         log.debug("Call getById method: id = " + id + ", ownerId = " + ownerId);
         synchronized (monitor) {
-            Group group = null;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(Group.class);
                 criteria.add(Restrictions.eq(("id"), id));
@@ -132,15 +127,15 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
                 List result = criteria.list();
 
                 if (!result.isEmpty()) {
-                    group = (Group) result.get(0);
+                    return (Group) result.get(0);
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving group by id: " + e);
-                throw new DAOException("Exception while retrieving group by id: " + e);
+                log.error("Exception while retrieving group by id: ", e);
+                throw new DAOException("Exception while retrieving group by id: ", e);
             }
 
-            return group;
+            return null;
         }
     }
 
@@ -148,20 +143,16 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
     public List<Group> getByName(String name, int ownerId) throws DAOException {
         log.debug("Call getByName method: name = " + name + ", ownerId = " + ownerId);
         synchronized (monitor) {
-            List<Group> groups;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(Group.class);
                 criteria.add(Restrictions.eq(("name"), name));
                 criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
-                groups = criteria.list();
+                return criteria.list();
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving group list by name: " + e);
-                throw new DAOException("Exception while retrieving group list by name: " + e);
+                log.error("Exception while retrieving group list by name: ", e);
+                throw new DAOException("Exception while retrieving group list by name: ", e);
             }
-
-            return groups;
         }
     }
 

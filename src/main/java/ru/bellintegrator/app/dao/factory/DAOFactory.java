@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.dao.factory;
 
+import org.apache.log4j.Logger;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.hibernate.HibernateDAOFactory;
 import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
@@ -14,7 +15,7 @@ import ru.bellintegrator.app.model.User;
 public abstract class DAOFactory {
 
     private static final DAOFactoryType DEFAULT_DAO_FACTORY_TYPE = DAOFactoryType.HIBERNATE;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(DAOFactory.class);
+    private static final Logger log = Logger.getLogger(DAOFactory.class);
 
     public abstract GenericDAO<Contact> getContactDAO() throws DAOException;
 

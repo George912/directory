@@ -50,16 +50,16 @@
         <br/>
         <% if (action == EditorAction.CREATE) {
             for (Group group : groupList) {%>
-                <input type="checkbox" name="group" value=<%=group.getId()%>> <%=group.getName()%><br/>
-            <%}%>
+        <input type="checkbox" name="group" value=<%=group.getId()%>> <%=group.getName()%><br/>
+        <%}%>
         <%}%>
         <% if (action == EditorAction.UPDATE) {
             for (Group group : contact.getGroupList()) {%>
-                <input type="checkbox" name="group" value=<%=group.getId()%> checked> <%=group.getName()%><br/>
-            <%}%>
+        <input type="checkbox" name="group" value=<%=group.getId()%> checked> <%=group.getName()%><br/>
+        <%}%>
         <%}%>
         <br/>
-        <input type="hidden" name="contact_id" value=<%=contact.getId()%> />
+        <input type="hidden" name="contact_id" value=<%=contact.getId()%>/>
         <input type="submit" value="Сохранить"/>
         <input type="button" value="Отмена"/>
     </form>

@@ -4,7 +4,7 @@ import ru.bellintegrator.app.exception.DAOException;
 
 import java.util.Map;
 
-public interface AnalyticalInfoDAO{
+public interface AnalyticalInfoDAO {
 
     int getUserCount() throws DAOException;
 

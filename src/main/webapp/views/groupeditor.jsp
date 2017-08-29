@@ -20,7 +20,7 @@
 
         Имя <input type="text" name="name" value=<%=group.getName()%>/><br/>
         Заметки <textarea name="notes"><%=group.getNotes()%></textarea><br/>
-        <input type="hidden" name="group_id" value=<%=group.getId()%> />
+        <input type="hidden" name="group_id" value=<%=group.getId()%>/>
         <input type="submit" value="Сохранить"/>
         <input type="button" value="Отмена"/>
     </form>

@@ -2,8 +2,8 @@
 <%@ page import="java.util.Map" %>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Контакты</title>
+    <meta charset="UTF-8">
+    <title>Контакты</title>
 </head>
 <body>
 <%AnalyticalInfo info = (AnalyticalInfo) request.getAttribute("info");%>
@@ -39,12 +39,12 @@
                 <tbody>
                 <%
                     for (Map.Entry<Integer, Long> entry : info.getEachUserContactCount().entrySet()) {%>
-                        <tr>
-                            <td><%=entry.getKey()%>
-                            </td>
-                            <td><%=entry.getValue()%>
-                            </td>
-                        </tr>
+                <tr>
+                    <td><%=entry.getKey()%>
+                    </td>
+                    <td><%=entry.getValue()%>
+                    </td>
+                </tr>
                 <%}%>
                 </tbody>
             </table>
@@ -64,12 +64,12 @@
                 <tbody>
                 <%
                     for (Map.Entry<Integer, Long> entry1 : info.getEachUserGroupCount().entrySet()) {%>
-                        <tr>
-                            <td><%=entry1.getKey()%>
-                            </td>
-                            <td><%=entry1.getValue()%>
-                            </td>
-                        </tr>
+                <tr>
+                    <td><%=entry1.getKey()%>
+                    </td>
+                    <td><%=entry1.getValue()%>
+                    </td>
+                </tr>
                 <%}%>
                 </tbody>
             </table>
@@ -88,13 +88,13 @@
                 </thead>
                 <tbody>
                 <%
-                    for (Map.Entry<Integer, Long> entry2 : info.getInactiveUserCount().entrySet()){%>
-                        <tr>
-                            <td><%=entry2.getKey()%>
-                            </td>
-                            <td><%=entry2.getValue()%>
-                            </td>
-                        </tr>
+                    for (Map.Entry<Integer, Long> entry2 : info.getInactiveUserCount().entrySet()) {%>
+                <tr>
+                    <td><%=entry2.getKey()%>
+                    </td>
+                    <td><%=entry2.getValue()%>
+                    </td>
+                </tr>
                 <%}%>
                 </tbody>
             </table>

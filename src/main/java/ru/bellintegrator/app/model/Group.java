@@ -39,7 +39,7 @@ public class Group implements Serializable {
 //        this.owner = owner;
     }
 
-    @Column(name="name", nullable=false, length=30)
+    @Column(name = "name", nullable = false, length = 30)
     public String getName() {
         return name;
     }
@@ -48,7 +48,7 @@ public class Group implements Serializable {
         this.name = name;
     }
 
-    @Column(name="notes", nullable=false, length=300)
+    @Column(name = "notes", nullable = false, length = 300)
     public String getNotes() {
         return notes;
     }

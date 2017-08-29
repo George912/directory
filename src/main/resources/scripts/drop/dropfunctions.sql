@@ -1,24 +1,24 @@
 -- delete functions for table groups
-DROP FUNCTION IF EXISTS add_group(varchar(30), varchar(300), int);
-DROP FUNCTION IF EXISTS update_group(int, varchar(30), varchar(300), int);
-DROP FUNCTION IF EXISTS get_all_groups(int);
-DROP FUNCTION IF EXISTS get_group_by_id(int, int);
-DROP FUNCTION IF EXISTS get_groups_by_name(varchar(30), int);
-DROP FUNCTION IF EXISTS delete_group(int, int);
+DROP FUNCTION IF EXISTS add_group( VARCHAR(30), VARCHAR(300), INT );
+DROP FUNCTION IF EXISTS update_group( INT, VARCHAR(30), VARCHAR(300), INT );
+DROP FUNCTION IF EXISTS get_all_groups( INT );
+DROP FUNCTION IF EXISTS get_group_by_id( INT, INT );
+DROP FUNCTION IF EXISTS get_groups_by_name( VARCHAR(30), INT );
+DROP FUNCTION IF EXISTS delete_group( INT, INT );
 
 -- delete functions for table contacts_groups
-DROP FUNCTION IF EXISTS add_group_to_contact(int, int);
-DROP FUNCTION IF EXISTS delete_group_from_contact(int, int);
+DROP FUNCTION IF EXISTS add_group_to_contact( INT, INT );
+DROP FUNCTION IF EXISTS delete_group_from_contact( INT, INT );
 
 -- delete functions for table contacts
-DROP FUNCTION IF EXISTS add_contact(varchar(30), varchar(30), varchar(50), varchar(11),
-  varchar(10), varchar(11), varchar(10), varchar(30), varchar(300), int);
-DROP FUNCTION IF EXISTS update_contact(int, varchar(30), varchar(30), varchar(50), varchar(11),
-  varchar(10), varchar(11), varchar(10), varchar(30), varchar(300), int);
-DROP FUNCTION IF EXISTS delete_contact(int, int);
-DROP FUNCTION IF EXISTS get_all_contacts(int);
-DROP FUNCTION IF EXISTS get_contact_by_id(int, int);
-DROP FUNCTION IF EXISTS get_contacts_by_name(varchar(30), int);
+DROP FUNCTION IF EXISTS add_contact( VARCHAR(30), VARCHAR(30), VARCHAR(50), VARCHAR(11),
+  VARCHAR(10), VARCHAR(11), VARCHAR(10), VARCHAR(30), VARCHAR(300), INT );
+DROP FUNCTION IF EXISTS update_contact( INT, VARCHAR(30), VARCHAR(30), VARCHAR(50), VARCHAR(11),
+  VARCHAR(10), VARCHAR(11), VARCHAR(10), VARCHAR(30), VARCHAR(300), INT );
+DROP FUNCTION IF EXISTS delete_contact( INT, INT );
+DROP FUNCTION IF EXISTS get_all_contacts( INT );
+DROP FUNCTION IF EXISTS get_contact_by_id( INT, INT );
+DROP FUNCTION IF EXISTS get_contacts_by_name( VARCHAR(30), INT );
 
 -- delete trigger functions
 DROP FUNCTION IF EXISTS delete_groups_info();

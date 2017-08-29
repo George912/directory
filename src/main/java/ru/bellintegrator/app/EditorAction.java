@@ -11,7 +11,7 @@ public enum EditorAction {
     DELETE,
     UNKNOWN;
 
-    public static EditorAction getActionFromString(String act){
+    public static EditorAction getActionFromString(String act) {
         for (EditorAction action : values()) {
             if (action.name().equalsIgnoreCase(act)) {
                 return action;

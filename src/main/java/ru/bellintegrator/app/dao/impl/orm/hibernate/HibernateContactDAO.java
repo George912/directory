@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.dao.impl.orm.hibernate;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -16,7 +17,7 @@ import java.util.List;
 public class HibernateContactDAO extends AbstractConnectable implements GenericDAO<Contact> {
 
     private final static Object monitor = new Object();
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateContactDAO.class);
+    private static final Logger log = Logger.getLogger(HibernateContactDAO.class);
 
     @Override
     public int create(Contact contact) throws DAOException {
@@ -37,9 +38,9 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                     transaction.rollback();
                 }
 
-                log.error("Exception while creating contact: " + e);
+                log.error("Exception while creating contact: ", e);
                 e.printStackTrace();
-                throw new DAOException("Exception while creating contact: " + e);
+                throw new DAOException("Exception while creating contact: ", e);
             }
 
             return contactId;
@@ -66,8 +67,8 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                     transaction.rollback();
                 }
 
-                log.error("Exception while removing contact: " + e);
-                throw new DAOException("Exception while removing contact: " + e);
+                log.error("Exception while removing contact: ", e);
+                throw new DAOException("Exception while removing contact: ", e);
             }
         }
     }
@@ -102,8 +103,8 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                     transaction.rollback();
                 }
 
-                log.error("Exception while updating contact: " + e);
-                throw new DAOException("Exception while updating contact: " + e);
+                log.error("Exception while updating contact: ", e);
+                throw new DAOException("Exception while updating contact: ", e);
             }
         }
     }
@@ -112,19 +113,14 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
     public List<Contact> getAll(int ownerId) throws DAOException {
         log.debug("Call getAll method: ownerId = " + ownerId);
         synchronized (monitor) {
-            List<Contact> contacts;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(Contact.class);
-                criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
-                contacts = criteria.list();
+                return criteria.list();
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving contact list: " + e);
-                throw new DAOException("Exception while retrieving contact list: " + e);
+                log.error("Exception while retrieving contact list: ", e);
+                throw new DAOException("Exception while retrieving contact list: ", e);
             }
-
-            return contacts;
         }
     }
 
@@ -132,8 +128,6 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
     public Contact getById(int id, int ownerId) throws DAOException {
         log.debug("Call getById method: id = " + id + ", ownerId = " + ownerId);
         synchronized (monitor) {
-            Contact contact = null;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(Contact.class);
                 criteria.add(Restrictions.eq(("id"), id));
@@ -141,15 +135,15 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                 List result = criteria.list();
 
                 if (!result.isEmpty()) {
-                    contact = (Contact) result.get(0);
+                    return (Contact) result.get(0);
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving contact by id: " + e);
-                throw new DAOException("Exception while retrieving contact by id: " + e);
+                log.error("Exception while retrieving contact by id: ", e);
+                throw new DAOException("Exception while retrieving contact by id: ", e);
             }
 
-            return contact;
+            return null;
         }
     }
 
@@ -157,20 +151,16 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
     public List<Contact> getByName(String name, int ownerId) throws DAOException {
         log.debug("Call getByName method: name = " + name + ", ownerId = " + ownerId);
         synchronized (monitor) {
-            List<Contact> contacts;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(Contact.class);
                 criteria.add(Restrictions.eq(("firstName"), name));
                 criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
-                contacts = criteria.list();
+                return criteria.list();
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving contact list by name: " + e);
-                throw new DAOException("Exception while retrieving contact list by name: " + e);
+                log.error("Exception while retrieving contact list by name: ", e);
+                throw new DAOException("Exception while retrieving contact list by name: ", e);
             }
-
-            return contacts;
         }
     }
 

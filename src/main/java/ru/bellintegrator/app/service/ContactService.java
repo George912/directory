@@ -1,9 +1,10 @@
 package ru.bellintegrator.app.service;
 
+import org.apache.log4j.Logger;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Contact;
-import ru.bellintegrator.app.model.Group;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public class ContactService {
 
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ContactService.class);
+    private static final Logger log = Logger.getLogger(ContactService.class);
     private GenericDAO<Contact> contactGenericDAO;
     private GroupService groupService;
 
@@ -23,78 +24,75 @@ public class ContactService {
     }
 
     public void setGroupService(GroupService groupService) {
-        this.groupService = groupService;
         log.debug("Call setGroupService method: groupService = " + groupService);
+        this.groupService = groupService;
     }
 
-    public void addContact(Contact contact) throws DAOException {
+    public void addContact(Contact contact) throws ServiceException {
         log.debug("Call addContact method: contact = " + contact);
-        contactGenericDAO.create(contact);
-    }
-
-    public void updateContact(Contact contact) throws DAOException {
-        log.debug("Call updateContact method: contact = " + contact);
-        contactGenericDAO.update(contact);
-    }
-
-    public void deleteContact(Contact contact) throws DAOException {
-        log.debug("Call deleteContact method: contact = " + contact);
-        contactGenericDAO.delete(contact);
-    }
-
-    public List<Contact> getAllContacts(int ownerId) throws DAOException {
-        log.debug("Call getAllContacts method: ownerId = " + ownerId);
-        return contactGenericDAO.getAll(ownerId);
-    }
-
-    @Deprecated
-    public void saveContacts(List<Contact> contactList) throws DAOException {
-        for (Contact contact : contactList) {
+        try {
             contactGenericDAO.create(contact);
+
+        } catch (DAOException e) {
+            log.error("Exception while adding contact: ", e);
+            throw new ServiceException("Exception while adding contact: ", e);
         }
     }
 
-    public Contact getContactById(int id, int ownerId) throws DAOException {
-        Contact contact;
+    public void updateContact(Contact contact) throws ServiceException {
+        log.debug("Call updateContact method: contact = " + contact);
+        try {
+            contactGenericDAO.update(contact);
 
+        } catch (DAOException e) {
+            log.error("Exception while updating contact: ", e);
+            throw new ServiceException("Exception while updating contact: ", e);
+        }
+    }
+
+    public void deleteContact(Contact contact) throws ServiceException {
+        log.debug("Call deleteContact method: contact = " + contact);
+        try {
+            contactGenericDAO.delete(contact);
+
+        } catch (DAOException e) {
+            log.error("Exception while removing contact: ", e);
+            throw new ServiceException("Exception while removing contact: ", e);
+        }
+    }
+
+    public List<Contact> getAllContacts(int ownerId) throws ServiceException {
+        log.debug("Call getAllContacts method: ownerId = " + ownerId);
+        try {
+            return contactGenericDAO.getAll(ownerId);
+
+        } catch (DAOException e) {
+            log.error("Exception while retrieving contact list: ", e);
+            throw new ServiceException("Exception while retrieving contact list: ", e);
+        }
+    }
+
+    public Contact getContactById(int id, int ownerId) throws ServiceException {
         log.debug("Call getContactById method: id = " + id + ", ownerId = " + ownerId);
 
         try {
-            contact = contactGenericDAO.getById(id, ownerId);
+            return contactGenericDAO.getById(id, ownerId);
 
         } catch (DAOException e) {
-            log.error("Exception while retrieving contact by id: " + e);
-            throw new DAOException("Exception while retrieving contact by id: " + e);
+            log.error("Exception while retrieving contact by id: ", e);
+            throw new ServiceException("Exception while retrieving contact by id: ", e);
         }
-
-        return contact;
     }
 
-    public List<Contact> getContactsByName(String name, int ownerId) throws DAOException {
-        List<Contact> contactList;
-
+    public List<Contact> getContactsByName(String name, int ownerId) throws ServiceException {
         log.debug("Call getContactsByName method: name = " + name + ", ownerId = " + ownerId);
 
         try {
-            contactList = contactGenericDAO.getByName(name, ownerId);
-//            updateContactGroups(contactList);
+            return contactGenericDAO.getByName(name, ownerId);
 
         } catch (DAOException e) {
-            log.error("Exception while retrieving contact list by name: " + e);
-            throw new DAOException("Exception while retrieving contact list by name: " + e);
-        }
-
-        return contactList;
-    }
-
-    @Deprecated
-    public void deleteGroupFromContacts(Group group, int ownerId) throws DAOException {
-        List<Contact> contactList = contactGenericDAO.getAll(ownerId);
-        for (Contact contact : contactList) {
-            if (contact.getGroupList().remove(group)) {
-//                groupService.deleteGroupFromContact(group, contact);
-                contactGenericDAO.update(contact);
-            }
+            log.error("Exception while retrieving contact list by name: ", e);
+            throw new ServiceException("Exception while retrieving contact list by name: ", e);
         }
     }
 

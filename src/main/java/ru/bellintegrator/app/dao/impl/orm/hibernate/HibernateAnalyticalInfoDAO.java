@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.dao.impl.orm.hibernate;
 
+import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import ru.bellintegrator.app.dao.impl.AbstractConnectable;
@@ -16,27 +17,25 @@ import java.util.Map;
 public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements AnalyticalInfoDAO {
 
     private final static Object monitor = new Object();
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateAnalyticalInfoDAO.class);
+    private static final Logger log = Logger.getLogger(HibernateAnalyticalInfoDAO.class);
 
     @Override
     public int getUserCount() throws DAOException {
         log.debug("Call getUserCount method");
         synchronized (monitor) {
-            int count = 0;
-
             try (Session session = getSessionFactory().openSession()) {
                 StoredProcedureQuery procedureQuery = session.createStoredProcedureQuery("get_user_count");
 
                 if (procedureQuery.execute()) {
-                    count = (int) procedureQuery.getSingleResult();
+                    return (int) procedureQuery.getSingleResult();
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving user count");
-                throw new DAOException("Exception while retrieving user count: " + e);
+                log.error("Exception while retrieving user count", e);
+                throw new DAOException("Exception while retrieving user count: ", e);
             }
 
-            return count;
+            return -1;
         }
     }
 
@@ -44,21 +43,19 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
     public Map<Integer, Long> getEachUserContactCount() throws DAOException {
         log.debug("Call getEachUserContactCount method");
         synchronized (monitor) {
-            Map<Integer, Long> map = new HashMap<>();
-
             try (Session session = getSessionFactory().openSession()) {
                 StoredProcedureQuery procedureQuery = session.createStoredProcedureQuery("get_each_user_contact_count");
 
                 if (procedureQuery.execute()) {
-                    map = convertResultListToMap(procedureQuery.getResultList());
+                    return convertResultListToMap(procedureQuery.getResultList());
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving each user contact count");
-                throw new DAOException("Exception while retrieving each user contact count: " + e);
+                log.error("Exception while retrieving each user contact count", e);
+                throw new DAOException("Exception while retrieving each user contact count: ", e);
             }
 
-            return map;
+            return null;
         }
     }
 
@@ -66,21 +63,19 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
     public Map<Integer, Long> getEachUserGroupCount() throws DAOException {
         log.debug("Call getEachUserGroupCount method");
         synchronized (monitor) {
-            Map<Integer, Long> map = new HashMap<>();
-
             try (Session session = getSessionFactory().openSession()) {
                 StoredProcedureQuery procedureQuery = session.createStoredProcedureQuery("get_each_user_group_count");
 
                 if (procedureQuery.execute()) {
-                    map = convertResultListToMap(procedureQuery.getResultList());
+                    return convertResultListToMap(procedureQuery.getResultList());
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving each user group count");
-                throw new DAOException("Exception while retrieving each user group count: " + e);
+                log.error("Exception while retrieving each user group count", e);
+                throw new DAOException("Exception while retrieving each user group count: ", e);
             }
 
-            return map;
+            return null;
         }
     }
 
@@ -88,21 +83,19 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
     public double getAvgUserCountInGroup() throws DAOException {
         log.debug("Call getAvgUserCountInGroup method");
         synchronized (monitor) {
-            double count = 0;
-
             try (Session session = getSessionFactory().openSession()) {
                 StoredProcedureQuery procedureQuery = session.createStoredProcedureQuery("avg_user_count_in_groups");
 
                 if (procedureQuery.execute()) {
-                    count = ((BigDecimal) procedureQuery.getSingleResult()).doubleValue();
+                    return ((BigDecimal) procedureQuery.getSingleResult()).doubleValue();
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving average user count in groups");
-                throw new DAOException("Exception while retrieving average user count in groups: " + e);
+                log.error("Exception while retrieving average user count in groups", e);
+                throw new DAOException("Exception while retrieving average user count in groups: ", e);
             }
 
-            return count;
+            return -1;
         }
     }
 
@@ -110,21 +103,19 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
     public Map<Integer, Long> getInactiveUserCount() throws DAOException {
         log.debug("Call getInactiveUserCount method");
         synchronized (monitor) {
-            Map<Integer, Long> map = new HashMap<>();
-
             try (Session session = getSessionFactory().openSession()) {
                 StoredProcedureQuery procedureQuery = session.createStoredProcedureQuery("get_inactive_users");
 
                 if (procedureQuery.execute()) {
-                    map = convertResultListToMap(procedureQuery.getResultList());
+                    return convertResultListToMap(procedureQuery.getResultList());
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving inactive user count");
-                throw new DAOException("Exception while retrieving inactive user count: " + e);
+                log.error("Exception while retrieving inactive user count", e);
+                throw new DAOException("Exception while retrieving inactive user count: ", e);
             }
 
-            return map;
+            return null;
         }
     }
 
@@ -132,27 +123,25 @@ public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements A
     public double getAvgUserContactsCount() throws DAOException {
         log.debug("Call getInactiveUserCount method");
         synchronized (monitor) {
-            double count = 0;
-
             try (Session session = getSessionFactory().openSession()) {
                 StoredProcedureQuery procedureQuery = session.createStoredProcedureQuery("avg_users_contact_count");
 
                 if (procedureQuery.execute()) {
-                    count = ((BigDecimal) procedureQuery.getSingleResult()).doubleValue();
+                    return ((BigDecimal) procedureQuery.getSingleResult()).doubleValue();
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving average user contact count");
-                throw new DAOException("Exception while retrieving average user contact count: " + e);
+                log.error("Exception while retrieving average user contact count", e);
+                throw new DAOException("Exception while retrieving average user contact count: ", e);
             }
 
-            return count;
+            return -1;
         }
     }
 
     private Map<Integer, Long> convertResultListToMap(List list) {
-        Map<Integer, Long> map = new HashMap<>();
         log.debug("Call convertResultListToMap method: list to convert = " + list);
+        Map<Integer, Long> map = new HashMap<>();
 
         for (Object o : list) {
             Object[] row = (Object[]) o;

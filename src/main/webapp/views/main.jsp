@@ -21,7 +21,7 @@
     </tr>
     <tr>
         <td rowspan="2">
-            <table border="5"  width="500" height="600">
+            <table border="5" width="500" height="600">
                 <thead>
                 <tr>
                     <td>Имя</td>
@@ -41,30 +41,42 @@
                 <tbody>
                 <%
                     List<Contact> contacts = (List<Contact>) request.getAttribute("contactList");
-                    for (Contact contact : contacts){%>
-                        <tr>
-                            <td><%=contact.getFirstName()%></td>
-                            <td><%=contact.getMiddleName()%></td>
-                            <td><%=contact.getLastName()%></td>
-                            <td><%=contact.getFirstPhoneNumber()%></td>
-                            <td><%=contact.getFirstPhoneNumberType()%></td>
-                            <td><%=contact.getSecondPhoneNumber()%></td>
-                            <td><%=contact.getSecondPhoneNumberType()%></td>
-                            <td><%=contact.getEmail()%></td>
-                            <td>
+                    for (Contact contact : contacts) {%>
+                <tr>
+                    <td><%=contact.getFirstName()%>
+                    </td>
+                    <td><%=contact.getMiddleName()%>
+                    </td>
+                    <td><%=contact.getLastName()%>
+                    </td>
+                    <td><%=contact.getFirstPhoneNumber()%>
+                    </td>
+                    <td><%=contact.getFirstPhoneNumberType()%>
+                    </td>
+                    <td><%=contact.getSecondPhoneNumber()%>
+                    </td>
+                    <td><%=contact.getSecondPhoneNumberType()%>
+                    </td>
+                    <td><%=contact.getEmail()%>
+                    </td>
+                    <td>
                                 <textarea>
                                     <%=contact.getNotes()%>
                                 </textarea>
-                            </td>
-                            <td>
+                    </td>
+                    <td>
                                 <textarea>
                                     <%=contact.getGroupList().toString()%>
                                 </textarea>
-                            </td>
-                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=contact.getOwner().getId()%>">Редактировать</a></td>
-                            <td><a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=contact.getOwner().getId()%>">Удалить</a></td>
-                            <td></td>
-                        </tr>
+                    </td>
+                    <td>
+                        <a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=contact.getOwner().getId()%>">Редактировать</a>
+                    </td>
+                    <td>
+                        <a href="editor/contact?contact_id=<%=contact.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=contact.getOwner().getId()%>">Удалить</a>
+                    </td>
+                    <td></td>
+                </tr>
                 <%}%>
                 </tbody>
             </table>
@@ -101,16 +113,21 @@
                 <tbody>
                 <%
                     List<Group> groups = (List<Group>) request.getAttribute("groupList");
-                    for (Group group : groups){%>
+                    for (Group group : groups) {%>
                 <tr>
-                    <td><%=group.getName()%></td>
+                    <td><%=group.getName()%>
+                    </td>
                     <td>
                         <textarea>
                                 <%=group.getNotes()%>
                         </textarea>
                     </td>
-                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=group.getOwner().getId()%>">Редактировать</a></td>
-                    <td><a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=group.getOwner().getId()%>">Удалить</a></td>
+                    <td>
+                        <a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.UPDATE%>&owner_id=<%=group.getOwner().getId()%>">Редактировать</a>
+                    </td>
+                    <td>
+                        <a href="editor/group?group_id=<%=group.getId()%>&action=<%=EditorAction.DELETE%>&owner_id=<%=group.getOwner().getId()%>">Удалить</a>
+                    </td>
                 </tr>
                 <%}%>
                 </tbody>

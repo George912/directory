@@ -10,21 +10,8 @@ public class AnalyticalInfo {
     private double avgUserCountInGroups;
     private Map<Integer, Long> inactiveUserCount;
     private double avgUsersContactCount;
-    private static AnalyticalInfo instance;
 
-    private AnalyticalInfo() {
-    }
-
-    public static AnalyticalInfo getInstance() {
-        if (instance == null) {
-            synchronized (AnalyticalInfo.class) {
-                if (instance == null) {
-                    instance = new AnalyticalInfo();
-                }
-            }
-        }
-
-        return instance;
+    public AnalyticalInfo() {
     }
 
     public int getUserCount() {

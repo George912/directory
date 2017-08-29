@@ -1,14 +1,16 @@
 package ru.bellintegrator.app.service;
 
+import org.apache.log4j.Logger;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.impl.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.User;
 
 public class UserService {
 
     private UserDAO dao;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(UserService.class);
+    private static final Logger log = Logger.getLogger(UserService.class);
 
     public UserService(GenericDAO<User> dao) {
         this.dao = (UserDAO) dao;
@@ -16,14 +18,26 @@ public class UserService {
         log.info("UserService instance created");
     }
 
-    public User getUserByCredential(String login, String password) throws DAOException {
+    public User getUserByCredential(String login, String password) throws ServiceException {
         log.debug("Call getUserByCredential method: login = " + login + ", password=" + password);
-        return dao.getUserByCredential(login, password);
+        try {
+            return dao.getUserByCredential(login, password);
+
+        } catch (DAOException e) {
+            log.error("Exception while retrieving user by credential: ", e);
+            throw new ServiceException("Exception while retrieving user by credential: ", e);
+        }
     }
 
-    public int getUserId(String login, String password) throws DAOException {
+    public int getUserId(String login, String password) throws ServiceException {
         log.debug("Call getUserId method: login = " + login + ", password=" + password);
-        return dao.getUserId(login, password);
+        try {
+            return dao.getUserId(login, password);
+
+        } catch (DAOException e) {
+            log.error("Exception while retrieving user id by credential: ", e);
+            throw new ServiceException("Exception while retrieving user id by credential: ", e);
+        }
     }
 
 }

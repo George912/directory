@@ -1,7 +1,8 @@
 package ru.bellintegrator.app.servlet;
 
+import org.apache.log4j.Logger;
 import ru.bellintegrator.app.EditorAction;
-import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.ContactService;
@@ -17,7 +18,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
 
     private ContactService contactService;
     private GroupService groupService;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(GroupEditorServlet.class);
+    private static final Logger log = Logger.getLogger(GroupEditorServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -41,10 +42,11 @@ public class GroupEditorServlet extends AbstractEditorServlet {
             log.debug("Go to /views/groupeditor.jsp");
             dispatcher.include(request, response);
 
-        } catch (DAOException | ServletException | IOException e) {
-            log.error("Exception while update group: " + e);
+        } catch (ServiceException | ServletException | IOException e) {
+            log.error("Exception while update group: ", e);
         }
     }
+
     protected void create(HttpServletRequest request, HttpServletResponse response, int userId, RequestDispatcher dispatcher) {
         Group group = new Group(0, "", "", userId);
         request.setAttribute("group", group);
@@ -56,10 +58,11 @@ public class GroupEditorServlet extends AbstractEditorServlet {
             dispatcher.include(request, response);
 
         } catch (ServletException | IOException e) {
-            log.error("Exception while creating group: " + e);
+            log.error("Exception while creating group: ", e);
 
         }
     }
+
     protected void insert(HttpServletRequest request, HttpServletResponse response, int userId, EditorAction action) {
         Group group = new Group(0);
         group.setName(request.getParameter("name"));
@@ -80,10 +83,11 @@ public class GroupEditorServlet extends AbstractEditorServlet {
             log.debug("Go to /userdata");
             response.sendRedirect(request.getContextPath() + "/userdata");
 
-        } catch (DAOException | IOException e) {
-            log.error("Exception while saving group into storage: " + e);
+        } catch (ServiceException | IOException e) {
+            log.error("Exception while saving group into storage: ", e);
         }
     }
+
     protected void delete(HttpServletRequest request, HttpServletResponse response, int userId) {
         try {
             Group group = new Group(Integer.parseInt(request.getParameter("group_id")));
@@ -94,8 +98,8 @@ public class GroupEditorServlet extends AbstractEditorServlet {
             log.debug("Go to /userdata");
             response.sendRedirect(request.getContextPath() + "/userdata");
 
-        } catch (IOException | DAOException e) {
-            log.error("Exception while deleting group: " + e);
+        } catch (IOException | ServiceException e) {
+            log.error("Exception while deleting group: ", e);
         }
     }
 

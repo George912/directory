@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.dao.impl.orm.hibernate;
 
+import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
 import ru.bellintegrator.app.dao.GenericDAO;
@@ -13,7 +14,7 @@ import java.util.List;
 public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<User>, UserDAO {
 
     private final static Object monitor = new Object();
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HibernateContactDAO.class);
+    private static final Logger log = Logger.getLogger(HibernateContactDAO.class);
 
     @Override
     public int create(User user) throws DAOException {
@@ -34,8 +35,8 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
-                log.error("Exception while creating user: " + e);
-                throw new DAOException("Exception while creating user: " + e);
+                log.error("Exception while creating user: ", e);
+                throw new DAOException("Exception while creating user: ", e);
             }
 
             return userId;
@@ -62,8 +63,8 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
-                log.error("Exception while removing user: " + e);
-                throw new DAOException("Exception while removing user: " + e);
+                log.error("Exception while removing user: ", e);
+                throw new DAOException("Exception while removing user: ", e);
             }
         }
     }
@@ -93,8 +94,8 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
-                log.error("Exception while updating user: " + e);
-                throw new DAOException("Exception while updating user: " + e);
+                log.error("Exception while updating user: ", e);
+                throw new DAOException("Exception while updating user: ", e);
             }
         }
     }
@@ -118,8 +119,8 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                     transaction.rollback();
                 }
 
-                log.error("Exception while retrieving user list: " + e);
-                throw new DAOException("Exception while getting user list: " + e);
+                log.error("Exception while retrieving user list: ", e);
+                throw new DAOException("Exception while getting user list: ", e);
             }
 
             return users;
@@ -130,18 +131,14 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
     public User getById(int id, int ownerId) throws DAOException {
         log.debug("Call getById method: id = " + id + ", ownerId = " + ownerId);
         synchronized (monitor) {
-            User user;
-
             try (Session session = getSessionFactory().openSession()) {
                 IdentifierLoadAccess<User> userIdentifierLoadAccess = session.byId(User.class);
-                user = userIdentifierLoadAccess.load(id);
+                return userIdentifierLoadAccess.load(id);
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving user by id: " + e);
-                throw new DAOException("Exception while retrieving user by id: " + e);
+                log.error("Exception while retrieving user by id: ", e);
+                throw new DAOException("Exception while retrieving user by id: ", e);
             }
-
-            return user;
         }
     }
 
@@ -149,18 +146,14 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
     public List<User> getByName(String name, int ownerId) throws DAOException {
         log.debug("Call getByName method: name = " + name + ", ownerId = " + ownerId);
         synchronized (monitor) {
-            List<User> users;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(User.class);
-                users = criteria.add(Restrictions.eq(("firstName"), name)).list();
+                return criteria.add(Restrictions.eq(("firstName"), name)).list();
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving user list by name: " + e);
-                throw new DAOException("Exception while retrieving user list by name: " + e);
+                log.error("Exception while retrieving user list by name: ", e);
+                throw new DAOException("Exception while retrieving user list by name: ", e);
             }
-
-            return users;
         }
     }
 
@@ -168,8 +161,6 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
     public User getUserByCredential(String login, String password) throws DAOException {
         log.debug("Call getUserByCredential method: login = " + login + ", password = " + password);
         synchronized (monitor) {
-            User user = null;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(User.class);
                 criteria.add(Restrictions.eq(("login"), login))
@@ -177,15 +168,15 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                 List result = criteria.list();
 
                 if (!result.isEmpty()) {
-                    user = (User) result.get(0);
+                    return (User) result.get(0);
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving user by credential: " + e);
-                throw new DAOException("Exception while retrieving user by credential: " + e);
+                log.error("Exception while retrieving user by credential: ", e);
+                throw new DAOException("Exception while retrieving user by credential: ", e);
             }
 
-            return user;
+            return null;
         }
     }
 
@@ -193,8 +184,6 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
     public int getUserId(String login, String password) throws DAOException {
         log.debug("Call getUserId method: login = " + login + ", password = " + password);
         synchronized (monitor) {
-            int userId = -1;
-
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(User.class);
                 criteria.add(Restrictions.eq(("login"), login))
@@ -202,15 +191,15 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
                 List result = criteria.list();
 
                 if (!result.isEmpty()) {
-                    userId = ((User) criteria.list().get(0)).getId();
+                    return ((User) criteria.list().get(0)).getId();
                 }
 
             } catch (HibernateException e) {
-                log.error("Exception while retrieving user id: " + e);
-                throw new DAOException("Exception while retrieving user id: " + e);
+                log.error("Exception while retrieving user id: ", e);
+                throw new DAOException("Exception while retrieving user id: ", e);
             }
 
-            return userId;
+            return -1;
         }
     }
 

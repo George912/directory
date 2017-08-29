@@ -1,7 +1,8 @@
 package ru.bellintegrator.app.servlet;
 
+import org.apache.log4j.Logger;
 import ru.bellintegrator.app.EditorAction;
-import ru.bellintegrator.app.exception.DAOException;
+import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
@@ -20,7 +21,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
 
     private ContactService contactService;
     private GroupService groupService;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ContactEditorServlet.class);
+    private static final Logger log = Logger.getLogger(ContactEditorServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -44,10 +45,11 @@ public class ContactEditorServlet extends AbstractEditorServlet {
             log.debug("Go to /views/contacteditor.jsp");
             dispatcher.include(request, response);
 
-        } catch (DAOException | ServletException | IOException e) {
-            log.error("Exception while update contact: " + e);
+        } catch (ServiceException | ServletException | IOException e) {
+            log.error("Exception while update contact: ", e);
         }
     }
+
     protected void create(HttpServletRequest request, HttpServletResponse response, int userId, RequestDispatcher dispatcher) {
         Contact contact = new Contact(userId);
 
@@ -64,10 +66,11 @@ public class ContactEditorServlet extends AbstractEditorServlet {
             log.debug("Go to /views/contacteditor.jsp");
             dispatcher.include(request, response);
 
-        } catch (IOException | ServletException | DAOException e) {
-            log.error("Exception while creating contact: " + e);
+        } catch (IOException | ServletException | ServiceException e) {
+            log.error("Exception while creating contact: ", e);
         }
     }
+
     protected void insert(HttpServletRequest request, HttpServletResponse response, int userId, EditorAction action) {
         Contact contact = new Contact(userId);
         contact.setEmail(request.getParameter("email"));
@@ -114,10 +117,11 @@ public class ContactEditorServlet extends AbstractEditorServlet {
             log.debug("Go to /userdata");
             response.sendRedirect(request.getContextPath() + "/userdata");
 
-        } catch (DAOException | IOException e) {
-            log.error("Exception while saving contact into storage: " + e);
+        } catch (ServiceException | IOException e) {
+            log.error("Exception while saving contact into storage: ", e);
         }
     }
+
     protected void delete(HttpServletRequest request, HttpServletResponse response, int userId) {
         try {
             Contact contact = new Contact(Integer.parseInt(request.getParameter("contact_id")), "", "", "");
@@ -128,8 +132,8 @@ public class ContactEditorServlet extends AbstractEditorServlet {
             log.debug("Go to /userdata");
             response.sendRedirect(request.getContextPath() + "/userdata");
 
-        } catch (IOException | DAOException e) {
-            log.error("Exception while deleting contact: " + e);
+        } catch (IOException | ServiceException e) {
+            log.error("Exception while deleting contact: ", e);
         }
     }
 

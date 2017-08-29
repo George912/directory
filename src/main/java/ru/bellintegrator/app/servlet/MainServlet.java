@@ -1,6 +1,7 @@
 package ru.bellintegrator.app.servlet;
 
-import ru.bellintegrator.app.exception.DAOException;
+import org.apache.log4j.Logger;
+import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.service.ContactService;
@@ -16,7 +17,7 @@ public class MainServlet extends AbstractServlet {
 
     private ContactService contactService;
     private GroupService groupService;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(MainServlet.class);
+    private static final Logger log = Logger.getLogger(MainServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -62,8 +63,8 @@ public class MainServlet extends AbstractServlet {
 
             dispatcher.include(req, resp);
 
-        } catch (DAOException e) {
-            log.error("Exception in MainServlet:" + e);
+        } catch (ServiceException e) {
+            log.error("Exception in MainServlet:", e);
         }
     }
 

@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.servlet;
 
+import org.apache.log4j.Logger;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.UserService;
 
@@ -12,7 +13,7 @@ import java.io.IOException;
 public class LoginServlet extends AbstractServlet {
 
     private UserService userService;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(LoginServlet.class);
+    private static final Logger log = Logger.getLogger(LoginServlet.class);
 
     @Override
     public void init() throws ServletException {
@@ -44,7 +45,7 @@ public class LoginServlet extends AbstractServlet {
             }
 
         } catch (Exception e) {
-            log.error("Exception while authenticate user:" + e);
+            log.error("Exception while authenticate user:", e);
         }
     }
 

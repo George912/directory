@@ -1,5 +1,6 @@
 package ru.bellintegrator.app.servlet;
 
+import org.apache.log4j.Logger;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
@@ -19,7 +20,7 @@ public abstract class AbstractServlet extends HttpServlet {
     protected GenericDAO<Contact> contactGenericDAO;
     protected GenericDAO<Group> groupGenericDAO;
     protected GenericDAO<User> userGenericDAO;
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(AbstractServlet.class);
+    private static final Logger log = Logger.getLogger(AbstractServlet.class);
 
     {
         daoFactory = DAOFactory.getDAOFactory();
@@ -31,7 +32,7 @@ public abstract class AbstractServlet extends HttpServlet {
             log.debug("Initialize daos");
 
         } catch (DAOException e) {
-            log.error("Exception while initializing daos:" + e);
+            log.error("Exception while initializing daos:", e);
         }
     }
 }
