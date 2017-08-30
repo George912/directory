@@ -180,27 +180,4 @@ public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<
         }
     }
 
-    @Override
-    public int getUserId(String login, String password) throws DAOException {
-        log.debug("Call getUserId method: login = " + login + ", password = " + password);
-        synchronized (monitor) {
-            try (Session session = getSessionFactory().openSession()) {
-                Criteria criteria = session.createCriteria(User.class);
-                criteria.add(Restrictions.eq(("login"), login))
-                        .add(Restrictions.eq(("password"), password));
-                List result = criteria.list();
-
-                if (!result.isEmpty()) {
-                    return ((User) criteria.list().get(0)).getId();
-                }
-
-            } catch (HibernateException e) {
-                log.error("Exception while retrieving user id: ", e);
-                throw new DAOException("Exception while retrieving user id: ", e);
-            }
-
-            return -1;
-        }
-    }
-
 }

@@ -14,13 +14,4 @@ public interface UserDAO {
      */
     User getUserByCredential(String login, String password) throws DAOException;
 
-    /**
-     * Получает id пользователя в базе данных.
-     *
-     * @param login
-     * @param password
-     * @return
-     */
-    int getUserId(String login, String password) throws DAOException;
-
 }

@@ -29,15 +29,4 @@ public class UserService {
         }
     }
 
-    public int getUserId(String login, String password) throws ServiceException {
-        log.debug("Call getUserId method: login = " + login + ", password=" + password);
-        try {
-            return dao.getUserId(login, password);
-
-        } catch (DAOException e) {
-            log.error("Exception while retrieving user id by credential: ", e);
-            throw new ServiceException("Exception while retrieving user id by credential: ", e);
-        }
-    }
-
 }
