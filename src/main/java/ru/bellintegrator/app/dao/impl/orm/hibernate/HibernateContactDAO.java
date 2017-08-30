@@ -39,7 +39,6 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
                 }
 
                 log.error("Exception while creating contact: ", e);
-                e.printStackTrace();
                 throw new DAOException("Exception while creating contact: ", e);
             }
 
