@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bellintegrator.app.controller.EntityController;
+import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.model.Contact;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/contacts")
-public class ContactController implements EntityController<Contact> {
+public class ContactController implements GenericController<Contact> {
 
     private static final Logger log = Logger.getLogger(ContactController.class);
 

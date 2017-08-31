@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bellintegrator.app.controller.EntityController;
+import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.model.Group;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/groups")
-public class GroupController implements EntityController<Group> {
+public class GroupController implements GenericController<Group> {
 
     private static final Logger log = Logger.getLogger(GroupController.class);
 

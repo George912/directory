@@ -5,7 +5,7 @@ import ru.bellintegrator.app.model.User;
 /**
  * Интерфейс, содержащий специфичные методы для манипуляции ресурсом пользователь.
  */
-public interface UserEntityController {
+public interface UserController {
 
     /**
      * Осуществляет поиск пользователя по логину login

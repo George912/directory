@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.bellintegrator.app.controller.EntityController;
-import ru.bellintegrator.app.controller.UserEntityController;
+import ru.bellintegrator.app.controller.GenericController;
+import ru.bellintegrator.app.controller.UserController;
 import ru.bellintegrator.app.model.User;
 
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/users")
-public class UserController implements EntityController<User>, UserEntityController {
+public class UserControllerImpl implements GenericController<User>, UserController {
 
-    private static final Logger log = Logger.getLogger(UserController.class);
+    private static final Logger log = Logger.getLogger(UserControllerImpl.class);
 
     @Override
     @RequestMapping("/owners/{ownerId}/list")

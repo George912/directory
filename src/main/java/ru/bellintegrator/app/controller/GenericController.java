@@ -6,7 +6,7 @@ import java.util.List;
  * Интерфейс, содержащий методы манипуляции ресурсами:
  * контакт, группа, пользователь(общие методы).
  */
-public interface EntityController<T> {
+public interface GenericController<T> {
 
     /**
      * Возвращает список объектов, владельцем которых является пользователь
