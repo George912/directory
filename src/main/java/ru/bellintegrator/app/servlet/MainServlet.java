@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
-import ru.bellintegrator.app.service.ContactService;
-import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.service.impl.ContactServiceImpl;
+import ru.bellintegrator.app.service.impl.GroupServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,16 +15,16 @@ import java.util.List;
 
 public class MainServlet extends AbstractServlet {
 
-    private ContactService contactService;
-    private GroupService groupService;
+    private ContactServiceImpl contactServiceImpl;
+    private GroupServiceImpl groupServiceImpl;
     private static final Logger log = Logger.getLogger(MainServlet.class);
 
     @Override
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/main.jsp");
-        contactService = new ContactService(contactGenericDAO);
-        groupService = new GroupService(groupGenericDAO, contactService);
-        contactService.setGroupService(groupService);
+        contactServiceImpl = new ContactServiceImpl(contactGenericDAO);
+        groupServiceImpl = new GroupServiceImpl(groupGenericDAO, contactServiceImpl);
+        contactServiceImpl.setGroupServiceImpl(groupServiceImpl);
         log.debug("Initialize MainServlet");
         log.info("MainServlet instance created");
     }
@@ -40,18 +40,18 @@ public class MainServlet extends AbstractServlet {
 
         try {
             if ("contacts".equals(act)) {
-                groups = groupService.getAllGroups(userId);
+                groups = groupServiceImpl.list(userId);
                 String name = req.getParameter("contact_name");
-                contacts = contactService.getContactsByName(name, userId);
+                contacts = contactServiceImpl.findByName(name, userId);
 
             } else if ("groups".equals(act)) {
-                contacts = contactService.getAllContacts(userId);
+                contacts = contactServiceImpl.list(userId);
                 String name = req.getParameter("group_name");
-                groups = groupService.getGroupsByName(name, userId);
+                groups = groupServiceImpl.findByName(name, userId);
 
             } else {
-                groups = groupService.getAllGroups(userId);
-                contacts = contactService.getAllContacts(userId);
+                groups = groupServiceImpl.list(userId);
+                contacts = contactServiceImpl.list(userId);
             }
 
             log.debug("Request set attribute contactList = " + contacts);

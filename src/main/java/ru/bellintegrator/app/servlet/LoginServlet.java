@@ -2,7 +2,7 @@ package ru.bellintegrator.app.servlet;
 
 import org.apache.log4j.Logger;
 import ru.bellintegrator.app.model.User;
-import ru.bellintegrator.app.service.UserService;
+import ru.bellintegrator.app.service.impl.UserServiceImpl;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -12,12 +12,12 @@ import java.io.IOException;
 
 public class LoginServlet extends AbstractServlet {
 
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     private static final Logger log = Logger.getLogger(LoginServlet.class);
 
     @Override
     public void init() throws ServletException {
-        userService = new UserService(userGenericDAO);
+        userServiceImpl = new UserServiceImpl(userGenericDAO);
         log.debug("Initialize LoginServlet");
         log.info("LoginServlet instance created");
     }
@@ -27,7 +27,7 @@ public class LoginServlet extends AbstractServlet {
         ServletContext context = this.getServletContext();
 
         try {
-            User user = userService.getUserByCredential(req.getParameter("login"), req.getParameter("password"));
+            User user = userServiceImpl.getUserByCredential(req.getParameter("login"), req.getParameter("password"));
 
             log.debug("LoginServlet.service: User credentials:" + user);
 

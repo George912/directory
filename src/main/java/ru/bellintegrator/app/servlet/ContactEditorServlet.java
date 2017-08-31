@@ -6,8 +6,8 @@ import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
-import ru.bellintegrator.app.service.ContactService;
-import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.service.impl.ContactServiceImpl;
+import ru.bellintegrator.app.service.impl.GroupServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,15 +19,15 @@ import java.util.List;
 
 public class ContactEditorServlet extends AbstractEditorServlet {
 
-    private ContactService contactService;
-    private GroupService groupService;
+    private ContactServiceImpl contactServiceImpl;
+    private GroupServiceImpl groupServiceImpl;
     private static final Logger log = Logger.getLogger(ContactEditorServlet.class);
 
     @Override
     public void init() throws ServletException {
-        contactService = new ContactService(contactGenericDAO);
-        groupService = new GroupService(groupGenericDAO, contactService);
-        contactService.setGroupService(groupService);
+        contactServiceImpl = new ContactServiceImpl(contactGenericDAO);
+        groupServiceImpl = new GroupServiceImpl(groupGenericDAO, contactServiceImpl);
+        contactServiceImpl.setGroupServiceImpl(groupServiceImpl);
         dispatcher = this.getServletContext().getRequestDispatcher("/views/contacteditor.jsp");
         log.debug("Initialize ContactEditorServlet");
         log.info("ContactEditorServlet instance created");
@@ -39,7 +39,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
         log.info("ContactEditorServlet.update: contactId = " + contactId);
 
         try {
-            Contact contact = contactService.getContactById(contactId, userId);
+            Contact contact = contactServiceImpl.findById(contactId, userId);
             log.debug("Request set attribute contact = " + contact);
             request.setAttribute("contact", contact);
             log.debug("Go to /views/contacteditor.jsp");
@@ -56,7 +56,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
         log.info("ContactEditorServlet.create: ownerId = " + userId);
 
         try {
-            List<Group> groups = groupService.getAllGroups(userId);
+            List<Group> groups = groupServiceImpl.list(userId);
 
             log.debug("Request set attribute groups = " + groups);
             request.setAttribute("groups", groups);
@@ -87,7 +87,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
         try {
             if (action == EditorAction.CREATED) {
                 //получение идентификатора добаленного контакта
-                List<Contact> contactList = contactService.getAllContacts(userId);
+                List<Contact> contactList = contactServiceImpl.list(userId);
                 int contactId = contactList.get(contactList.size() - 1).getId();
                 contact.setId(contactId);
 
@@ -96,21 +96,21 @@ public class ContactEditorServlet extends AbstractEditorServlet {
                 List<Group> groupList = new ArrayList<>();
                 if (groups != null) {
                     for (String id : groups) {
-                        Group group = groupService.getGroupById(Integer.parseInt(id), userId);
+                        Group group = groupServiceImpl.findById(Integer.parseInt(id), userId);
                         groupList.add(group);
                     }
                 }
 
                 contact.setGroupList(groupList);
                 contact.setOwner(new User(userId));
-                contactService.addContact(contact);
+                contactServiceImpl.add(contact);
 
                 log.debug("ContactEditorServlet.insert: action = " + action + ", contact=" + contact);
 
             } else if (action == EditorAction.UPDATED) {
                 contact.setId(Integer.parseInt(request.getParameter("contact_id")));
                 contact.setOwner(new User(userId));
-                contactService.updateContact(contact);
+                contactServiceImpl.update(contact);
                 log.debug("ContactEditorServlet.insert: action = " + action + ", contact=" + contact);
             }
 
@@ -126,7 +126,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
         try {
             Contact contact = new Contact(Integer.parseInt(request.getParameter("contact_id")), "", "", "");
             contact.setOwner(new User(userId));
-            contactService.deleteContact(contact);
+            contactServiceImpl.delete(contact);
             log.debug("ContactEditorServlet.delete: contact=" + contact);
 
             log.debug("Go to /userdata");

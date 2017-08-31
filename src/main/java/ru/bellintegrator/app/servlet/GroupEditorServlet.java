@@ -5,8 +5,8 @@ import ru.bellintegrator.app.EditorAction;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Group;
 import ru.bellintegrator.app.model.User;
-import ru.bellintegrator.app.service.ContactService;
-import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.service.impl.ContactServiceImpl;
+import ru.bellintegrator.app.service.impl.GroupServiceImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,16 +16,16 @@ import java.io.IOException;
 
 public class GroupEditorServlet extends AbstractEditorServlet {
 
-    private ContactService contactService;
-    private GroupService groupService;
+    private ContactServiceImpl contactServiceImpl;
+    private GroupServiceImpl groupServiceImpl;
     private static final Logger log = Logger.getLogger(GroupEditorServlet.class);
 
     @Override
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/groupeditor.jsp");
-        contactService = new ContactService(contactGenericDAO);
-        groupService = new GroupService(groupGenericDAO, contactService);
-        contactService.setGroupService(groupService);
+        contactServiceImpl = new ContactServiceImpl(contactGenericDAO);
+        groupServiceImpl = new GroupServiceImpl(groupGenericDAO, contactServiceImpl);
+        contactServiceImpl.setGroupServiceImpl(groupServiceImpl);
         log.debug("Initialize GroupEditorServlet");
         log.info("GroupEditorServlet instance created");
     }
@@ -36,7 +36,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
         log.info("GroupEditorServlet.update: groupId = " + groupId);
 
         try {
-            Group group = groupService.getGroupById(groupId, userId);
+            Group group = groupServiceImpl.findById(groupId, userId);
             log.debug("Request set attribute group = " + group);
             request.setAttribute("group", group);
             log.debug("Go to /views/groupeditor.jsp");
@@ -71,12 +71,12 @@ public class GroupEditorServlet extends AbstractEditorServlet {
 
         try {
             if (action == EditorAction.CREATED) {
-                groupService.addGroup(group);
+                groupServiceImpl.add(group);
                 log.debug("GroupEditorServlet.insert: action = " + action + ", group=" + group);
 
             } else if (action == EditorAction.UPDATED) {
                 group.setId(Integer.parseInt(request.getParameter("group_id")));
-                groupService.updateGroup(group);
+                groupServiceImpl.update(group);
                 log.debug("GroupEditorServlet.insert: action = " + action + ", group=" + group);
             }
 
@@ -92,7 +92,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
         try {
             Group group = new Group(Integer.parseInt(request.getParameter("group_id")));
             group.setOwner(new User(userId));
-            groupService.deleteGroup(group, userId);
+            groupServiceImpl.delete(group, userId);
             log.debug("GroupEditorServlet.delete: group=" + group);
 
             log.debug("Go to /userdata");

@@ -3,7 +3,7 @@ package ru.bellintegrator.app.servlet;
 import org.apache.log4j.Logger;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
-import ru.bellintegrator.app.service.AnalyticalInfoService;
+import ru.bellintegrator.app.service.impl.AnalyticalInfoServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -12,13 +12,13 @@ import java.io.IOException;
 
 public class AdminServlet extends AbstractServlet {
 
-    private AnalyticalInfoService service;
+    private AnalyticalInfoServiceImpl service;
     private static final Logger log = Logger.getLogger(AdminServlet.class);
 
     @Override
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/admin.jsp");
-        service = new AnalyticalInfoService(infoDAO);
+        service = new AnalyticalInfoServiceImpl(infoDAO);
         log.debug("Initialize AdminServlet");
         log.info("AdminServlet instance created");
     }
