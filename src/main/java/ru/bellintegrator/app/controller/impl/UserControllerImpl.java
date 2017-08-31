@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.controller.UserController;
+import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.UserService;
 
@@ -23,7 +24,7 @@ public class UserControllerImpl implements GenericController<User>, UserControll
     private static final Logger log = Logger.getLogger(UserControllerImpl.class);
     private UserService service;
 
-    public UserControllerImpl(UserService service){
+    public UserControllerImpl(UserService service) {
         this.service = service;
     }
 
@@ -63,10 +64,17 @@ public class UserControllerImpl implements GenericController<User>, UserControll
 
     }
 
-    //todo: use post for retrieve
     @Override
     @RequestMapping("/userByCredential")
     public User findByCredential(@RequestParam(value = "login") String login, @RequestParam(value = "password") String password) {
+        log.debug("Call findByCredential method: login = " + login + ", password=" + password);
+        try {
+            return service.getUserByCredential(login, password);
+
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving user by credential: ", e);
+        }
+
         return null;
     }
 

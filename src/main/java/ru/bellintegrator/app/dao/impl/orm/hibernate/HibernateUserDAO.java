@@ -3,6 +3,7 @@ package ru.bellintegrator.app.dao.impl.orm.hibernate;
 import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 import ru.bellintegrator.app.dao.impl.AbstractConnectable;
 import ru.bellintegrator.app.dao.impl.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
@@ -10,6 +11,7 @@ import ru.bellintegrator.app.model.User;
 
 import java.util.List;
 
+@Repository("userDao")
 public class HibernateUserDAO extends AbstractConnectable implements UserDAO {
 
     private final static Object monitor = new Object();
