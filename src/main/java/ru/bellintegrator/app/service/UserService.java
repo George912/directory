@@ -6,7 +6,7 @@ import ru.bellintegrator.app.model.User;
 /**
  * Интерфейс, сервиса для работы с пользователями.
  */
-public interface UserService {
+public interface UserService extends BaseService<User>{
 
     /**
      * Осуществляет поиск пользователя по логину login

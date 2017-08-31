@@ -3,7 +3,6 @@ package ru.bellintegrator.app.dao.impl.orm.hibernate;
 import org.apache.log4j.Logger;
 import org.hibernate.*;
 import org.hibernate.criterion.Restrictions;
-import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.impl.AbstractConnectable;
 import ru.bellintegrator.app.dao.impl.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
@@ -11,7 +10,7 @@ import ru.bellintegrator.app.model.User;
 
 import java.util.List;
 
-public class HibernateUserDAO extends AbstractConnectable implements GenericDAO<User>, UserDAO {
+public class HibernateUserDAO extends AbstractConnectable implements UserDAO {
 
     private final static Object monitor = new Object();
     private static final Logger log = Logger.getLogger(HibernateContactDAO.class);

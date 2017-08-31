@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.controller.UserController;
 import ru.bellintegrator.app.model.User;
+import ru.bellintegrator.app.service.UserService;
 
 import java.util.List;
 
@@ -20,6 +21,11 @@ import java.util.List;
 public class UserControllerImpl implements GenericController<User>, UserController {
 
     private static final Logger log = Logger.getLogger(UserControllerImpl.class);
+    private UserService service;
+
+    public UserControllerImpl(UserService service){
+        this.service = service;
+    }
 
     @Override
     @RequestMapping("/owners/{ownerId}/list")
