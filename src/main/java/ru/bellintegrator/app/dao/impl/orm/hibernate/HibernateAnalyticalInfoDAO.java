@@ -3,6 +3,7 @@ package ru.bellintegrator.app.dao.impl.orm.hibernate;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
 import ru.bellintegrator.app.dao.impl.AbstractConnectable;
 import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
 import ru.bellintegrator.app.exception.DAOException;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Repository("analyticInfoDao")
 public class HibernateAnalyticalInfoDAO extends AbstractConnectable implements AnalyticalInfoDAO {
 
     private final static Object monitor = new Object();

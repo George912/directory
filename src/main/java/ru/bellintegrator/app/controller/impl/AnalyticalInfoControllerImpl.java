@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.AnalyticalInfoController;
+import ru.bellintegrator.app.service.AnalyticalInfoService;
 
 import java.util.Map;
 
@@ -15,6 +16,11 @@ import java.util.Map;
 public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
 
     private static final Logger log = Logger.getLogger(AnalyticalInfoControllerImpl.class);
+    private AnalyticalInfoService service;
+
+    public AnalyticalInfoControllerImpl(AnalyticalInfoService service) {
+        this.service = service;
+    }
 
     @Override
     @RequestMapping("/uc")

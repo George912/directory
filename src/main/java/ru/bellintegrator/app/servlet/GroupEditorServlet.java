@@ -24,8 +24,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/groupeditor.jsp");
         contactServiceImpl = new ContactServiceImpl(contactGenericDAO);
-        groupServiceImpl = new GroupServiceImpl(groupGenericDAO, contactServiceImpl);
-        contactServiceImpl.setGroupServiceImpl(groupServiceImpl);
+        groupServiceImpl = new GroupServiceImpl(groupGenericDAO);
         log.debug("Initialize GroupEditorServlet");
         log.info("GroupEditorServlet instance created");
     }
@@ -92,7 +91,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
         try {
             Group group = new Group(Integer.parseInt(request.getParameter("group_id")));
             group.setOwner(new User(userId));
-            groupServiceImpl.delete(group, userId);
+            groupServiceImpl.delete(group);
             log.debug("GroupEditorServlet.delete: group=" + group);
 
             log.debug("Go to /userdata");

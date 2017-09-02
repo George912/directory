@@ -26,8 +26,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
     @Override
     public void init() throws ServletException {
         contactServiceImpl = new ContactServiceImpl(contactGenericDAO);
-        groupServiceImpl = new GroupServiceImpl(groupGenericDAO, contactServiceImpl);
-        contactServiceImpl.setGroupServiceImpl(groupServiceImpl);
+        groupServiceImpl = new GroupServiceImpl(groupGenericDAO);
         dispatcher = this.getServletContext().getRequestDispatcher("/views/contacteditor.jsp");
         log.debug("Initialize ContactEditorServlet");
         log.info("ContactEditorServlet instance created");

@@ -6,6 +6,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.impl.AbstractConnectable;
 import ru.bellintegrator.app.exception.DAOException;
@@ -14,6 +15,7 @@ import ru.bellintegrator.app.model.User;
 
 import java.util.List;
 
+@Repository("grouoDao")
 public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO<Group> {
 
     private final static Object monitor = new Object();

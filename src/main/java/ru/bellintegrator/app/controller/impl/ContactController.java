@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.service.ContactService;
 
 import java.util.List;
 
@@ -18,6 +19,11 @@ import java.util.List;
 public class ContactController implements GenericController<Contact> {
 
     private static final Logger log = Logger.getLogger(ContactController.class);
+    private ContactService service;
+
+    public ContactController(ContactService service) {
+        this.service = service;
+    }
 
     @Override
     @RequestMapping("/owners/{ownerId}/list")

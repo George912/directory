@@ -1,10 +1,7 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.controller.UserController;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -25,12 +22,21 @@ public class UserControllerImpl implements GenericController<User>, UserControll
     private UserService service;
 
     public UserControllerImpl(UserService service) {
+        log.debug("create UserControllerImpl");
         this.service = service;
     }
 
     @Override
-    @RequestMapping("/owners/{ownerId}/list")
+    @RequestMapping(value = "/owners/{ownerId}/list", method = RequestMethod.GET)
     public List<User> list(@PathVariable int ownerId) {
+        log.debug("Call list method: ownerId = " + ownerId);
+
+        try {
+            System.out.println("List:" + service.list(0));
+
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving user list: ", e);
+        }
         return null;
     }
 

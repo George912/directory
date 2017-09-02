@@ -23,8 +23,7 @@ public class MainServlet extends AbstractServlet {
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/main.jsp");
         contactServiceImpl = new ContactServiceImpl(contactGenericDAO);
-        groupServiceImpl = new GroupServiceImpl(groupGenericDAO, contactServiceImpl);
-        contactServiceImpl.setGroupServiceImpl(groupServiceImpl);
+        groupServiceImpl = new GroupServiceImpl(groupGenericDAO);
         log.debug("Initialize MainServlet");
         log.info("MainServlet instance created");
     }

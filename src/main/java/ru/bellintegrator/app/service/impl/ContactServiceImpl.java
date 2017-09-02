@@ -1,6 +1,7 @@
 package ru.bellintegrator.app.service.impl;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -12,21 +13,16 @@ import java.util.List;
 /**
  * Created by neste_000 on 21.07.2017.
  */
+@Service("contactService")
 public class ContactServiceImpl implements ContactService {
 
     private static final Logger log = Logger.getLogger(ContactServiceImpl.class);
     private GenericDAO<Contact> contactGenericDAO;
-    private GroupServiceImpl groupServiceImpl;
 
     public ContactServiceImpl(GenericDAO<Contact> contactGenericDAO) {
         this.contactGenericDAO = contactGenericDAO;
         log.debug("ContactService UserService");
         log.info("ContactService instance created");
-    }
-
-    public void setGroupServiceImpl(GroupServiceImpl groupServiceImpl) {
-        log.debug("Call setGroupService method: groupService = " + groupServiceImpl);
-        this.groupServiceImpl = groupServiceImpl;
     }
 
     @Override

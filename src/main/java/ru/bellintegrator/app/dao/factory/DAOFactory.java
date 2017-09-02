@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.impl.hibernate.HibernateDAOFactory;
 import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
+import ru.bellintegrator.app.dao.impl.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.model.Contact;
 import ru.bellintegrator.app.model.Group;
@@ -21,7 +22,7 @@ public abstract class DAOFactory {
 
     public abstract GenericDAO<Group> getGroupDAO() throws DAOException;
 
-    public abstract GenericDAO<User> getUserDAO() throws DAOException;
+    public abstract UserDAO getUserDAO() throws DAOException;
 
     public abstract AnalyticalInfoDAO getAnalyticalInfoDAO() throws DAOException;
 

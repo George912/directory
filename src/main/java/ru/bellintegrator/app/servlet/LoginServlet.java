@@ -17,7 +17,7 @@ public class LoginServlet extends AbstractServlet {
 
     @Override
     public void init() throws ServletException {
-        userServiceImpl = new UserServiceImpl(userGenericDAO);
+        userServiceImpl = new UserServiceImpl(userDAO);
         log.debug("Initialize LoginServlet");
         log.info("LoginServlet instance created");
     }

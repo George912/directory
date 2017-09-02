@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.dao.factory.DAOFactory;
 import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
+import ru.bellintegrator.app.dao.impl.UserDAO;
 import ru.bellintegrator.app.dao.impl.orm.hibernate.HibernateAnalyticalInfoDAO;
 import ru.bellintegrator.app.dao.impl.orm.hibernate.HibernateContactDAO;
 import ru.bellintegrator.app.dao.impl.orm.hibernate.HibernateGroupDAO;
@@ -30,7 +31,7 @@ public class HibernateDAOFactory extends DAOFactory {
     }
 
     @Override
-    public GenericDAO<User> getUserDAO() throws DAOException {
+    public UserDAO getUserDAO() throws DAOException {
         log.debug("Retrieving user dao");
         return new HibernateUserDAO();
     }

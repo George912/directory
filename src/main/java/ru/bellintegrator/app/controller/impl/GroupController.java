@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.service.GroupService;
 
 import java.util.List;
 
@@ -18,6 +19,11 @@ import java.util.List;
 public class GroupController implements GenericController<Group> {
 
     private static final Logger log = Logger.getLogger(GroupController.class);
+    private GroupService service;
+
+    public GroupController(GroupService service) {
+        this.service = service;
+    }
 
     @Override
     @RequestMapping("/owners/{ownerId}/list")
