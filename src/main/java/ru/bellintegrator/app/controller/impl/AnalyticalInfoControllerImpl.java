@@ -1,6 +1,7 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.AnalyticalInfoController;
@@ -32,6 +33,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/uc")
     public int userCount() {
         log.debug("Call userCount method");
@@ -40,6 +42,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/eucc")
     public Map<Integer, Long> eachUserContactCount() {
         log.debug("Call eachUserContactCount method");
@@ -48,6 +51,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/eugc")
     public Map<Integer, Long> eachUserGroupCount() {
         log.debug("Call eachUserGroupCount method");
@@ -56,6 +60,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/aucig")
     public double avgUserCountInGroup() {
         log.debug("Call avgUserCountInGroup method");
@@ -64,6 +69,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/iu")
     public Map<Integer, Long> inactiveUserCount() {
         log.debug("Call avgUserContactsCount method");
@@ -72,6 +78,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/aucc")
     public double avgUserContactsCount() {
         log.debug("Call avgUserContactsCount method");

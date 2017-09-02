@@ -11,7 +11,8 @@
         <intercept-url pattern='/*' access='ROLE_REMOTE'/>
         <http-basic/>
         <form-login login-page="/index.jsp"
-            authentication-failure-url="/index.jsp"/>
+            authentication-failure-url="/index.jsp"
+        default-target-url="/index.jsp"/>
     </http>
     <authentication-manager>
         <authentication-provider>
