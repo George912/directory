@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.AnalyticalInfoController;
+import ru.bellintegrator.app.exception.ServiceException;
+import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.service.AnalyticalInfoService;
 
 import java.util.Map;
@@ -17,45 +19,64 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
 
     private static final Logger log = Logger.getLogger(AnalyticalInfoControllerImpl.class);
     private AnalyticalInfoService service;
+    private AnalyticalInfo info;
 
     public AnalyticalInfoControllerImpl(AnalyticalInfoService service) {
         this.service = service;
+        try {
+            info = service.collectAnalyticalInfo();
+
+        } catch (ServiceException e) {
+            log.error("Exception while collect analytic info: ", e);
+        }
     }
 
     @Override
     @RequestMapping("/uc")
     public int userCount() {
-        return 0;
+        log.debug("Call userCount method");
+        log.debug("User count:" + info.getUserCount());
+        return info.getUserCount();
     }
 
     @Override
     @RequestMapping("/eucc")
     public Map<Integer, Long> eachUserContactCount() {
-        return null;
+        log.debug("Call eachUserContactCount method");
+        log.debug("eachUserContactCount:" + info.getEachUserContactCount());
+        return info.getEachUserContactCount();
     }
 
     @Override
     @RequestMapping("/eugc")
     public Map<Integer, Long> eachUserGroupCount() {
-        return null;
+        log.debug("Call eachUserGroupCount method");
+        log.debug("eachUserGroupCount:" + info.getEachUserGroupCount());
+        return info.getEachUserGroupCount();
     }
 
     @Override
     @RequestMapping("/aucig")
     public double avgUserCountInGroup() {
-        return 0;
+        log.debug("Call avgUserCountInGroup method");
+        log.debug("eachUserGroupCount:" + info.getAvgUserCountInGroups());
+        return info.getAvgUserCountInGroups();
     }
 
     @Override
     @RequestMapping("/iu")
     public Map<Integer, Long> inactiveUserCount() {
-        return null;
+        log.debug("Call avgUserContactsCount method");
+        log.debug("inactiveUserCount:" + info.getInactiveUserCount());
+        return info.getInactiveUserCount();
     }
 
     @Override
     @RequestMapping("/aucc")
     public double avgUserContactsCount() {
-        return 0;
+        log.debug("Call avgUserContactsCount method");
+        log.debug("avgUserContactsCount:" + info.getAvgUsersContactCount());
+        return info.getAvgUsersContactCount();
     }
 
 }
