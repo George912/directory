@@ -294,6 +294,13 @@
             <version>${spring.security.version}</version>
         </dependency>
 
+        <!--Spring transaction-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+
         <!--Jackson-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

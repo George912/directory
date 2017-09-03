@@ -2,6 +2,7 @@ package ru.bellintegrator.app.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.app.dao.impl.UserDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -11,6 +12,7 @@ import ru.bellintegrator.app.service.UserService;
 import java.util.List;
 
 @Service("userService")
+@Transactional(readOnly = true, rollbackFor = DAOException.class)
 public class UserServiceImpl implements UserService {
 
     private UserDAO dao;
@@ -36,16 +38,19 @@ public class UserServiceImpl implements UserService {
 
     //todo crud operations for user
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void add(User user) throws ServiceException {
 
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void update(User user) throws ServiceException {
 
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void delete(User user) throws ServiceException {
 
     }

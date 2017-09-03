@@ -2,6 +2,7 @@ package ru.bellintegrator.app.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by neste_000 on 21.07.2017.
  */
 @Service("groupService")
+@Transactional(readOnly = true, rollbackFor = DAOException.class)
 public class GroupServiceImpl implements GroupService{
 
     private static final Logger log = Logger.getLogger(GroupServiceImpl.class);
@@ -26,6 +28,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void add(Group group) throws ServiceException {
         log.info("Call add method: group = " + group);
         try {
@@ -38,6 +41,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void update(Group group) throws ServiceException {
         log.info("Call update method: group = " + group);
         try {
@@ -50,6 +54,7 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void delete(Group group) throws ServiceException {
         log.info("Call delete method: group = " + group);
         try {

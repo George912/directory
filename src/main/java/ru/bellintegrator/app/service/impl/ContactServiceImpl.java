@@ -2,6 +2,7 @@ package ru.bellintegrator.app.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -14,6 +15,7 @@ import java.util.List;
  * Created by neste_000 on 21.07.2017.
  */
 @Service("contactService")
+@Transactional(readOnly = true, rollbackFor = DAOException.class)
 public class ContactServiceImpl implements ContactService {
 
     private static final Logger log = Logger.getLogger(ContactServiceImpl.class);
@@ -26,6 +28,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void add(Contact contact) throws ServiceException {
         log.debug("Call add method: contact = " + contact);
         try {
@@ -38,6 +41,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void update(Contact contact) throws ServiceException {
         log.debug("Call update method: contact = " + contact);
         try {
@@ -50,6 +54,7 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    @Transactional(rollbackFor = DAOException.class)
     public void delete(Contact contact) throws ServiceException {
         log.debug("Call delete method: contact = " + contact);
         try {
