@@ -53,20 +53,23 @@ public class GroupController implements GenericController<Group> {
 
     @Override
     @RequestMapping("/add")
-    public void create(@RequestParam(value = "group") Group group) {
+    public String create(@RequestParam(value = "group") Group group) {
+        return "";
 
     }
 
     @Override
     @RequestMapping("/update")
-    public void update(@RequestParam(value = "group") Group group) {
+    public String update(@RequestParam(value = "group") Group group) {
 
+        return null;
     }
 
     @Override
     @RequestMapping("/delete")
-    public void delete(@RequestParam(value = "group") Group group) {
+    public String delete(@RequestParam(value = "group") Group group) {
 
+        return null;
     }
 
 }

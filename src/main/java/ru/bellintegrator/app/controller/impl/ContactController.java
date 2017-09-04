@@ -45,20 +45,22 @@ public class ContactController implements GenericController<Contact> {
 
     @Override
     @RequestMapping("/add")
-    public void create(@RequestParam(value = "group") Contact contact) {
-
+    public String create(@RequestParam(value = "group") Contact contact) {
+        return "";
     }
 
     @Override
     @RequestMapping("/update")
-    public void update(@RequestParam(value = "group") Contact contact) {
+    public String update(@RequestParam(value = "group") Contact contact) {
 
+        return null;
     }
 
     @Override
     @RequestMapping("/delete")
-    public void delete(@RequestParam(value = "group") Contact contact) {
+    public String delete(@RequestParam(value = "group") Contact contact) {
 
+        return null;
     }
 
 }

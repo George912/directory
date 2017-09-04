@@ -38,18 +38,18 @@ public interface GenericController<T> {
      * Создаёт ресурс.
      * @param t данные создаваемого ресурса
      */
-    void create(T t);
+    String create(T t);
 
     /**
      * Редактирует ресурс.
      * @param t данные редактируемого ресурса
      */
-    void update(T t);
+    String update(T t);
 
     /**
      * Удаляет ресурс.
      * @param t данные удаляемого ресурса
      */
-    void delete(T t);
+    String delete(T t);
 
 }
