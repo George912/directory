@@ -27,7 +27,7 @@ public class LoginServlet extends AbstractServlet {
         ServletContext context = this.getServletContext();
 
         try {
-            User user = userServiceImpl.getUserByCredential(req.getParameter("login"), req.getParameter("password"));
+            User user = userServiceImpl.getUserByCredential(req.getParameter("username"), req.getParameter("password"));
 
             log.debug("LoginServlet.service: User credentials:" + user);
 

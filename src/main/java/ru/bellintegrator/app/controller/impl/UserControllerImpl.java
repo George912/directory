@@ -1,7 +1,6 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.UserController;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -98,7 +97,6 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/userByCredential", method = RequestMethod.GET)
     public User findByCredential(@RequestParam(value = "login") String login, @RequestParam(value = "password") String password) {
         log.debug("Call findByCredential method: login = " + login + ", password=" + password);
@@ -113,7 +111,6 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public UserContainer list() {
         return new UserContainer(list(0));
