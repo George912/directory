@@ -1,15 +1,28 @@
 -- insert test data into table users
-INSERT INTO users (id, login, password, firstname, middlename, lastname) VALUES
-  (nextval('users_id_seq'), 'l1', 'p1', 'fn1', 'mn1', 'ln1'),
-  (nextval('users_id_seq'), 'l2', 'p2', 'fn2', 'mn2', 'ln2'),
-  (nextval('users_id_seq'), 'l3', 'p3', 'fn3', 'mn3', 'ln3'),
-  (nextval('users_id_seq'), 'l4', 'p4', 'fn4', 'mn4', 'ln4'),
-  (nextval('users_id_seq'), 'l5', 'p5', 'fn5', 'mn5', 'ln5'),
-  (nextval('users_id_seq'), 'l6', 'p6', 'fn6', 'mn6', 'ln6'),
-  (nextval('users_id_seq'), 'l7', 'p7', 'fn7', 'mn7', 'ln7'),
-  (nextval('users_id_seq'), 'l8', 'p8', 'fn8', 'mn8', 'ln8'),
-  (nextval('users_id_seq'), 'l9', 'p9', 'fn9', 'mn9', 'ln9'),
-  (nextval('users_id_seq'), 'l10', 'p10', 'fn10', 'mn10', 'ln10');
+INSERT INTO users (id, login, password, firstname, middlename, lastname, "enabled") VALUES
+  (nextval('users_id_seq'), 'l1', 'p1', 'fn1', 'mn1', 'ln1', TRUE),
+  (nextval('users_id_seq'), 'l2', 'p2', 'fn2', 'mn2', 'ln2', TRUE ),
+  (nextval('users_id_seq'), 'l3', 'p3', 'fn3', 'mn3', 'ln3', TRUE ),
+  (nextval('users_id_seq'), 'l4', 'p4', 'fn4', 'mn4', 'ln4', TRUE),
+  (nextval('users_id_seq'), 'l5', 'p5', 'fn5', 'mn5', 'ln5', TRUE),
+  (nextval('users_id_seq'), 'l6', 'p6', 'fn6', 'mn6', 'ln6', TRUE),
+  (nextval('users_id_seq'), 'l7', 'p7', 'fn7', 'mn7', 'ln7', TRUE),
+  (nextval('users_id_seq'), 'l8', 'p8', 'fn8', 'mn8', 'ln8', TRUE),
+  (nextval('users_id_seq'), 'l9', 'p9', 'fn9', 'mn9', 'ln9', TRUE),
+  (nextval('users_id_seq'), 'l10', 'p10', 'fn10', 'mn10', 'ln10', TRUE);
+
+-- insert test data into table user_roles
+INSERT INTO user_roles (id, user_id, role) VALUES
+  (nextval('users_id_seq'), 1, 'ROLE_USER'),
+  (nextval('users_id_seq'), 2, 'ROLE_USER'),
+  (nextval('users_id_seq'), 3, 'ROLE_USER'),
+  (nextval('users_id_seq'), 4, 'ROLE_USER'),
+  (nextval('users_id_seq'), 5, 'ROLE_USER'),
+  (nextval('users_id_seq'), 6, 'ROLE_USER'),
+  (nextval('users_id_seq'), 7, 'ROLE_USER'),
+  (nextval('users_id_seq'), 8, 'ROLE_USER'),
+  (nextval('users_id_seq'), 9, 'ROLE_USER'),
+  (nextval('users_id_seq'), 10, 'ROLE_USER');
 
 -- insert test data into table groups
 INSERT INTO groups (id, name, notes, owner) VALUES

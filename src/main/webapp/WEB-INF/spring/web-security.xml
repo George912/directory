@@ -10,28 +10,33 @@
                                     http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
 
     <!--JNDI data source-->
-    <jee:jndi-lookup id="dbDataSource" expected-type="javax.sql.DataSource" jndi-name="java:comp/env/jdbc/AppDB"/>
+    <!--<jee:jndi-lookup id="dbDataSource" expected-type="javax.sql.DataSource" jndi-name="java:comp/env/jdbc/AppDB"/>-->
 
-    <http pattern="/service/**" create-session="stateless">
-        <intercept-url pattern='/**' access='ROLE_REMOTE'/>
-        <http-basic/>
-        <form-login login-page="/index.jsp"
-                    authentication-failure-url="/index.jsp"
-                    default-target-url="/index.jsp"/>
-    </http>
-    <authentication-manager>
-        <authentication-provider>
-            <jdbc-user-service data-source-ref="dbDataSource"
-                               users-by-username-query="SELECT get_user_by_credential(?,?)"
-                               authorities-by-username-query="SELECT get_user_by_credential(?,?)"/>
-        </authentication-provider>
-    </authentication-manager>
+    <!--<http pattern="/service/**" create-session="stateless">-->
+        <!--<intercept-url pattern='/**' access='ROLE_REMOTE'/>-->
+        <!--<http-basic/>-->
+        <!--<form-login login-page="/index.jsp"-->
+                    <!--authentication-failure-url="/index.jsp"-->
+                    <!--default-target-url="/index.jsp"/>-->
+    <!--</http>-->
+    <!--<authentication-manager>-->
+        <!--<authentication-provider>-->
+            <!--<jdbc-user-service data-source-ref="dbDataSource"-->
+                               <!--users-by-username-query="SELECT get_user_by_credential(?,?)"-->
+                               <!--authorities-by-username-query="SELECT get_user_by_credential(?,?)"/>-->
+        <!--</authentication-provider>-->
+    <!--</authentication-manager>-->
 
     <!--test-->
+    <http auto-config="true" pattern="/service/**" create-session="stateless" use-expressions="true">
+        <intercept-url pattern=' /**' access="hasRole('ROLE_REMOTE')" />
+        <http-basic />
+    </http>
+
     <authentication-manager>
         <authentication-provider>
             <user-service>
-                <user name="root" password="root" authorities="ROLE_USER, ROLE_ADMIN" />
+                <user name="remote" password="remote" authorities="ROLE_REMOTE" />
             </user-service>
         </authentication-provider>
     </authentication-manager>

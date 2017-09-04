@@ -199,7 +199,7 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION get_all_users()
   RETURNS TABLE(id        INT, login VARCHAR(20), password VARCHAR(20),
                 firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
-SELECT *
+SELECT id, login, password, firstname, middlename, lastname
 FROM users;
 $$ LANGUAGE SQL;
 
@@ -225,7 +225,7 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION get_user_by_name(u_firstname VARCHAR(30))
   RETURNS TABLE(id        INT, login VARCHAR(20), password VARCHAR(20),
                 firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
-SELECT *
+SELECT id, login, password, firstname, middlename, lastname
 FROM users
 WHERE lower(firstname) = lower(u_firstname);
 $$ LANGUAGE SQL;
@@ -239,7 +239,7 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION get_user_by_id(u_id INT)
   RETURNS TABLE(id        INT, login VARCHAR(20), password VARCHAR(20),
                 firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
-SELECT *
+SELECT id, login, password, firstname, middlename, lastname
 FROM users
 WHERE id = u_id;
 $$ LANGUAGE SQL;
@@ -255,7 +255,7 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION get_user_by_credential(u_login VARCHAR(20), u_password VARCHAR(20))
   RETURNS TABLE(id        INT, login VARCHAR(20), password VARCHAR(20),
                 firstname VARCHAR(30), middlename VARCHAR(30), lastname VARCHAR(50)) AS $$
-SELECT *
+SELECT id, login, password, firstname, middlename, lastname
 FROM users
 WHERE lower(login) = lower(u_login)
       AND lower(password) = lower(u_password);

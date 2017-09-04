@@ -39,7 +39,17 @@ CREATE TABLE "users" (
   "firstname"  VARCHAR(30) NOT NULL,
   "middlename" VARCHAR(30) NOT NULL,
   "lastname"   VARCHAR(50) NOT NULL,
+  "enabled"    BOOLEAN NOT NULL,
   CONSTRAINT users_pk PRIMARY KEY ("id")
+) WITH (
+OIDS = FALSE
+);
+
+CREATE TABLE "user_roles" (
+  "id"         SERIAL      NOT NULL,
+  "user_id"  INT NOT NULL,
+  "role" VARCHAR(30) NOT NULL,
+  CONSTRAINT user_roles_pk PRIMARY KEY ("id")
 ) WITH (
 OIDS = FALSE
 );
@@ -52,6 +62,10 @@ ALTER TABLE "contacts"
 
 ALTER TABLE "contacts_groups"
   ADD CONSTRAINT "contacts_groups_fk0" FOREIGN KEY ("contact_id") REFERENCES "contacts" ("id") ON DELETE CASCADE;
+
 ALTER TABLE "contacts_groups"
   ADD CONSTRAINT "contacts_groups_fk1" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON DELETE CASCADE;
+
+ALTER TABLE "user_roles"
+  ADD CONSTRAINT "user_roles_fk1" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE CASCADE;
 
