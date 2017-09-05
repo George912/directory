@@ -1,6 +1,7 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.UserController;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -16,6 +17,7 @@ import java.util.List;
  * а также интерфейса UserEntityController.
  */
 @RestController
+@Transactional(readOnly = true)
 @RequestMapping("/users")
 public class UserControllerImpl implements UserController {
 
@@ -113,6 +115,7 @@ public class UserControllerImpl implements UserController {
     @Override
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public UserContainer list() {
+        log.debug("Principal: " + getPrincipal());
         return new UserContainer(list(0));
     }
 

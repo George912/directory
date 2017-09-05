@@ -1,10 +1,8 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Group;
@@ -17,6 +15,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/groups")
+@Transactional(readOnly = true)
 public class GroupController implements GenericController<Group> {
 
     private static final Logger log = Logger.getLogger(GroupController.class);
@@ -52,10 +51,18 @@ public class GroupController implements GenericController<Group> {
     }
 
     @Override
-    @RequestMapping("/add")
+    @Transactional()
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String create(@RequestParam(value = "group") Group group) {
-        return "";
+        log.debug("Call create method: group = " + group);
+        try {
+            service.add(group);
+            return "Group successfully created!";
 
+        } catch (ServiceException e) {
+            log.error("Exception while creating group : ", e);
+            return "Exception while creating group!";
+        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.AnalyticalInfoController;
@@ -15,15 +15,14 @@ import java.util.Map;
  * Реализация интерфейса AnalyticalInfoController.
  */
 @RestController
+@Transactional(readOnly = true)
 @RequestMapping("/analytic")
 public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
 
     private static final Logger log = Logger.getLogger(AnalyticalInfoControllerImpl.class);
-    private AnalyticalInfoService service;
     private AnalyticalInfo info;
 
     public AnalyticalInfoControllerImpl(AnalyticalInfoService service) {
-        this.service = service;
         try {
             info = service.collectAnalyticalInfo();
 
@@ -33,7 +32,6 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/uc")
     public int userCount() {
         log.debug("Call userCount method");
@@ -42,7 +40,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
+    //todo: wrapper
     @RequestMapping("/eucc")
     public Map<Integer, Long> eachUserContactCount() {
         log.debug("Call eachUserContactCount method");
@@ -51,7 +49,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
+    //todo: wrapper
     @RequestMapping("/eugc")
     public Map<Integer, Long> eachUserGroupCount() {
         log.debug("Call eachUserGroupCount method");
@@ -60,17 +58,16 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/aucig")
     public double avgUserCountInGroup() {
         log.debug("Call avgUserCountInGroup method");
-        log.debug("eachUserGroupCount:" + info.getAvgUserCountInGroups());
+        log.debug("avgUserCountInGroup:" + info.getAvgUserCountInGroups());
         return info.getAvgUserCountInGroups();
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
-    @RequestMapping("/iu")
+    //todo: wrapper
+    @RequestMapping("/iuc")
     public Map<Integer, Long> inactiveUserCount() {
         log.debug("Call avgUserContactsCount method");
         log.debug("inactiveUserCount:" + info.getInactiveUserCount());
@@ -78,7 +75,6 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @PreAuthorize("isAuthenticated()")
     @RequestMapping("/aucc")
     public double avgUserContactsCount() {
         log.debug("Call avgUserContactsCount method");
