@@ -2,6 +2,7 @@ package ru.bellintegrator.app.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.app.dao.impl.AnalyticalInfoDAO;
 import ru.bellintegrator.app.exception.DAOException;
@@ -10,7 +11,7 @@ import ru.bellintegrator.app.model.AnalyticalInfo;
 import ru.bellintegrator.app.service.AnalyticalInfoService;
 
 @Service("analyticalInfoService")
-@Transactional(readOnly = true, rollbackFor = DAOException.class)
+@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
 public class AnalyticalInfoServiceImpl implements AnalyticalInfoService{
 
     private AnalyticalInfoDAO dao;

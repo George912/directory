@@ -25,4 +25,18 @@ public interface UserController extends GenericController<User>{
      */
     UserContainer list();
 
+    /**
+     * Осуществляет поиск пользователя по идентификатору id.
+     * @param id
+     * @return
+     */
+    User findById(int id);
+
+    /**
+     * Осуществляет поиск объектов по имени name.
+     * @param name
+     * @return
+     */
+    List<User> findByName(String name);
+
 }

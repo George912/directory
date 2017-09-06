@@ -1,7 +1,6 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.UserController;
 import ru.bellintegrator.app.exception.ServiceException;
@@ -9,7 +8,6 @@ import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.model.UserContainer;
 import ru.bellintegrator.app.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +15,6 @@ import java.util.List;
  * а также интерфейса UserEntityController.
  */
 @RestController
-@Transactional(readOnly = true)
 @RequestMapping("/users")
 public class UserControllerImpl implements UserController {
 
@@ -27,33 +24,6 @@ public class UserControllerImpl implements UserController {
     public UserControllerImpl(UserService service) {
         log.debug("create UserControllerImpl");
         this.service = service;
-    }
-
-    @Override
-    public List<User> list(int ownerId) {
-        log.debug("Call list method: ownerId = " + ownerId);
-
-        try {
-            System.out.println("List:" + service.list(0));
-
-        } catch (ServiceException e) {
-            log.error("Exception while retrieving user list: ", e);
-        }
-        List<User> users = new ArrayList<>();
-        users.add(new User(0, "l1", "p1", "qwe", "qwe", "qwe"));
-        return users;
-    }
-
-    @Override
-    @RequestMapping("/owners/{ownerId}/user/{id}")
-    public User findById(@PathVariable int id, @PathVariable int ownerId) {
-        return null;
-    }
-
-    @Override
-    @RequestMapping("/owners/{ownerId}/user/list/{name}")
-    public List<User> findByName(@PathVariable String name, @PathVariable int ownerId) {
-        return null;
     }
 
     @Override
@@ -99,7 +69,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @RequestMapping(value = "/userByCredential", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public User findByCredential(@RequestParam(value = "login") String login, @RequestParam(value = "password") String password) {
         log.debug("Call findByCredential method: login = " + login + ", password=" + password);
         try {
@@ -108,15 +78,64 @@ public class UserControllerImpl implements UserController {
         } catch (ServiceException e) {
             log.error("Exception while retrieving user by credential: ", e);
         }
-
         return null;
     }
 
     @Override
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public UserContainer list() {
-        log.debug("Principal: " + getPrincipal());
-        return new UserContainer(list(0));
+        User principal = getPrincipal();
+        return new UserContainer(list(findByCredential(principal.getLogin(), principal.getPassword()).getId()));
+    }
+
+    @Override
+    @RequestMapping(name = "/user", method = RequestMethod.GET)
+    public User findById(@PathVariable int id) {
+        User principal = getPrincipal();
+        return findById(id, principal.getId());
+    }
+
+    @Override
+    @RequestMapping("/user")
+    public List<User> findByName(@RequestParam(value = "name") String name) {
+        User principal = getPrincipal();
+        return findByName(name, principal.getId());
+    }
+
+    @Override
+    public List<User> list(int ownerId) {
+        log.debug("Call list method: ownerId = " + ownerId);
+        try {
+            return service.list(ownerId);
+
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving user list: ", e);
+        }
+        return null;
+    }
+
+    @Override
+    public User findById(int id, int ownerId) {
+        log.debug("Call findById method: id = " + id + "ownerId = " + ownerId);
+        try {
+            return service.findById(id, ownerId);
+
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving user by id: ", e);
+        }
+        return null;
+    }
+
+    @Override
+    public List<User> findByName(String name, int ownerId) {
+        log.debug("Call findByName method: name = " + name + "ownerId = " + ownerId);
+        try {
+            return service.findByName(name, ownerId);
+
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving user list by name: ", e);
+        }
+        return null;
     }
 
 }

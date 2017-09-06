@@ -2,6 +2,7 @@ package ru.bellintegrator.app.service.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.app.dao.GenericDAO;
 import ru.bellintegrator.app.exception.DAOException;
@@ -15,24 +16,24 @@ import java.util.List;
  * Created by neste_000 on 21.07.2017.
  */
 @Service("groupService")
-@Transactional(readOnly = true, rollbackFor = DAOException.class)
+@Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
 public class GroupServiceImpl implements GroupService{
 
     private static final Logger log = Logger.getLogger(GroupServiceImpl.class);
-    private GenericDAO<Group> groupGenericDAO;
+    private GenericDAO<Group> dao;
 
-    public GroupServiceImpl(GenericDAO<Group> groupGenericDAO) {
-        this.groupGenericDAO = groupGenericDAO;
+    public GroupServiceImpl(GenericDAO<Group> dao) {
+        this.dao = dao;
         log.debug("Initialize GroupService");
         log.info("GroupService instance created");
     }
 
     @Override
-    @Transactional(rollbackFor = DAOException.class)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void add(Group group) throws ServiceException {
         log.info("Call add method: group = " + group);
         try {
-            groupGenericDAO.create(group);
+            dao.create(group);
 
         } catch (DAOException e) {
             log.error("Exception while adding group: ", e);
@@ -41,11 +42,11 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    @Transactional(rollbackFor = DAOException.class)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void update(Group group) throws ServiceException {
         log.info("Call update method: group = " + group);
         try {
-            groupGenericDAO.update(group);
+            dao.update(group);
 
         } catch (DAOException e) {
             log.error("Exception while updating group: ", e);
@@ -54,11 +55,11 @@ public class GroupServiceImpl implements GroupService{
     }
 
     @Override
-    @Transactional(rollbackFor = DAOException.class)
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void delete(Group group) throws ServiceException {
         log.info("Call delete method: group = " + group);
         try {
-            groupGenericDAO.delete(group);
+            dao.delete(group);
 
         } catch (DAOException e) {
             log.error("Exception while removing group: ", e);
@@ -70,7 +71,7 @@ public class GroupServiceImpl implements GroupService{
     public List<Group> list(int ownerId) throws ServiceException {
         log.info("Call list method: ownerId = " + ownerId);
         try {
-            return groupGenericDAO.getAll(ownerId);
+            return dao.getAll(ownerId);
 
         } catch (DAOException e) {
             log.error("Exception while retrieving group list: ", e);
@@ -81,9 +82,8 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public Group findById(int id, int ownerId) throws ServiceException {
         log.info("Call findById method: id = " + id + ", ownerId = " + ownerId);
-
         try {
-            return groupGenericDAO.getById(id, ownerId);
+            return dao.getById(id, ownerId);
 
         } catch (DAOException e) {
             log.error("Exception while retrieving group by id: ", e);
@@ -94,9 +94,8 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public List<Group> findByName(String name, int ownerId) throws ServiceException {
         log.info("Call findByName method: name = " + name + ", ownerId = " + ownerId);
-
         try {
-            return groupGenericDAO.getByName(name, ownerId);
+            return dao.getByName(name, ownerId);
 
         } catch (DAOException e) {
             log.error("Exception while retrieving group list by name: ", e);

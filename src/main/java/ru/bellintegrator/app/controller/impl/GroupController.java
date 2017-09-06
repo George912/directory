@@ -1,11 +1,11 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.GroupService;
 
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/groups")
-@Transactional(readOnly = true)
 public class GroupController implements GenericController<Group> {
 
     private static final Logger log = Logger.getLogger(GroupController.class);
@@ -25,33 +24,25 @@ public class GroupController implements GenericController<Group> {
         this.service = service;
     }
 
-    @Override
-    @RequestMapping("/owners/{ownerId}/list")
-    public List<Group> list(@PathVariable int ownerId) {
-        log.debug("Call list method: ownerId = " + ownerId);
-        try {
-            log.debug("list:" + service.list(ownerId));
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public List<Group> list() {
+        User principal = getPrincipal();
+        return list(principal.getId());
+    }
 
-        } catch (ServiceException e) {
-            log.error("Exception while retrieving group list: ", e);
-        }
-        return null;
+    @RequestMapping(name = "/group", method = RequestMethod.GET)
+    public Group findById(@RequestParam(value = "id") int id) {
+        User principal = getPrincipal();
+        return findById(id, principal.getId());
+    }
+
+    @RequestMapping(value = "/group", method = RequestMethod.GET)
+    public List<Group> findByName(@RequestParam(value = "name") String name) {
+        User principal = getPrincipal();
+        return findByName(name, principal.getId());
     }
 
     @Override
-    @RequestMapping("/owners/{ownerId}/group/{id}")
-    public Group findById(@PathVariable int id, @PathVariable int ownerId) {
-        return null;
-    }
-
-    @Override
-    @RequestMapping("/owners/{ownerId}/group/list/{name}")
-    public List<Group> findByName(@PathVariable String name, @PathVariable int ownerId) {
-        return null;
-    }
-
-    @Override
-    @Transactional()
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String create(@RequestParam(value = "group") Group group) {
         log.debug("Call create method: group = " + group);
@@ -66,16 +57,66 @@ public class GroupController implements GenericController<Group> {
     }
 
     @Override
-    @RequestMapping("/update")
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public String update(@RequestParam(value = "group") Group group) {
+        log.debug("Call update method: group = " + group);
+        try {
+            service.update(group);
+            return "Group successfully updated!";
 
+        } catch (ServiceException e) {
+            log.error("Exception while updating group : ", e);
+            return "Exception while updating group!";
+        }
+    }
+
+    @Override
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    public String delete(@RequestParam(value = "group") Group group) {
+        log.debug("Call delete method: contact = " + group);
+        try {
+            service.delete(group);
+            return "Group successfully removed!";
+
+        } catch (ServiceException e) {
+            log.error("Exception while removing group : ", e);
+            return "Exception while removing group!";
+        }
+    }
+
+    @Override
+    public List<Group> list(int ownerId) {
+        log.debug("Call list method: ownerId = " + ownerId);
+        try {
+            log.debug("list:" + service.list(ownerId));
+
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving group list: ", e);
+        }
         return null;
     }
 
     @Override
-    @RequestMapping("/delete")
-    public String delete(@RequestParam(value = "group") Group group) {
+    public Group findById(int id, int ownerId) {
+        log.debug("Call findById method: id = " + id + "ownerId = " + ownerId);
+        try {
+            return service.findById(id, ownerId);
 
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving group by id: ", e);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Group> findByName(@PathVariable String name, @PathVariable int ownerId) {
+        log.debug("Call findByName method: name = " + name + "ownerId = " + ownerId);
+        try {
+            return service.findByName(name, ownerId);
+
+        } catch (ServiceException e) {
+            log.error("Exception while retrieving group list by name: ", e);
+        }
         return null;
     }
 

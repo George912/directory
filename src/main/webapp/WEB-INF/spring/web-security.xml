@@ -16,7 +16,7 @@
         <http-basic />
     </http>
 
-    <authentication-manager>
+    <authentication-manager erase-credentials="false">
         <authentication-provider>
             <jdbc-user-service data-source-ref="dbDataSource"
                 users-by-username-query="select login as username, password, enabled

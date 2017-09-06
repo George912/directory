@@ -63,6 +63,11 @@ public interface GenericController<T> {
      */
     String delete(T t);
 
+    /**
+     * Возвращает объект пользователя, содержащий логин и пароль,
+     * указанные при авторизации.
+     * @return
+     */
     default User getPrincipal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
