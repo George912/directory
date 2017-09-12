@@ -14,8 +14,6 @@
             Пароль <input type="password" name="password"/>
             <br/>
             <input type="submit" value="Войти"/>
-            <br/>
-            <input type="reset" value="Отмена"/>
     </form>
 </sec:authorize>
 </body>

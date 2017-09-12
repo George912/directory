@@ -61,7 +61,6 @@
         <br/>
         <input type="hidden" name="contact_id" value=<%=contact.getId()%>/>
         <input type="submit" value="Сохранить"/>
-        <input type="button" value="Отмена"/>
     </form>
 </form>
 </body>

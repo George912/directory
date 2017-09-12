@@ -25,7 +25,6 @@ public class AdminServlet extends AbstractServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-
         try {
             AnalyticalInfo info = service.collectAnalyticalInfo();
             log.debug("Request set attribute info = " + info);

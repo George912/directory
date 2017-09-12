@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainServlet extends AbstractServlet {
@@ -41,12 +42,12 @@ public class MainServlet extends AbstractServlet {
             if ("contacts".equals(act)) {
                 groups = groupServiceImpl.list(userId);
                 String name = req.getParameter("contact_name");
-                contacts = contactServiceImpl.findByName(name, userId);
+                contacts = findContactByName(name, userId);
 
             } else if ("groups".equals(act)) {
                 contacts = contactServiceImpl.list(userId);
                 String name = req.getParameter("group_name");
-                groups = groupServiceImpl.findByName(name, userId);
+                groups = findGroupByName(name, userId);
 
             } else {
                 groups = groupServiceImpl.list(userId);
@@ -67,4 +68,32 @@ public class MainServlet extends AbstractServlet {
         }
     }
 
+    private List<Group> findGroupByName(String name, int ownerId) {
+        List<Group> groups = new ArrayList<>();
+        try {
+            for (Group group : groupServiceImpl.list(ownerId)) {
+                if (group.getName().contains(name)) {
+                    groups.add(group);
+                }
+            }
+
+        } catch (ServiceException e) {
+            log.error("Exception while find groups by name:", e);
+        }
+        return groups;
+    }
+
+    private List<Contact> findContactByName(String name, int ownerId) {
+        List<Contact> contacts = new ArrayList<>();
+        try {
+            for (Contact contact : contactServiceImpl.list(ownerId)) {
+                if(contact.getFirstName().contains(name)){
+                    contacts.add(contact);
+                }
+            }
+        } catch (ServiceException e) {
+            log.error("Exception while find contacts by name:", e);
+        }
+        return contacts;
+    }
 }

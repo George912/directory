@@ -36,11 +36,6 @@ public class Contact implements Serializable {
         this.notes = "";
     }
 
-    public Contact(int owner) {
-        this();
-//        this.owner = owner;
-    }
-
     public Contact(int id, String firstName, String lastName, String middleName) {
         this.id = id;
         this.firstName = firstName;
@@ -68,9 +63,8 @@ public class Contact implements Serializable {
         this.notes = notes;
     }
 
-    public Contact(int id, String firstName, String lastName, String middleName, String firstPhoneNumber, PhoneNumberType firstPhoneNumberType, String secondPhoneNumber, PhoneNumberType secondPhoneNumberType, String email, String notes, int owner) {
-        this(id, firstName, lastName, middleName, firstPhoneNumber, firstPhoneNumberType, secondPhoneNumber, secondPhoneNumberType, email, notes);
-//        this.owner = owner;
+    public Contact(int userId) {
+        this.owner = new User(userId);
     }
 
     @Id

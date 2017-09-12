@@ -34,9 +34,9 @@ public class Group implements Serializable {
         this.notes = notes;
     }
 
-    public Group(int id, String name, String notes, int owner) {
+    public Group(int id, String name, String notes, int userId) {
         this(id, name, notes);
-//        this.owner = owner;
+        this.owner = new User(userId);
     }
 
     @Column(name = "name", nullable = false, length = 30)

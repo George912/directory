@@ -116,6 +116,7 @@ public class HibernateContactDAO extends AbstractConnectable implements GenericD
         synchronized (monitor) {
             try (Session session = getSessionFactory().openSession()) {
                 Criteria criteria = session.createCriteria(Contact.class);
+                criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
                 return criteria.list();
 
             } catch (HibernateException e) {
