@@ -27,7 +27,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     public String create(@RequestParam(value = "user") User user) {
         log.debug("Call create method: user = " + user);
         try {
@@ -41,7 +41,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @PutMapping(value = "/update")
     public String update(@RequestParam(value = "user") User user) {
         log.debug("Call update method: user = " + user);
         try {
@@ -55,7 +55,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/delete")
     public String delete(@RequestParam(value = "user") User user) {
         log.debug("Call delete method: user = " + user);
         try {
@@ -69,7 +69,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @GetMapping(value = "/userByCredential")
     public User findByCredential(@RequestParam(value = "login") String login, @RequestParam(value = "password") String password) {
         log.debug("Call findByCredential method: login = " + login + ", password=" + password);
         try {
@@ -82,24 +82,24 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @GetMapping(value = "/list")
     public UserContainer list() {
-        User principal = getPrincipal();
+        User principal = getPrincipal(service);
         return new UserContainer(list(findByCredential(principal.getLogin(), principal.getPassword()).getId()));
     }
 
     @Override
-    @RequestMapping(name = "/user", method = RequestMethod.GET)
-    public User findById(@PathVariable int id) {
-        User principal = getPrincipal();
+    @GetMapping(value = "/userById")
+    public User findById(@RequestParam(value = "id") int id) {
+        User principal = getPrincipal(service);
         return findById(id, principal.getId());
     }
 
     @Override
-    @RequestMapping("/user")
-    public List<User> findByName(@RequestParam(value = "name") String name) {
-        User principal = getPrincipal();
-        return findByName(name, principal.getId());
+    @GetMapping("/userByName")
+    public UserContainer findByName(@RequestParam(value = "name") String name) {
+        User principal = getPrincipal(service);
+        return new UserContainer(findByName(name, principal.getId()));
     }
 
     @Override

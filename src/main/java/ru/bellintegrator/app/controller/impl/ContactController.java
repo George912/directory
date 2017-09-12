@@ -1,15 +1,14 @@
 package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Contact;
+import ru.bellintegrator.app.model.ContactContainer;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.ContactService;
+import ru.bellintegrator.app.service.UserService;
 
 import java.util.List;
 
@@ -22,31 +21,33 @@ public class ContactController implements GenericController<Contact> {
 
     private static final Logger log = Logger.getLogger(ContactController.class);
     private ContactService service;
+    private UserService userService;
 
-    public ContactController(ContactService service) {
+    public ContactController(ContactService service, UserService userService) {
         this.service = service;
+        this.userService = userService;
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<Contact> list() {
-        User principal = getPrincipal();
-        return list(principal.getId());
+    @GetMapping(value = "/list")
+    public ContactContainer list() {
+        User principal = getPrincipal(userService);
+        return new ContactContainer(list(principal.getId()));
     }
 
-    @RequestMapping(name = "/contact", method = RequestMethod.GET)
+    @GetMapping(value = "/contactById")
     public Contact findById(@RequestParam(value = "id") int id) {
-        User principal = getPrincipal();
+        User principal = getPrincipal(userService);
         return findById(id, principal.getId());
     }
 
-    @RequestMapping(value = "/contact", method = RequestMethod.GET)
-    public List<Contact> findByName(@RequestParam(value = "name") String name) {
-        User principal = getPrincipal();
-        return findByName(name, principal.getId());
+    @GetMapping(value = "/contactByName")
+    public ContactContainer findByName(@RequestParam(value = "name") String name) {
+        User principal = getPrincipal(userService);
+        return new ContactContainer(findByName(name, principal.getId()));
     }
 
     @Override
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     public String create(@RequestParam(value = "contact") Contact contact) {
         log.debug("Call create method: contact = " + contact);
         try {
@@ -60,7 +61,7 @@ public class ContactController implements GenericController<Contact> {
     }
 
     @Override
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @PutMapping(value = "/update")
     public String update(@RequestParam(value = "contact") Contact contact) {
         log.debug("Call update method: contact = " + contact);
         try {
@@ -74,7 +75,7 @@ public class ContactController implements GenericController<Contact> {
     }
 
     @Override
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/delete")
     public String delete(@RequestParam(value = "contact") Contact contact) {
         log.debug("Call delete method: contact = " + contact);
         try {

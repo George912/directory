@@ -107,8 +107,12 @@ public class HibernateGroupDAO extends AbstractConnectable implements GenericDAO
         log.debug("Call getAll method: ownerId = " + ownerId);
         synchronized (monitor) {
             try (Session session = getSessionFactory().openSession()) {
-                Criteria criteria = session.createCriteria(Group.class);
-                criteria.add(Restrictions.eq(("owner"), new User(ownerId)));
+                //get owner
+                Criteria criteria = session.createCriteria(User.class);
+                criteria.add(Restrictions.eq(("id"), ownerId));
+                User user = (User) criteria.list().get(0);
+                criteria = session.createCriteria(Group.class);
+                criteria.add(Restrictions.eq(("owner"), user));
                 return criteria.list();
 
             } catch (HibernateException e) {

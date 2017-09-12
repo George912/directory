@@ -140,6 +140,11 @@
 </table>
 <br/>
 <br/>
-<a href="statistic">Статистика</a>
+<a href="statistic?data=uc">Общее количество пользователей</a> |
+<a href="statistic?data=eucc">Количество контактов каждого пользователя</a> |
+<a href="statistic?data=eugc">Количество групп каждого пользователя</a> |
+<a href="statistic?data=aguc">Среднее количество пользователей в группах</a> |<br/>
+<a href="statistic?data=aucc">Среднее количество контактов у пользователей</a> |
+<a href="statistic?data=iucc">Список неактивных пользователей приложения</a>
 </body>
 </html>

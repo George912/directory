@@ -16,14 +16,12 @@ import java.io.IOException;
 
 public class GroupEditorServlet extends AbstractEditorServlet {
 
-    private ContactServiceImpl contactServiceImpl;
     private GroupServiceImpl groupServiceImpl;
     private static final Logger log = Logger.getLogger(GroupEditorServlet.class);
 
     @Override
     public void init() throws ServletException {
         dispatcher = this.getServletContext().getRequestDispatcher("/views/groupeditor.jsp");
-        contactServiceImpl = new ContactServiceImpl(contactGenericDAO);
         groupServiceImpl = new GroupServiceImpl(groupGenericDAO);
         log.debug("Initialize GroupEditorServlet");
         log.info("GroupEditorServlet instance created");
@@ -74,7 +72,7 @@ public class GroupEditorServlet extends AbstractEditorServlet {
                 log.debug("GroupEditorServlet.insert: action = " + action + ", group=" + group);
 
             } else if (action == EditorAction.UPDATED) {
-                group.setId(Integer.parseInt(request.getParameter("group_id")));
+                group.setId(Integer.parseInt(request.getParameter("group_id").replace("/", "")));
                 groupServiceImpl.update(group);
                 log.debug("GroupEditorServlet.insert: action = " + action + ", group=" + group);
             }

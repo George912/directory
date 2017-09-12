@@ -168,7 +168,7 @@ public class Contact implements Serializable {
         return groupList;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "owner", nullable = false, referencedColumnName = "id")
     public User getOwner() {
         return owner;

@@ -107,7 +107,7 @@ public class ContactEditorServlet extends AbstractEditorServlet {
                 log.debug("ContactEditorServlet.insert: action = " + action + ", contact=" + contact);
 
             } else if (action == EditorAction.UPDATED) {
-                contact.setId(Integer.parseInt(request.getParameter("contact_id")));
+                contact.setId(Integer.parseInt(request.getParameter("contact_id").replace("/","")));
                 contact.setOwner(new User(userId));
                 contactServiceImpl.update(contact);
                 log.debug("ContactEditorServlet.insert: action = " + action + ", contact=" + contact);

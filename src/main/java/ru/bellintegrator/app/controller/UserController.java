@@ -3,8 +3,6 @@ package ru.bellintegrator.app.controller;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.model.UserContainer;
 
-import java.util.List;
-
 /**
  * Интерфейс, содержащий специфичные методы для манипуляции ресурсом пользователь.
  */
@@ -37,6 +35,6 @@ public interface UserController extends GenericController<User>{
      * @param name
      * @return
      */
-    List<User> findByName(String name);
+    UserContainer findByName(String name);
 
 }

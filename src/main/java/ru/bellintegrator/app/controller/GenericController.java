@@ -1,9 +1,12 @@
 package ru.bellintegrator.app.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.User;
+import ru.bellintegrator.app.service.UserService;
 
 import java.util.List;
 
@@ -68,12 +71,16 @@ public interface GenericController<T> {
      * указанные при авторизации.
      * @return
      */
-    default User getPrincipal() {
+    default User getPrincipal(UserService service) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             String login = authentication.getName();
             String password = (String) authentication.getCredentials();
-            return new User(0, login, password);
+            try {
+                return service.getUserByCredential(login, password);
+            } catch (ServiceException e) {
+                Logger.getLogger(GenericController.class).error("Exception while retrieving principal: ",e);
+            }
         }
         return null;
     }

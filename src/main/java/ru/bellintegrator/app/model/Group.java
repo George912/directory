@@ -68,7 +68,7 @@ public class Group implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "owner", nullable = false, referencedColumnName = "id")
     public User getOwner() {
         return owner;

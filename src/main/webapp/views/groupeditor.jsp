@@ -1,5 +1,7 @@
 <%@ page import="ru.bellintegrator.app.EditorAction" %>
 <%@ page import="ru.bellintegrator.app.model.Group" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -22,7 +24,6 @@
         Заметки <textarea name="notes"><%=group.getNotes()%></textarea><br/>
         <input type="hidden" name="group_id" value=<%=group.getId()%>/>
         <input type="submit" value="Сохранить"/>
-        <input type="button" value="Отмена"/>
     </form>
 </form>
 </body>

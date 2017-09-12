@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.app.controller.GenericController;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.Group;
+import ru.bellintegrator.app.model.GroupContainer;
 import ru.bellintegrator.app.model.User;
 import ru.bellintegrator.app.service.GroupService;
+import ru.bellintegrator.app.service.UserService;
 
 import java.util.List;
 
@@ -19,31 +21,33 @@ public class GroupController implements GenericController<Group> {
 
     private static final Logger log = Logger.getLogger(GroupController.class);
     private GroupService service;
+    private UserService userService;
 
-    public GroupController(GroupService service) {
+    public GroupController(GroupService service, UserService userService) {
         this.service = service;
+        this.userService = userService;
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public List<Group> list() {
-        User principal = getPrincipal();
-        return list(principal.getId());
+    @GetMapping(value = "/list")
+    public GroupContainer list() {
+        User principal = getPrincipal(userService);
+        return new GroupContainer(list(principal.getId()));
     }
 
-    @RequestMapping(name = "/group", method = RequestMethod.GET)
+    @GetMapping(value = "/groupById")
     public Group findById(@RequestParam(value = "id") int id) {
-        User principal = getPrincipal();
+        User principal = getPrincipal(userService);
         return findById(id, principal.getId());
     }
 
-    @RequestMapping(value = "/group", method = RequestMethod.GET)
-    public List<Group> findByName(@RequestParam(value = "name") String name) {
-        User principal = getPrincipal();
-        return findByName(name, principal.getId());
+        @GetMapping(value = "/groupByName")
+    public GroupContainer findByName(@RequestParam(value = "name") String name) {
+        User principal = getPrincipal(userService);
+        return new GroupContainer(findByName(name, principal.getId()));
     }
 
     @Override
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/add")
     public String create(@RequestParam(value = "group") Group group) {
         log.debug("Call create method: group = " + group);
         try {
@@ -57,7 +61,7 @@ public class GroupController implements GenericController<Group> {
     }
 
     @Override
-    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    @PutMapping(value = "/update")
     public String update(@RequestParam(value = "group") Group group) {
         log.debug("Call update method: group = " + group);
         try {
@@ -71,7 +75,7 @@ public class GroupController implements GenericController<Group> {
     }
 
     @Override
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/delete")
     public String delete(@RequestParam(value = "group") Group group) {
         log.debug("Call delete method: contact = " + group);
         try {
@@ -88,7 +92,7 @@ public class GroupController implements GenericController<Group> {
     public List<Group> list(int ownerId) {
         log.debug("Call list method: ownerId = " + ownerId);
         try {
-            log.debug("list:" + service.list(ownerId));
+            return service.list(ownerId);
 
         } catch (ServiceException e) {
             log.error("Exception while retrieving group list: ", e);
@@ -109,7 +113,7 @@ public class GroupController implements GenericController<Group> {
     }
 
     @Override
-    public List<Group> findByName(@PathVariable String name, @PathVariable int ownerId) {
+    public List<Group> findByName(String name, int ownerId) {
         log.debug("Call findByName method: name = " + name + "ownerId = " + ownerId);
         try {
             return service.findByName(name, ownerId);
