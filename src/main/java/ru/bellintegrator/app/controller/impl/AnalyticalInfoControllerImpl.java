@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.AnalyticalInfoController;
 import ru.bellintegrator.app.exception.ServiceException;
 import ru.bellintegrator.app.model.AnalyticalInfo;
+import ru.bellintegrator.app.model.InfoContainer;
 import ru.bellintegrator.app.service.AnalyticalInfoService;
-
-import java.util.Map;
 
 /**
  * Реализация интерфейса AnalyticalInfoController.
@@ -41,21 +40,19 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    //todo: wrapper
     @GetMapping("/eucc")
-    public Map<Integer, Long> eachUserContactCount() {
+    public InfoContainer eachUserContactCount() {
         log.debug("Call eachUserContactCount method");
         log.debug("eachUserContactCount:" + info.getEachUserContactCount());
-        return info.getEachUserContactCount();
+        return new InfoContainer(info.getEachUserContactCount());
     }
 
     @Override
-    //todo: wrapper
     @GetMapping("/eugc")
-    public Map<Integer, Long> eachUserGroupCount() {
+    public InfoContainer eachUserGroupCount() {
         log.debug("Call eachUserGroupCount method");
         log.debug("eachUserGroupCount:" + info.getEachUserGroupCount());
-        return info.getEachUserGroupCount();
+        return new InfoContainer(info.getEachUserGroupCount());
     }
 
     @Override
@@ -67,12 +64,11 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    //todo: wrapper
     @GetMapping("/iuc")
-    public Map<Integer, Long> inactiveUserCount() {
+    public InfoContainer inactiveUserCount() {
         log.debug("Call avgUserContactsCount method");
         log.debug("inactiveUserCount:" + info.getInactiveUserCount());
-        return info.getInactiveUserCount();
+        return new InfoContainer(info.getInactiveUserCount());
     }
 
     @Override

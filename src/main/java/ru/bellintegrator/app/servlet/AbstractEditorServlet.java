@@ -15,6 +15,8 @@ public abstract class AbstractEditorServlet extends AbstractServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setCharacterEncoding("UTF-8");
+        req.setCharacterEncoding("UTF-8");
         int userId = (int) req.getSession().getAttribute("userId");
         String act = req.getParameter("action") == null ? (String) req.getAttribute("action") : req.getParameter("action");
         EditorAction action = EditorAction.getActionFromString(act);

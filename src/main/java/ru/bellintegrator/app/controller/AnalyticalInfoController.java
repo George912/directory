@@ -1,6 +1,6 @@
 package ru.bellintegrator.app.controller;
 
-import java.util.Map;
+import ru.bellintegrator.app.model.InfoContainer;
 
 /**
  * Интерфейс, содержащий методы для получения статистической информации.
@@ -17,13 +17,13 @@ public interface AnalyticalInfoController {
      * Возвращает количество контактов каждого пользователя.
      * @return
      */
-    Map<Integer, Long> eachUserContactCount();
+    InfoContainer eachUserContactCount();
 
     /**
      * Возвращает количество групп каждого пользователя.
      * @return
      */
-    Map<Integer, Long> eachUserGroupCount();
+    InfoContainer eachUserGroupCount();
 
     /**
      * Возвращает среднее количество пользователей в группах.
@@ -35,7 +35,7 @@ public interface AnalyticalInfoController {
      * Возвращает список неактивных пользователей приложения - количество контактов меньше 10.
      * @return
      */
-    Map<Integer, Long> inactiveUserCount();
+    InfoContainer inactiveUserCount();
 
     /**
      * Возвращает среднее количество контактов у пользователей.

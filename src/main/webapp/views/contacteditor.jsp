@@ -3,7 +3,7 @@
 <%@ page import="ru.bellintegrator.app.model.Group" %>
 <%@ page import="ru.bellintegrator.app.model.PhoneNumberType" %>
 <%@ page import="java.util.List" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <html>
 <head>
