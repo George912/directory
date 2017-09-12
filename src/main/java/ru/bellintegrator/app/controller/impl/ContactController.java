@@ -48,7 +48,7 @@ public class ContactController implements GenericController<Contact> {
 
     @Override
     @PostMapping(value = "/add")
-    public String create(@RequestParam(value = "contact") Contact contact) {
+    public String create(@RequestBody Contact contact) {
         log.debug("Call create method: contact = " + contact);
         try {
             service.add(contact);
@@ -62,7 +62,7 @@ public class ContactController implements GenericController<Contact> {
 
     @Override
     @PutMapping(value = "/update")
-    public String update(@RequestParam(value = "contact") Contact contact) {
+    public String update(@RequestBody Contact contact) {
         log.debug("Call update method: contact = " + contact);
         try {
             service.update(contact);
@@ -76,7 +76,7 @@ public class ContactController implements GenericController<Contact> {
 
     @Override
     @DeleteMapping(value = "/delete")
-    public String delete(@RequestParam(value = "contact") Contact contact) {
+    public String delete(@RequestBody Contact contact) {
         log.debug("Call delete method: contact = " + contact);
         try {
             service.delete(contact);

@@ -28,7 +28,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @PostMapping(value = "/add")
-    public String create(@RequestParam(value = "user") User user) {
+    public String create(@RequestBody User user) {
         log.debug("Call create method: user = " + user);
         try {
             service.add(user);
@@ -42,7 +42,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @PutMapping(value = "/update")
-    public String update(@RequestParam(value = "user") User user) {
+    public String update(@RequestBody User user) {
         log.debug("Call update method: user = " + user);
         try {
             service.update(user);
@@ -56,7 +56,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @DeleteMapping(value = "/delete")
-    public String delete(@RequestParam(value = "user") User user) {
+    public String delete(@RequestBody User user) {
         log.debug("Call delete method: user = " + user);
         try {
             service.delete(user);

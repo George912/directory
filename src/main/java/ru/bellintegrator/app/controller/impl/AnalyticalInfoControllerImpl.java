@@ -2,6 +2,7 @@ package ru.bellintegrator.app.controller.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.bellintegrator.app.controller.AnalyticalInfoController;
@@ -32,7 +33,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @RequestMapping("/uc")
+    @GetMapping("/uc")
     public int userCount() {
         log.debug("Call userCount method");
         log.debug("User count:" + info.getUserCount());
@@ -41,7 +42,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
 
     @Override
     //todo: wrapper
-    @RequestMapping("/eucc")
+    @GetMapping("/eucc")
     public Map<Integer, Long> eachUserContactCount() {
         log.debug("Call eachUserContactCount method");
         log.debug("eachUserContactCount:" + info.getEachUserContactCount());
@@ -50,7 +51,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
 
     @Override
     //todo: wrapper
-    @RequestMapping("/eugc")
+    @GetMapping("/eugc")
     public Map<Integer, Long> eachUserGroupCount() {
         log.debug("Call eachUserGroupCount method");
         log.debug("eachUserGroupCount:" + info.getEachUserGroupCount());
@@ -58,7 +59,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @RequestMapping("/aucig")
+    @GetMapping("/aucig")
     public double avgUserCountInGroup() {
         log.debug("Call avgUserCountInGroup method");
         log.debug("avgUserCountInGroup:" + info.getAvgUserCountInGroups());
@@ -67,7 +68,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
 
     @Override
     //todo: wrapper
-    @RequestMapping("/iuc")
+    @GetMapping("/iuc")
     public Map<Integer, Long> inactiveUserCount() {
         log.debug("Call avgUserContactsCount method");
         log.debug("inactiveUserCount:" + info.getInactiveUserCount());
@@ -75,7 +76,7 @@ public class AnalyticalInfoControllerImpl implements AnalyticalInfoController {
     }
 
     @Override
-    @RequestMapping("/aucc")
+    @GetMapping("/aucc")
     public double avgUserContactsCount() {
         log.debug("Call avgUserContactsCount method");
         log.debug("avgUserContactsCount:" + info.getAvgUsersContactCount());

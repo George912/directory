@@ -40,7 +40,7 @@ public class GroupController implements GenericController<Group> {
         return findById(id, principal.getId());
     }
 
-        @GetMapping(value = "/groupByName")
+    @GetMapping(value = "/groupByName")
     public GroupContainer findByName(@RequestParam(value = "name") String name) {
         User principal = getPrincipal(userService);
         return new GroupContainer(findByName(name, principal.getId()));
@@ -48,7 +48,7 @@ public class GroupController implements GenericController<Group> {
 
     @Override
     @PostMapping(value = "/add")
-    public String create(@RequestParam(value = "group") Group group) {
+    public String create(@RequestBody Group group) {
         log.debug("Call create method: group = " + group);
         try {
             service.add(group);
@@ -62,7 +62,7 @@ public class GroupController implements GenericController<Group> {
 
     @Override
     @PutMapping(value = "/update")
-    public String update(@RequestParam(value = "group") Group group) {
+    public String update(@RequestBody Group group) {
         log.debug("Call update method: group = " + group);
         try {
             service.update(group);
@@ -76,7 +76,7 @@ public class GroupController implements GenericController<Group> {
 
     @Override
     @DeleteMapping(value = "/delete")
-    public String delete(@RequestParam(value = "group") Group group) {
+    public String delete(@RequestBody Group group) {
         log.debug("Call delete method: contact = " + group);
         try {
             service.delete(group);
